@@ -1,0 +1,22 @@
+name: Render pdf
+on: 
+    push:
+    workflow_dispatch:
+jobs:
+  render-paper:
+    runs-on: ubuntu-latest
+    steps:
+        - uses: actions/checkout@v4
+        - uses: typst-community/setup-typst@v4
+        - run: typst compile main.typ physx_book.pdf
+        - name: Upload Artifacts
+          uses: actions/upload-artifact@v4
+          with:
+              name: PDF
+              path: 'physx_book.pdf'
+        - name: Release
+          uses: softprops/action-gh-release@v1
+          if: github.ref_type == 'tag'
+          with:
+              name: "${{ github.ref_name }}"
+              files: physx_book.pdf
