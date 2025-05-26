@@ -3,7 +3,7 @@ on:
     push:
     workflow_dispatch:
 jobs:
-  render-paper:
+  render-book:
     runs-on: ubuntu-latest
     steps:
         - uses: actions/checkout@v4
@@ -15,7 +15,7 @@ jobs:
               name: PDF
               path: 'physx_book.pdf'
         - name: Release
-          uses: softprops/action-gh-release@v1
+          uses: softprops/action-gh-release@v2
           if: github.ref_type == 'tag'
           with:
               name: "${{ github.ref_name }}"

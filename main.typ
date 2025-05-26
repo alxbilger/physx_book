@@ -25,6 +25,11 @@
 
 #outline(indent: auto)
 
+#show heading.where(depth: 1): body => {    
+  pagebreak(weak: true)
+  body
+}
+
 #import "variables.typ": * 
 #include "lagrangianmechanics.typ"
 
