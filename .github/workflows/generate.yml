@@ -7,10 +7,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
         - uses: actions/checkout@v4
+        - uses: typst-community/setup-typst@v4
         - name: Add details
           id: details
-          run: echo "Compiled from \#link("https://github.com/alxbilger/physx_book/commit/${{ github.sha }}")[${{ github.sha }}]" >> details.typ
-        - uses: typst-community/setup-typst@v4
+          run: |
+            echo "Compiled from \#link("https://github.com/alxbilger/physx_book/commit/${{ github.sha }}")[${{ github.sha }}] from Typst " >> details.typ
+            typst --version >> details.typ
         - run: typst compile main.typ physx_book.pdf
         - name: Upload Artifacts
           uses: actions/upload-artifact@v4
