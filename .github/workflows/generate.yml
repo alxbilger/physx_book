@@ -9,7 +9,6 @@ jobs:
         - uses: actions/checkout@v4
         - uses: typst-community/setup-typst@v4
         - name: Add details
-          id: details
           run: |
             echo "Compiled from \#link("https://github.com/alxbilger/physx_book/commit/${{ github.sha }}")[${{ github.sha }}] from Typst " >> details.typ
             typst --version >> details.typ
