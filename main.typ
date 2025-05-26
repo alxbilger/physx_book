@@ -43,6 +43,7 @@
 #include "numericalintegration.typ"
 #include "implicittimeintegration.typ"
 #include "constraints.typ"
+#include "mapping.typ"
 #include "maths.typ"
 
 = Other Resources

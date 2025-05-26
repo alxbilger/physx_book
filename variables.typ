@@ -16,3 +16,5 @@
 #let geometricstiffness = $tilde(stiffness)$
 #let compliancematrix = $bold(cal(W))$
 #let relaxation = $bold(cal(C))$
+#let mapping = $bold(cal(F))$
+#let jacobianmapping = $bold(cal(J))$
