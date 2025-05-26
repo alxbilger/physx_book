@@ -14,6 +14,8 @@
   date: datetime.today().display("[day] [month repr:long] [year]"),
 )
 
+#include "details.typ"
+
 #set math.equation(numbering: "(1)")
 
 #show outline.entry.where(
