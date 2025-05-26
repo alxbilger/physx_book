@@ -279,7 +279,7 @@ $ <force_linearization>
 Second line of @backward_euler becomes:
 
 $
-mass thick Delta velocity = stepsize ( force(#position _n, #velocity _n) + stiffness(position_n, velocity_n) Delta x + damping(position_n, velocity_n) Delta v)
+mass thick Delta velocity = stepsize ( force(#position _n, #velocity _n) + stiffness(position_n, velocity_n) Delta position + damping(position_n, velocity_n) Delta velocity)
 $ <backward_euler_linearized>
 
 ==== Solving for $Delta velocity$
@@ -293,7 +293,7 @@ $
 Grouping terms in $Delta velocity$ in LHS:
 
 $
-(mass - stepsize thick damping(position_n, velocity_n) - stepsize^2 thick stiffness(position_n, velocity_n)) Delta velocity = stepsize thick force(#position _n, #velocity _n) + stepsize^2 stiffness(position_n, velocity_n) #velocity _n
+(mass - stepsize thick damping(position_n, velocity_n) - stepsize^2 thick stiffness(position_n, velocity_n)) Delta velocity = stepsize thick force(position _n, velocity _n) + stepsize^2 stiffness(position_n, velocity_n) velocity _n
 $ <backward_euler_linearized_dv>
 
 Defining $A= mass - stepsize thick damping(position_n, velocity_n) - stepsize^2 thick stiffness(position_n, velocity_n)$ and $b=stepsize thick force(#position _n, #velocity _n) + stepsize^2 stiffness(position_n, velocity_n) #velocity _n$, we have a linear system to solve:
