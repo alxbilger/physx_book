@@ -160,7 +160,7 @@ Using the Schur complement (see @schur_complement_linear_system_x), we obtain th
 
 
 $
-((-stepsize thick #stiffness (#state^i))-(M - stepsize thick #damping (#state^i)) (-1/stepsize I)) (position^(i+1) - position ^i) =\ -M(velocity^i - velocity_n) + stepsize thick force(state^i) - (M - stepsize thick #damping (#state^i))(-1/stepsize) (-position^i + position_n + stepsize thick velocity^i)
+((-stepsize thick #stiffness (#state^i))-(mass - stepsize thick #damping (#state^i)) (-1/stepsize I)) (position^(i+1) - position ^i) =\ -M(velocity^i - velocity_n) + stepsize thick force(state^i) - (mass - stepsize thick #damping (#state^i))(-1/stepsize) (-position^i + position_n + stepsize thick velocity^i)
 $
 
 Cleaning:
@@ -171,11 +171,11 @@ $
 
 === Rayleigh Damping
 
-$F_"Rayleigh"$ (@F_rayleigh) is added to the sum of forces in @backward_euler:
+$force_"Rayleigh"$ (@F_rayleigh) is added to the sum of forces in @backward_euler:
 
 $
-M (#velocity _(n+1) - #velocity _n) &= stepsize thick (F(#position _(n+1), #velocity _(n+1)) + F_"Rayleigh")\
-&= stepsize thick (F(#position _(n+1), #velocity _(n+1)) + (-alpha M + beta K) #velocity _(n+1))
+mass (#velocity _(n+1) - #velocity _n) &= stepsize thick (force(#position _(n+1), #velocity _(n+1)) + force_"Rayleigh")\
+&= stepsize thick (force(#position _(n+1), #velocity _(n+1)) + (-alpha mass + beta stiffness) #velocity _(n+1))
 $ <backward_euler_rayleigh>
 
 We define the residual function $r$ such that:
