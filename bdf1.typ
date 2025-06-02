@@ -374,3 +374,34 @@ $
 $
 (1/(stepsize)(1/(stepsize) + alpha)mass - 1/(stepsize)B - (1+beta/(stepsize))) Delta x = F(#position _n, #velocity _n) + stepsize thick mass #velocity _n - B #velocity _n
 $
+
+=== Optimization Form
+
+In @h_backward_euler:
+
+$
+  r_1 = 0 <=> velocity = (position - position_n) / stepsize
+$
+
+Substituting into $r_2=0$:
+
+$
+  mass(velocity - velocity_n) - stepsize force(position, velocity) = 0
+  & <=> mass((position - position_n) / stepsize - velocity_n) - stepsize force(position, (position - position_n) / stepsize) = 0 \
+  & <=> mass (position - position_n - stepsize velocity_n)/stepsize^2 - force(position, (position - position_n) / stepsize) = 0 \
+  & <=> mass (position - position_n - stepsize velocity_n)/stepsize^2 + (partial potentialenergy)/(partial position)(position, (position - position_n) / stepsize) = 0
+$
+
+Let's define $h(position) = mass (position - position_n - stepsize velocity_n)/stepsize^2 + (partial potentialenergy)/(partial position)(position, (position - position_n) / stepsize)$
+
+We can define an energy $E$ such that its minimization corresponds to $h(position)=0$:
+
+$
+  E(position) = 1/(2 stepsize^2) (position - hat(position)) mass (position - hat(position)) + potentialenergy
+$
+
+In that case,
+
+$
+  h = (partial E)/(partial position)
+$
