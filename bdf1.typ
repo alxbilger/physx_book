@@ -61,7 +61,7 @@ This is a non-linear set of equations: $force$ is non-linear with respect to the
 Let's define the residual function $r$ such that:
 
 $
-r(state) = r(position, velocity) = mat(delim:"[", position - position _n - stepsize thick velocity ; mass(velocity -velocity _n) - stepsize thick F(state))
+r(state) = r(position, velocity) = mat(delim:"[", position - position _n - stepsize thick velocity ; mass(velocity -velocity _n) - stepsize thick force(state))
 = mat(delim:"[", r_1(state); r_2(state))
 $<h_backward_euler>
 
@@ -160,13 +160,13 @@ Using the Schur complement (see @schur_complement_linear_system_x), we obtain th
 
 
 $
-((-stepsize thick #stiffness (#state^i))-(mass - stepsize thick #damping (#state^i)) (-1/stepsize I)) (position^(i+1) - position ^i) =\ -M(velocity^i - velocity_n) + stepsize thick force(state^i) - (mass - stepsize thick #damping (#state^i))(-1/stepsize) (-position^i + position_n + stepsize thick velocity^i)
+((-stepsize thick #stiffness (#state^i))-(mass - stepsize thick #damping (#state^i)) (-1/stepsize I)) (position^(i+1) - position ^i) =\ -mass(velocity^i - velocity_n) + stepsize thick force(state^i) - (mass - stepsize thick #damping (#state^i))(-1/stepsize) (-position^i + position_n + stepsize thick velocity^i)
 $
 
 Cleaning:
 
 $
-(1/stepsize M - damping(state^i) -stepsize thick #stiffness (#state^i)) (position^(i+1) - position ^i) =\ -M(velocity^i - velocity_n) + stepsize thick force(state^i) + 1/stepsize (M - stepsize thick #damping (#state^i)) (-position^i + position_n + stepsize thick velocity^i)
+(1/stepsize mass - damping(state^i) -stepsize thick #stiffness (#state^i)) (position^(i+1) - position ^i) =\ -mass(velocity^i - velocity_n) + stepsize thick force(state^i) + 1/stepsize (mass - stepsize thick #damping (#state^i)) (-position^i + position_n + stepsize thick velocity^i)
 $
 
 === Rayleigh Damping
@@ -330,17 +330,17 @@ Then we use @backwardeuler_deltav to deduce $Delta velocity$.
 === Force Linearization with Rayleigh Damping
 
 $
-F(#position _(n+1), #velocity _(n+1)) + F_("Rayleigh",n+1) approx & F(#position _n, #velocity _n) + F_("Rayleigh",n) \ &+ (underbrace((partial F)/(partial x),K) + underbrace((partial F_"Rayleigh")/(partial x),0)) Delta x \ &+ (underbrace((partial F)/(partial v),B) + underbrace((partial F_"Rayleigh")/(partial v), -alpha M + beta K)) Delta v
+F(#position _(n+1), #velocity _(n+1)) + F_("Rayleigh",n+1) approx & F(#position _n, #velocity _n) + F_("Rayleigh",n) \ &+ (underbrace((partial F)/(partial x),stiffness) + underbrace((partial F_"Rayleigh")/(partial x),0)) Delta x \ &+ (underbrace((partial F)/(partial v),B) + underbrace((partial F_"Rayleigh")/(partial v), -alpha mass + beta stiffness)) Delta v
 $ 
 
 $
-F(#position _(n+1), #velocity _(n+1)) + F_("Rayleigh",n+1)  approx & F(#position _n, #velocity _n) + (-alpha M + beta K)#velocity _n \ &+ K thick Delta x + (B-alpha M + beta K) Delta v
+F(#position _(n+1), #velocity _(n+1)) + F_("Rayleigh",n+1)  approx & F(#position _n, #velocity _n) + (-alpha mass + beta stiffness)#velocity _n \ &+ stiffness thick Delta x + (B-alpha mass + beta stiffness) Delta v
 $ <force_linearization_rayleigh>
 
 @backward_euler becomes:
 
 $
-M thick Delta v = stepsize ( F(#position _n, #velocity _n) + (-alpha M + beta K)#velocity _n + K thick Delta x + (B-alpha M + beta K) Delta v)
+mass thick Delta v = stepsize ( F(#position _n, #velocity _n) + (-alpha mass + beta stiffness)#velocity _n + stiffness thick Delta x + (B-alpha mass + beta stiffness) Delta v)
 $ <backward_euler_linearized_rayleigh>
 
 ==== Solving for $Delta v$
@@ -348,13 +348,13 @@ $ <backward_euler_linearized_rayleigh>
 Replacing $Delta x$ from @backwardeuler_deltax in @backward_euler_linearized_rayleigh:
 
 $
-M thick Delta v = & stepsize ( F(#position _n, #velocity _n) + (-alpha M + beta K)#velocity _n + K thick stepsize (Delta v + #velocity _n) + (B-alpha M + beta K) Delta v)
+mass thick Delta v = & stepsize ( F(#position _n, #velocity _n) + (-alpha mass + beta stiffness)#velocity _n + stiffness thick stepsize (Delta v + #velocity _n) + (B-alpha mass + beta stiffness) Delta v)
 $
 
 Grouping terms in $Delta v$ in LHS:
 
 $
-((1+alpha stepsize )M - stepsize B - stepsize (stepsize + beta) K) Delta v =& stepsize thick F(#position _n, #velocity _n) \ &+ stepsize thick (-alpha M + (beta + stepsize) K)#velocity _n
+((1+alpha stepsize )mass - stepsize B - stepsize (stepsize + beta) stiffness) Delta v =& stepsize thick F(#position _n, #velocity _n) \ &+ stepsize thick (-alpha mass + (beta + stepsize) stiffness)#velocity _n
 $
 
 ==== Solving for $Delta x$
@@ -362,15 +362,15 @@ $
 Replacing $Delta v$ from @backwardeuler_deltav in @backward_euler_linearized_rayleigh:
 
 $
-M thick (1/(stepsize) Delta x - #velocity _n) = \ stepsize ( F(#position _n, #velocity _n) + (-alpha M + beta K)#velocity _n + K thick Delta x + (B-alpha M + beta K) (1/(stepsize) Delta x - #velocity _n))
+mass thick (1/(stepsize) Delta x - #velocity _n) = \ stepsize ( F(#position _n, #velocity _n) + (-alpha mass + beta stiffness)#velocity _n + stiffness thick Delta x + (B-alpha mass + beta stiffness) (1/(stepsize) Delta x - #velocity _n))
 $
 
 Grouping terms in $Delta x$ in LHS:
 
 $
-(M thick (1/(stepsize)) - stepsize thick K thick - (B-alpha M + beta K)) Delta x = \ stepsize ( F(#position _n, #velocity _n) + (-alpha M + beta K)#velocity _n - (B-alpha M + beta K) #velocity _n) + M #velocity _n
+(mass thick (1/(stepsize)) - stepsize thick stiffness thick - (B-alpha mass + beta stiffness)) Delta x = \ stepsize ( F(#position _n, #velocity _n) + (-alpha mass + beta stiffness)#velocity _n - (B-alpha mass + beta stiffness) #velocity _n) + mass #velocity _n
 $
 
 $
-(1/(stepsize)(1/(stepsize) + alpha)M - 1/(stepsize)B - (1+beta/(stepsize))) Delta x = F(#position _n, #velocity _n) + stepsize thick M #velocity _n - B #velocity _n
+(1/(stepsize)(1/(stepsize) + alpha)mass - 1/(stepsize)B - (1+beta/(stepsize))) Delta x = F(#position _n, #velocity _n) + stepsize thick mass #velocity _n - B #velocity _n
 $
