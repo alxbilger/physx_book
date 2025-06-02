@@ -38,22 +38,38 @@ $
 
 == Kinetic Energy
 
-The total kinetic energy $T$ of a deformable body with mass density $rho(#position)$ is given by integrating over the entire volume $V$:
+The continuous total kinetic energy $T$ of a deformable body with mass density $rho(position)$ is given by integrating over the entire volume $V$:
 
 $
-T = 1/2 integral_V #velocity (t) dot #velocity (t) thick rho(#position) thick d v
+kineticenergy &= 1/2 integral_V norm(velocity (t))^2 thick rho(position) thick d v \
+&= 1/2 integral_V velocity (t)^T dot velocity(t) thick rho(position) thick d v \
+&= 1/2 velocity(t)^T (integral_V rho(position) d v) velocity(t)
 $
+
+The term $integral_V rho(position) d v$ is called mass:
+
+$
+  mass(position) = integral_V rho(position) d v
+$
+
+Therefore,
+
+$
+  kineticenergy = 1/2 thick velocity(t)^T thick mass(position) thick velocity(t)
+$
+
+In general, the mass $mass$ depends on the state $position$, and therefore varies with time.
 
 == Lagrangian
 
 The Lagrangian $lagrangian$ of a system is defined as:
 
 $
-lagrangian(position, velocity, t) = T - potentialenergy
+lagrangian(position, velocity, t) = kineticenergy - potentialenergy
 $ <the_lagrangian>
 
 where:
-- $T$ is the total kinetic energy
+- $kineticenergy$ is the total kinetic energy
 - $potentialenergy$ is the potential energy
 
 == Forces
@@ -65,9 +81,9 @@ force = -(partial potentialenergy) / (partial position)
 $
 
 
-$#stiffness (#position, #velocity) = (partial #force)/(partial #position)$ is called the stiffness matrix.
+$#stiffness (#position, #velocity) = (partial #force)/(partial #position)$ is called stiffness.
 
-$#damping (#position, #velocity) = (partial #force)/(partial #velocity)$ is called the damping matrix.
+$#damping (#position, #velocity) = (partial #force)/(partial #velocity)$ is called damping.
 
 == Momentum
 
@@ -76,10 +92,21 @@ $
 momentum = (partial lagrangian) / (partial velocity)
 $ <momentum>
 
+Based on the definition of the Lagrangian (@the_lagrangian):
+
+$
+  momentum = (partial kineticenergy)/(partial velocity) - (partial V)/(partial velocity)
+$
+
 When the potential energy does not depend on the velocity (magnetic forces, dissipative forces...):
 
 $
-momentum = (partial T)/(partial velocity) = mass velocity(t)
+  (partial V)/(partial velocity) = 0
+$
+
+Therefore,
+$
+momentum = (partial kineticenergy)/(partial velocity) = mass(position) thick velocity(t)
 $
 
 == Action

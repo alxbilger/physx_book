@@ -160,23 +160,21 @@ $
 
 == Numerical Integration of Newton's Second Law of Motion
 
-The second Newton's law (@ODE) is a first-order ordinary differential equation of the form of @initial_value_problem where:
+The second Newton's law (@ODE) is a first-order ordinary differential equation of the form of @initial_value_problem ($y'=f(t,y), quad y(t_0) = y_0$) where:
 
 $
 y(t) = mat(delim:"[", position(t); velocity(t))
 $ <definition_y>
 
 $
-f(t,y) = mat(delim: "[", velocity(t); mass^(-1) force(position, velocity))
+f(t,y) = mat(delim: "[", velocity(t); mass^(-1) (force(position, velocity) - coriolismatrix velocity))
 $ <definition_f>
 
 In case of Rayleigh damping (@F_rayleigh):
 
 $
-f(t,y) = mat(delim: "[", velocity(t); mass^(-1) (force(position, velocity) + (-alpha mass + beta stiffness(position, velocity)) velocity))
+f(t,y) = mat(delim: "[", velocity(t); mass^(-1) (force(position, velocity) - coriolismatrix velocity + (-alpha mass + beta stiffness(position, velocity)) velocity))
 $
-
-
 
 == Newton-Raphson
 

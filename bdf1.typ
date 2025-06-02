@@ -5,7 +5,8 @@
 In @initial_value_problem, the time derivative can be approximated using the backward first-order finite differences:
 
 $
-y'_(n+1) approx (y_(n+1)-y_n)/stepsize
+y'_(n+1) approx (y_(n+1)-y_n)/stepsize <=> 
+d/(d t) mat(delim: "[", position(t+stepsize); velocity(t+stepsize)) approx  1/stepsize (mat(delim:"[", position (t+ Delta t); velocity (t + stepsize)) - mat(delim:"[", position (t); velocity (t)) )
 $
 
 @initial_value_problem becomes:
@@ -60,7 +61,7 @@ This is a non-linear set of equations: $force$ is non-linear with respect to the
 Let's define the residual function $r$ such that:
 
 $
-r(state) = r(position, velocity) = mat(delim:"[", position - position _n - stepsize thick velocity ; M(velocity -velocity _n) - stepsize thick F(state))
+r(state) = r(position, velocity) = mat(delim:"[", position - position _n - stepsize thick velocity ; mass(velocity -velocity _n) - stepsize thick F(state))
 = mat(delim:"[", r_1(state); r_2(state))
 $<h_backward_euler>
 
@@ -90,11 +91,11 @@ $
 $ <backward_euler_derivative_r1_velocity>
 
 $
-(partial r_2)/(partial #position) = -stepsize thick (partial F)/(partial #position) = - stepsize thick #stiffness
+(partial r_2)/(partial #position) = -stepsize thick (partial force)/(partial #position) = - stepsize thick #stiffness
 $ <backward_euler_derivative_r_2_position>
 
 $
-(partial r_2)/(partial #velocity) = mass - stepsize thick (partial F)/(partial #velocity) = mass - stepsize thick #damping
+(partial r_2)/(partial #velocity) = mass - stepsize thick (partial force)/(partial #velocity) = mass - stepsize thick #damping
 $ <backward_euler_derivative_r_2_velocity>
 
 The final expression of the Jacobian is:

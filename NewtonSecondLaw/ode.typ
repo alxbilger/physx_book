@@ -7,7 +7,7 @@
 Substituting @definition_acceleration into @second_newton_law:
 
 $
-mass (d velocity)/(d t) = force(position, velocity)
+mass(position) (d velocity)/(d t) + coriolismatrix(position, velocity) velocity(t) = force(position, velocity)
 $
 
 Combined with @definition_velocity, we have a first-order ordinary differential equation in $position$ and $velocity$:
@@ -15,7 +15,7 @@ Combined with @definition_velocity, we have a first-order ordinary differential 
 $
 mat(delim:"[",
 (d position)/(d t);
-mass (d velocity)/(d t)
+mass(position) thick (d velocity)/(d t) + coriolismatrix(position, velocity) velocity(t)
 ) =
 mat(delim:"[",
 velocity;
@@ -36,7 +36,7 @@ $F_"Rayleigh"$ is added to the sum of forces in @ODE:
 $
 mat(delim:"[",
 (d position)/(d t);
-mass (d velocity)/(d t)
+mass(position) (d velocity)/(d t) + coriolismatrix(position, velocity) velocity(t)
 ) =
 mat(delim:"[",
 velocity;
