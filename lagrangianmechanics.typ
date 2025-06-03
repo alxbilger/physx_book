@@ -22,17 +22,17 @@ $ <definition_acceleration>
 If we combine @definition_velocity and @definition_acceleration:
 
 $
-mat(delim:"[", #velocity (t); #acceleration (t))=
-d/(d t) mat(delim:"[", #position (t); #velocity (t))
+mat( #velocity (t); #acceleration (t))=
+d/(d t) mat( #position (t); #velocity (t))
 $ <states_ode>
 
 Global state
 $
-#state (t) =  mat(delim:"[", #position (t); #velocity (t))
+#state (t) =  mat( #position (t); #velocity (t))
 $
 
 $
-mat(delim:"[", #velocity (t); #acceleration (t))=
+mat( #velocity (t); #acceleration (t))=
 (d #state)/(d t)
 $
 

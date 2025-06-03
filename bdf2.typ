@@ -31,12 +31,12 @@ $
 We apply this equation on $y$ from @definition_y and $f$ from @definition_f:
 
 $
-mat(delim:"[",
+mat(
 position_(n+2) - 4/3 position_(n+1) + 1/3 position_n;
 velocity_(n+2) - 4/3 velocity_(n+1) + 1/3 velocity_n
 ) = 
 2/3 stepsize
-mat(delim:"[",
+mat(
 velocity_(n+2);
 mass^(-1) force(position_(n+2), velocity_(n+2))
 )
@@ -45,12 +45,12 @@ $
 We multiply the second line by $mass$ to get rid of the inverse:
 
 $
-mat(delim:"[",
+mat(
 position_(n+2) - 4/3 position_(n+1) + 1/3 position_n;
 mass(velocity_(n+2) - 4/3 velocity_(n+1) + 1/3 velocity_n)
 ) = 
 2/3 stepsize
-mat(delim:"[",
+mat(
 velocity_(n+2);
 force(position_(n+2), velocity_(n+2))
 )
@@ -60,16 +60,16 @@ Definition of the residual function $r$:
 
 $
 r(position, velocity) =
-mat(delim: "[",
+mat(
 position- 4/3 position_(n+1) + 1/3 position_(n) - 2/3 stepsize thick velocity;
 mass (velocity- 4/3 velocity_(n+1) + 1/3 velocity_(n)) - 2/3 Delta t thick force(position, velocity)
 )
-= mat(delim: "[", r_1(state);r_2(state))
+= mat( r_1(state);r_2(state))
 $
 
-Based on @bdf2, we want to find the root $state_(n+1) = mat(delim:"[", position_(n+1); velocity_(n+1))$ of $r$ such that $r(state_(n+1))=0$.
+Based on @bdf2, we want to find the root $state_(n+1) = mat( position_(n+1); velocity_(n+1))$ of $r$ such that $r(state_(n+1))=0$.
 
-We will need to compute the Jacobian $J_r = (partial r)/(partial x) = mat(delim:"[",
+We will need to compute the Jacobian $J_r = (partial r)/(partial x) = mat(
 (partial r_1)/(partial #position), (partial r_1)/(partial #velocity);
 (partial r_2)/(partial #position), (partial r_2)/(partial #velocity);
 )$ of $r$. Let's compute each term:
@@ -93,7 +93,7 @@ $
 The final expression of the Jacobian is:
 
 $
-J_r = mat(delim:"[",
+J_r = mat(
 identity, quad - 2/3 stepsize thick identity;
 - 2/3 stepsize thick stiffness, quad mass - 2/3 stepsize thick damping)
 $
@@ -101,11 +101,11 @@ $
 Newton-Raphson to solve $r(state)=0$:
 
 $
-mat(delim:"[",
+mat(
 identity, quad - 2/3 stepsize thick identity;
 - 2/3 stepsize thick stiffness, quad mass - 2/3 stepsize thick damping)
-mat(delim:"[", #position ^(i+1) - #position ^i; #velocity ^(i+1) - #velocity ^i) =
-mat(delim:"[",
+mat( #position ^(i+1) - #position ^i; #velocity ^(i+1) - #velocity ^i) =
+mat(
 -r_1(state^i);
 -r_2(state^i)
 )

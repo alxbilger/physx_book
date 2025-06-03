@@ -6,7 +6,7 @@ In @initial_value_problem, the time derivative can be approximated using the bac
 
 $
 y'_(n+1) approx (y_(n+1)-y_n)/stepsize <=> 
-d/(d t) mat(delim: "[", position(t+stepsize); velocity(t+stepsize)) approx  1/stepsize (mat(delim:"[", position (t+ Delta t); velocity (t + stepsize)) - mat(delim:"[", position (t); velocity (t)) )
+d/(d t) mat( position(t+stepsize); velocity(t+stepsize)) approx  1/stepsize (mat( position (t+ Delta t); velocity (t + stepsize)) - mat( position (t); velocity (t)) )
 $
 
 @initial_value_problem becomes:
@@ -30,26 +30,26 @@ $
 We apply this equation on $y$ from @definition_y and $f$ from @definition_f:
 
 $
-mat(delim:"[",
+mat(
 position_(n+1) - position_n;
 velocity_(n+1) - velocity_n
 )
 =
 stepsize
-mat(delim:"[",
+mat(
 velocity_(n+1);
 mass^(-1) force(position_(n+1), velocity_(n+1)))
 $
 
 We multiply the second line by $mass$ to get rid of the inverse:
 $
-mat(delim:"[",
+mat(
 position_(n+1) - position_n;
 mass ( velocity_(n+1) - velocity_n)
 )
 =
 stepsize
-mat(delim:"[",
+mat(
 velocity_(n+1);
 force(position_(n+1), velocity_(n+1)))
 $ <backward_euler>
@@ -61,11 +61,11 @@ This is a non-linear set of equations: $force$ is non-linear with respect to the
 Let's define the residual function $r$ such that:
 
 $
-r(state) = r(position, velocity) = mat(delim:"[", position - position _n - stepsize thick velocity ; mass(velocity -velocity _n) - stepsize thick force(state))
-= mat(delim:"[", r_1(state); r_2(state))
+r(state) = r(position, velocity) = mat( position - position _n - stepsize thick velocity ; mass(velocity -velocity _n) - stepsize thick force(state))
+= mat( r_1(state); r_2(state))
 $<h_backward_euler>
 
-Based on @backward_euler, we want to find the root $#state _(n+1) = mat(delim:"[",#position _(n+1); #velocity _(n+1))$ of $r$ such that 
+Based on @backward_euler, we want to find the root $#state _(n+1) = mat(#position _(n+1); #velocity _(n+1))$ of $r$ such that 
 
 $
 r(#state _(n+1))=0
@@ -74,7 +74,7 @@ $
 We will need to compute the Jacobian $J_r$ of $r$:
 
 $
-J_r = (partial r)/(partial x) = mat(delim:"[",
+J_r = (partial r)/(partial x) = mat(
 (partial r_1)/(partial #position), (partial r_1)/(partial #velocity);
 (partial r_2)/(partial #position), (partial r_2)/(partial #velocity);
 )
@@ -101,7 +101,7 @@ $ <backward_euler_derivative_r_2_velocity>
 The final expression of the Jacobian is:
 $
 J_r = (partial r)/(partial state) = 
-mat(delim:"[",
+mat(
 identity, quad -stepsize thick identity;
 -stepsize thick #stiffness, quad mass - stepsize thick #damping;
 )
@@ -118,13 +118,13 @@ $
 
 
 $
-mat(delim:"[",
+mat(
 identity, quad -stepsize thick identity;
 -stepsize thick #stiffness (#state^i), quad mass - stepsize thick #damping (#state^i);
 )
-mat(delim:"[", #position ^(i+1) - #position ^i; #velocity ^(i+1) - #velocity ^i) 
+mat( #position ^(i+1) - #position ^i; #velocity ^(i+1) - #velocity ^i) 
 =
-mat(delim:"[", -position^i + position_n + stepsize thick velocity^i ; -mass(velocity^i - velocity_n) + stepsize thick force(state^i))
+mat( -position^i + position_n + stepsize thick velocity^i ; -mass(velocity^i - velocity_n) + stepsize thick force(state^i))
 $
 
 === Solve for #velocity
@@ -181,8 +181,8 @@ $ <backward_euler_rayleigh>
 We define the residual function $r$ such that:
 
 $
-r(#state) = mat(delim:"[", #position - #position _n - stepsize thick #velocity ; mass(#velocity -#velocity _n) - stepsize thick (force(#state) + (-alpha mass + beta stiffness) velocity _(n+1)))
-= mat(delim:"[", r_1(#state); r_2(#state))
+r(#state) = mat( #position - #position _n - stepsize thick #velocity ; mass(#velocity -#velocity _n) - stepsize thick (force(#state) + (-alpha mass + beta stiffness) velocity _(n+1)))
+= mat( r_1(#state); r_2(#state))
 $<r_backward_euler_rayleigh>
 
 The nonlinear equation to solve is $r(position,velocity) = 0$
@@ -207,7 +207,7 @@ The Jacobian of $r$:
 
 $
 J_r = (partial r)/(partial state) =
-mat(delim:"[",
+mat(
 I, quad -stepsize I;
 #backward_euler_rayleigh_dr2dposition, quad #backward_euler_rayleigh_dr2dvelocity)
 $
@@ -215,12 +215,12 @@ $
 Newton-Raphson to solve $r(state)=0$:
 
 $
-mat(delim:"[",
+mat(
 I, quad -stepsize I;
 #backward_euler_rayleigh_dr2dposition, quad #backward_euler_rayleigh_dr2dvelocity)
-mat(delim:"[", #position ^(i+1) - #position ^i; #velocity ^(i+1) - #velocity ^i) 
+mat( #position ^(i+1) - #position ^i; #velocity ^(i+1) - #velocity ^i) 
 =\
-mat(delim:"[", -position^i + position_n + stepsize thick velocity^i ; -mass(velocity^i - velocity_n) + stepsize thick (force(state^i) + (-alpha mass + beta stiffness) #velocity _(n+1)))
+mat( -position^i + position_n + stepsize thick velocity^i ; -mass(velocity^i - velocity_n) + stepsize thick (force(state^i) + (-alpha mass + beta stiffness) #velocity _(n+1)))
 $
 
 ==== Solve for #velocity

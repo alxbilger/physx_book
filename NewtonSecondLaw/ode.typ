@@ -13,11 +13,11 @@ $
 Combined with @definition_velocity, we have a first-order ordinary differential equation in $position$ and $velocity$:
 
 $
-mat(delim:"[",
+mat(
 (d position)/(d t);
 mass(position) thick (d velocity)/(d t) + coriolismatrix(position, velocity) velocity(t)
 ) =
-mat(delim:"[",
+mat(
 velocity;
 force(position, velocity)
 )
@@ -34,11 +34,11 @@ $ <F_rayleigh>
 $F_"Rayleigh"$ is added to the sum of forces in @ODE:
 
 $
-mat(delim:"[",
+mat(
 (d position)/(d t);
 mass(position) (d velocity)/(d t) + coriolismatrix(position, velocity) velocity(t)
 ) =
-mat(delim:"[",
+mat(
 velocity;
 force(position, velocity) + (-alpha mass + beta stiffness) velocity
 )

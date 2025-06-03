@@ -6,32 +6,32 @@ It is the average of the forward Euler method (@forward_euler) and the backward 
 
 $
 underbrace(1/stepsize
-mat(delim:"[",
+mat(
 position_(n+1)-position_n;
 mass(velocity_(n+1)-velocity_n)), "forward")
 + 
 underbrace(1/stepsize
-mat(delim:"[",
+mat(
 position_(n+1) - position_n;
 mass ( velocity_(n+1) - velocity_n)
 ), "backward")
 =
-underbrace(mat(delim:"[",
+underbrace(mat(
 velocity_n;
 force(position_n,velocity_n)), "forward")
 +
-underbrace(mat(delim:"[",
+underbrace(mat(
 velocity_(n+1);
 force(position_(n+1), velocity_(n+1))), "backward")
 $
 
 $
 2/stepsize
-mat(delim:"[",
+mat(
 position_(n+1)-position_n;
 mass(velocity_(n+1)-velocity_n))
 =
-mat(delim:"[",
+mat(
 velocity_n + velocity_(n+1);
 force(position_n,velocity_n) + force(position_(n+1), velocity_(n+1))
 )
@@ -41,15 +41,15 @@ Definition of the residual function $r$:
 
 $
 r(state) = r(position, velocity) =
-mat(delim:"[",
+mat(
 position - position_(n) - stepsize/2 (velocity_n + velocity);
 mass(velocity - velocity_n) - stepsize/2 (force(position_n, velocity_n)+force(position, velocity))
 )
 $
 
-Based on @trapezoidal_rule, we want to find the root $state_(n+1) = mat(delim:"[", position_(n+1); velocity_(n+1))$ of $r$ such that $r(state_(n+1))=0$.
+Based on @trapezoidal_rule, we want to find the root $state_(n+1) = mat( position_(n+1); velocity_(n+1))$ of $r$ such that $r(state_(n+1))=0$.
 
-We will need to compute the Jacobian $J_r = (partial r)/(partial x) = mat(delim:"[",
+We will need to compute the Jacobian $J_r = (partial r)/(partial x) = mat(
 (partial r_1)/(partial #position), (partial r_1)/(partial #velocity);
 (partial r_2)/(partial #position), (partial r_2)/(partial #velocity);
 )$ of $r$. Let's compute each term:
@@ -73,7 +73,7 @@ $
 The final expression of the Jacobian is:
 
 $
-J_r = mat(delim:"[",
+J_r = mat(
 identity, quad -stepsize/2 thick identity;
  - stepsize/2 thick K, quad M - stepsize/2 thick B)
 $
@@ -81,11 +81,11 @@ $
 Newton-Raphson to solve $r(state)=0$:
 
 $
-mat(delim:"[",
+mat(
 identity, quad -stepsize/2 thick identity;
  - stepsize/2 thick K, quad mass - stepsize/2 thick B)
-mat(delim:"[", #position ^(i+1) - #position ^i; #velocity ^(i+1) - #velocity ^i) =
-mat(delim:"[",
+mat( #position ^(i+1) - #position ^i; #velocity ^(i+1) - #velocity ^i) =
+mat(
 -position^i + position_(n) + stepsize/2 (velocity_n + velocity^i);
 -M(velocity^i - velocity_n) + stepsize/2 (force(position_n, velocity_n)+force(position^i, velocity^i))
 )

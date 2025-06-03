@@ -20,11 +20,11 @@ Solving both the ODE from @ODE and the constraint is a Differential-algebraic sy
 
 $
 cases(
-mat(delim:"[",
+mat(
 (d position)/(d t);
 mass (d velocity)/(d t)
 ) &=
-mat(delim:"[",
+mat(
 velocity;
 force(position, velocity)
 ),
@@ -104,11 +104,11 @@ $
 Definition:
 
 $
-lambda(t) = mat(delim:"[", lambda_0 (t); dots.v; lambda_(C-1)(t))
+lambda(t) = mat( lambda_0 (t); dots.v; lambda_(C-1)(t))
 $
 
 $
-constraint(t) = mat(delim:"[", constraint_0 (position, t); dots.v; constraint_(C-1)(position, t))
+constraint(t) = mat( constraint_0 (position, t); dots.v; constraint_(C-1)(position, t))
 $
 
 Using the dot product $lambda dot constraint(position, t) = sum_(i=0)^(C-1) lambda_i constraint_i (position, t)$:
@@ -135,7 +135,7 @@ $
 With $n$ degrees of freedom and $m$ constraints, $constraintmatrix in RR^(m times n)$:
 
 $
-constraintmatrix(position, t) = mat(delim:"[",
+constraintmatrix(position, t) = mat(
 (partial constraint_0)/(partial position_0), dots, (partial constraint_0)/(partial position_(n-1));
 dots.v, dots.down, dots.v;
 (partial constraint_(m-1))/(partial position_0), dots, (partial constraint_(m-1))/(partial position_(n-1));
@@ -170,7 +170,7 @@ Let's define the residual function $r$ such that:
 
 $
 r(position, lambda) = 
-mat(delim:"[", force(position) + constraintmatrix^T lambda; constraint(position)) = mat(delim:"[", r_1(position, lambda); r_2(position, lambda))
+mat( force(position) + constraintmatrix^T lambda; constraint(position)) = mat( r_1(position, lambda); r_2(position, lambda))
 $
 
 We want to find the root $position_"eq", lambda_"eq"$ of $r$ such that $r(position_"eq", lambda_"eq") = 0$.
@@ -179,7 +179,7 @@ We want to find the root $position_"eq", lambda_"eq"$ of $r$ such that $r(positi
 We will need to compute the Jacobian $J_r$ of $r$:
 
 $
-J_r = mat(delim:"[", 
+J_r = mat( 
 (partial r_1)/(partial position), (partial r_1)/(partial lambda); 
 (partial r_2)/(partial position), (partial r_2)/(partial lambda)
 )
@@ -218,7 +218,7 @@ $
 The final expression of the Jacobian $J_r$ is:
 
 $
-J_r = mat(delim:"[",
+J_r = mat(
 stiffness + geometricstiffness_lambda, constraintmatrix(position)^T;
 constraintmatrix(position), 0
 )
@@ -227,18 +227,18 @@ $
 Newton-Raphson iteration:
 
 $
-J_r mat(delim:"[", position^(i+1) - position^i; lambda^(i+1) - lambda^i) = -r(position^i, lambda^i)
+J_r mat( position^(i+1) - position^i; lambda^(i+1) - lambda^i) = -r(position^i, lambda^i)
 $
 
 or,
 
 $
-mat(delim:"[",
+mat(
 stiffness(position^i) + geometricstiffness_lambda (position^i, lambda^i), constraintmatrix(position^i)^T;
 constraintmatrix(position^i), 0
 ) 
-mat(delim:"[", position^(i+1) - position^i; lambda^(i+1) - lambda^i)
-= -mat(delim:"[", force(position^i) + constraintmatrix(position^i)^T lambda^i; constraint(position^i))
+mat( position^(i+1) - position^i; lambda^(i+1) - lambda^i)
+= -mat( force(position^i) + constraintmatrix(position^i)^T lambda^i; constraint(position^i))
 $
 
 === 2-steps Solver
@@ -313,13 +313,13 @@ $
 Based on @second_newton_law_constraint, we add the constraint term in the residual function of the linear multistep methods (@linear_multistep_method_section):
 
 $
-tilde(r)(state, lambda) = tilde(r)(position, velocity, lambda) = \ a_s mat(delim:"[", position; mass velocity)
-+ sum_(j=0)^(s-1) a_j mat(delim:"[", position_(n+j); mass velocity_(n+j)) \
+tilde(r)(state, lambda) = tilde(r)(position, velocity, lambda) = \ a_s mat( position; mass velocity)
++ sum_(j=0)^(s-1) a_j mat( position_(n+j); mass velocity_(n+j)) \
 - stepsize (b_s 
-mat(delim:"[", velocity; force(position, velocity) + constraintmatrix(position, t)^T thick lambda)
-+ sum_(j=0)^(s-1) b_j mat(delim:"[", velocity_(n+j); force(position_(n+j), velocity_(n+j)) + constraintmatrix(position_(n+j), t_(n+j))^T thick lambda_(n+j))
+mat( velocity; force(position, velocity) + constraintmatrix(position, t)^T thick lambda)
++ sum_(j=0)^(s-1) b_j mat( velocity_(n+j); force(position_(n+j), velocity_(n+j)) + constraintmatrix(position_(n+j), t_(n+j))^T thick lambda_(n+j))
 )\
-= mat(delim:"[", r_1(state, lambda); tilde(r_2)(state, lambda))
+= mat( r_1(state, lambda); tilde(r_2)(state, lambda))
 $
 
 $tilde(r_2)$ can be related to $r_2$ from @linear_multistep_method_section:
@@ -330,7 +330,7 @@ $
 We know have more unknowns ($position$, $velocity$, $lambda$) than equations, so we add the constraint @holonomic_definition to $tilde(r)$:
 
 $
-tilde(r) = mat(delim:"[",
+tilde(r) = mat(
 r_1(state);
 tilde(r_2)(state);
 constraint(state,t)
@@ -340,7 +340,7 @@ $
 We need to compute the Jacobian $J_tilde(r)$ of $tilde(r)$:
 
 $
-J_tilde(r) = mat(delim:"[",
+J_tilde(r) = mat(
 (partial r_1)/(partial position), (partial r_1)/(partial velocity), (partial r_1)/(partial lambda);
 (partial tilde(r_2))/(partial position), (partial tilde(r_2))/(partial velocity), (partial tilde(r_2))/(partial lambda);
 (partial constraint)/(partial position), (partial constraint)/(partial velocity), (partial constraint)/(partial lambda)
@@ -389,7 +389,7 @@ The final expression of the Jacobian $J_tilde(r)$ is:
 
 $
 J_tilde(r) = 
-mat(delim:"[",
+mat(
 a_s identity, -stepsize thick b_s thick identity, 0;
 
 -stepsize thick b_s (stiffness(state) + geometricstiffness_lambda(position, lambda)),
@@ -405,7 +405,7 @@ We denote $constraintmatrix^i = constraintmatrix(position^i)$.
 Newton-Raphson to solve $tilde(r)(state)=0$:
 
 $
-mat(delim:"[",
+mat(
 a_s identity, -stepsize thick b_s thick identity, 0;
 
 -stepsize thick b_s (stiffness + geometricstiffness_lambda),
@@ -413,7 +413,7 @@ a_s mass - stepsize thick b_s thick damping,
 -stepsize thick b_s constraintmatrix^i^T;
 constraintmatrix^i, 0, 0
 )
-mat(delim:"[", 
+mat( 
  position ^(i+1) - position ^i; 
  velocity ^(i+1) - velocity ^i;
  lambda^(i+1) - lambda^i) 
@@ -423,13 +423,13 @@ $
 We define a block division of the matrix such as:
 
 $
-mat(delim:"[",
+mat(
 A,B,0;
 D,E,F;
 G,0,0;
 augment: #(hline:1, vline:1)) 
 =
-mat(delim:"[",
+mat(
 a_s identity, -stepsize thick b_s thick identity, 0;
 -stepsize thick b_s (stiffness + geometricstiffness_lambda),
 a_s mass - stepsize thick b_s thick damping,
@@ -443,44 +443,44 @@ Using the Schur complement (@schur_complement_linear_system_y), we obtain the re
 
 $
 (
-mat(delim:"[",
+mat(
 E,F;0,0)
-- mat(delim:"[",
+- mat(
 D;G)
 A^(-1)
-mat(delim:"[", B, 0)
+mat( B, 0)
 )
-mat(delim:"[",
+mat(
  velocity ^(i+1) - velocity ^i;
  lambda^(i+1) - lambda^i) 
- = - mat(delim:"[", tilde(r_2)(state^i); tilde(r_3)(state^i))
- + mat(delim:"[", D;G) A^(-1) r_1
+ = - mat( tilde(r_2)(state^i); tilde(r_3)(state^i))
+ + mat( D;G) A^(-1) r_1
 $
 
 
 $
 <=>
-mat(delim:"[",
+mat(
 E-1/a_s D B,F;-1/a_s G B,0)
-mat(delim:"[",
+mat(
  velocity ^(i+1) - velocity ^i;
  lambda^(i+1) - lambda^i) 
-= - mat(delim:"[", tilde(r_2)(state^i); tilde(r_3)(state^i))
-+ 1/a_s mat(delim:"[", D;G) r_1(state^i)
+= - mat( tilde(r_2)(state^i); tilde(r_3)(state^i))
++ 1/a_s mat( D;G) r_1(state^i)
 $
 
 Finally:
 $
-mat(delim:"[",
+mat(
 a_s mass - stepsize thick b_s thick damping - stepsize^2 b_s^2/a_s (stiffness + geometricstiffness_lambda),
 -stepsize thick b_s constraintmatrix^i^T;
 stepsize thick b_s/a_s constraintmatrix^i,0;
 augment: #(hline:1,vline:1))
-mat(delim:"[",
+mat(
  velocity ^(i+1) - velocity ^i;
  lambda^(i+1) - lambda^i) 
-\ = - mat(delim:"[", tilde(r_2); constraint(state^i))
-+ 1/a_s mat(delim:"[", 
+\ = - mat( tilde(r_2); constraint(state^i))
++ 1/a_s mat( 
 -stepsize thick b_s (stiffness + geometricstiffness_lambda); constraintmatrix^ i) r_1(state^i)
 $
 
@@ -491,16 +491,16 @@ $
 It yields:
 
 $
-mat(delim:"[",
+mat(
 A_lambda^i,
 -stepsize thick b_s constraintmatrix^i^T;
 stepsize thick b_s/a_s constraintmatrix^i,0;
 )
-mat(delim:"[",
+mat(
  velocity ^(i+1) - velocity ^i;
  lambda^(i+1) - lambda^i) 
 =
-mat(delim:"[",
+mat(
 b_lambda^i;
 constraint(state^i) + 1/a_s constraintmatrix^i r_1(state^i)
 )
@@ -594,12 +594,12 @@ $ <position_level_constraint_equation>
 In matrix format:
 
 $
-mat(delim:"[",
+mat(
 A, -stepsize constraintmatrix(position_n)^T;
 stepsize constraintmatrix(position_n), 0
 )
-mat(delim:"[", Delta velocity; lambda) =
-mat(delim:"[", b; -constraint(position_n) - stepsize constraintmatrix(position_n)velocity_n)
+mat( Delta velocity; lambda) =
+mat( b; -constraint(position_n) - stepsize constraintmatrix(position_n)velocity_n)
 $
 
 Using the Schur complement (@schur_complement_linear_system_y):
@@ -624,52 +624,52 @@ Force and constraint linearization method is equivalent to a single Newton step,
 If the matrix $A$ is made of multiple blocs:
 
 $
-A = mat(delim:"[", A_(00), A_(01); A_(10), A_(11))
+A = mat( A_(00), A_(01); A_(10), A_(11))
 $
 
 We can also divide $A^(-1)$:
 
 $
-A = mat(delim:"[", A^(-1)_(00), A^(-1)_(01); A^(-1)_(10), A^(-1)_(11))
+A = mat( A^(-1)_(00), A^(-1)_(01); A^(-1)_(10), A^(-1)_(11))
 $
 
 The Jacobian matric can also be divided:
 
 $
-constraintmatrix = mat(delim:"[", constraintmatrix_0, constraintmatrix_1) 
-= mat(delim:"[", constraintmatrix_0,0) + mat(delim:"[", 0, constraintmatrix_1) 
+constraintmatrix = mat( constraintmatrix_0, constraintmatrix_1) 
+= mat( constraintmatrix_0,0) + mat( 0, constraintmatrix_1) 
 $
 
 And the compliance matrix projected into the constraint space:
 
 $
 compliancematrix = constraintmatrix A^(-1) constraintmatrix^T = &
-(mat(delim:"[", constraintmatrix_0,0) + mat(delim:"[", 0,constraintmatrix_1) )
+(mat( constraintmatrix_0,0) + mat( 0,constraintmatrix_1) )
 A^(-1)
-(mat(delim:"[", constraintmatrix_0^T;0) + mat(delim:"[", 0;constraintmatrix_1^T) ) \
+(mat( constraintmatrix_0^T;0) + mat( 0;constraintmatrix_1^T) ) \
 =
 &
-mat(delim:"[", constraintmatrix_0,0) A^(-1) mat(delim:"[", constraintmatrix_0^T;0)
+mat( constraintmatrix_0,0) A^(-1) mat( constraintmatrix_0^T;0)
 +
-mat(delim:"[", 0,constraintmatrix_1) A^(-1) mat(delim:"[", constraintmatrix_0^T;0)
+mat( 0,constraintmatrix_1) A^(-1) mat( constraintmatrix_0^T;0)
 + \
-& mat(delim:"[", constraintmatrix_0,0) A^(-1) mat(delim:"[", 0;constraintmatrix_1^T)
+& mat( constraintmatrix_0,0) A^(-1) mat( 0;constraintmatrix_1^T)
 +
-mat(delim:"[", 0,constraintmatrix_1) A^(-1) mat(delim:"[", 0;constraintmatrix_1^T)
+mat( 0,constraintmatrix_1) A^(-1) mat( 0;constraintmatrix_1^T)
 $
 
 Let's compute each term:
 
 $
-underbrace(mat(delim:"[", constraintmatrix_0,0), in RR^(m times n) )
+underbrace(mat( constraintmatrix_0,0), in RR^(m times n) )
 underbrace(
   underbrace(A^(-1),  in RR^(n times n))
-  underbrace(mat(delim:"[", constraintmatrix_0^T;0), in RR^(n times m))
+  underbrace(mat( constraintmatrix_0^T;0), in RR^(n times m))
 , in RR^(n times m))
 =
 
-mat(delim:"[", constraintmatrix_0,0)
-mat(delim:"[", A^(-1)_(00) constraintmatrix_0^T;A^(-1)_(10) constraintmatrix_0^T)
+mat( constraintmatrix_0,0)
+mat( A^(-1)_(00) constraintmatrix_0^T;A^(-1)_(10) constraintmatrix_0^T)
 
 = constraintmatrix_0 A^(-1)_(00) constraintmatrix_0^T
 $
@@ -677,10 +677,10 @@ $
 Similarly
 
 $
-mat(delim:"[", 0,constraintmatrix_1) A^(-1) mat(delim:"[", constraintmatrix_0^T;0)
+mat( 0,constraintmatrix_1) A^(-1) mat( constraintmatrix_0^T;0)
 =
-mat(delim:"[", 0,constraintmatrix_1)
-mat(delim:"[", A^(-1)_(00) constraintmatrix_0^T;A^(-1)_(10) constraintmatrix_0^T)
+mat( 0,constraintmatrix_1)
+mat( A^(-1)_(00) constraintmatrix_0^T;A^(-1)_(10) constraintmatrix_0^T)
 =
 constraintmatrix_1 A^(-1)_(10) constraintmatrix_0^T
 $
@@ -712,12 +712,12 @@ cases(
 $
 
 $
-mat(delim:"[",
+mat(
 A, -stepsize constraintmatrix(position_n)^T;
 stepsize constraintmatrix(position_n), relaxation
 )
-mat(delim:"[", Delta velocity; lambda) =
-mat(delim:"[", b; -constraint(position_n) - stepsize constraintmatrix(position_n)velocity_n)
+mat( Delta velocity; lambda) =
+mat( b; -constraint(position_n) - stepsize constraintmatrix(position_n)velocity_n)
 $
 
 Using the Schur complement (@schur_complement_linear_system_y):
@@ -753,8 +753,8 @@ $
 
 $
 constraintmatrix(position_1, position_2)
-& = mat(delim:"[", (partial constraint)/(partial position_1), (partial constraint)/(partial position_2)) \
-& = mat(delim:"[", -identity, identity)
+& = mat( (partial constraint)/(partial position_1), (partial constraint)/(partial position_2)) \
+& = mat( -identity, identity)
 $
 
 $

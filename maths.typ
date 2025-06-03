@@ -9,7 +9,7 @@ their outer product, denoted $u times.circle v$, is defined as the $m times n$ m
 
 $
 u times.circle v = A =
-mat(delim:"[", 
+mat( 
 u_1 v_1, u_1 v_2, dots, u_1 v_n;
 u_2 v_1, u_2 v_2, dots, u_2 v_n;
 dots.v, dots.v, dots.down, dots.v;
@@ -109,7 +109,7 @@ $  <derivative_normalized_vetor_difference_b>
 The following is a linear system of equations in the matrix form using a 2x2 partition:
 
 $
-mat(delim:"[", A, B; C, D) mat(delim:"[", x; y) = mat(delim:"[", u;v)
+mat( A, B; C, D) mat( x; y) = mat( u;v)
 $
 
 Suppose $p$, $q$ are nonnegative integers such that $p + q > 0$, and suppose $A$, $B$, $C$, $D$ are respectively $p times p$, $p times q$, $q times p$, and $q times q$ matrices.

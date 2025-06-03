@@ -50,16 +50,16 @@ To find the next unknown state $y_(n+s)$, we need to compute the root $x_r$ of $
 In the case of the Newton's second law (@ODE),
 
 $
-r(state) = r(position, velocity) = \ a_s mat(delim:"[", position; mass velocity)
-+ sum_(j=0)^(s-1) a_j mat(delim:"[", position_(n+j); mass velocity_(n+j)) 
+r(state) = r(position, velocity) = \ a_s mat( position; mass velocity)
++ sum_(j=0)^(s-1) a_j mat( position_(n+j); mass velocity_(n+j)) 
 - stepsize (b_s 
-mat(delim:"[", velocity; force(position, velocity))
-+ sum_(j=0)^(s-1) b_j mat(delim:"[", velocity_(n+j); force(position_(n+j), velocity_(n+j)))
+mat( velocity; force(position, velocity))
++ sum_(j=0)^(s-1) b_j mat( velocity_(n+j); force(position_(n+j), velocity_(n+j)))
 )\
-= mat(delim:"[", r_1(state); r_2(state))
+= mat( r_1(state); r_2(state))
 $
 
-We will need to compute the Jacobian $J_r = (partial r)/(partial x) = mat(delim:"[",
+We will need to compute the Jacobian $J_r = (partial r)/(partial x) = mat(
 (partial r_1)/(partial #position), (partial r_1)/(partial #velocity);
 (partial r_2)/(partial #position), (partial r_2)/(partial #velocity);
 )$ of $r$. Let's compute each term:
@@ -83,7 +83,7 @@ $
 The final expression of the Jacobian is:
 
 $
-J_r = mat(delim:"[",
+J_r = mat(
 a_s identity, quad -stepsize thick b_s thick identity;
  -stepsize thick b_s thick stiffness, quad a_s mass - stepsize thick b_s thick damping)
 $
@@ -93,10 +93,10 @@ We define $stiffness^i = stiffness(position^i, velocity^i)$ and $damping^i = dam
 Newton-Raphson to solve $r(state)=0$:
 
 $
-mat(delim:"[",
+mat(
 a_s identity, quad -stepsize thick b_s thick identity;
  -stepsize thick b_s thick stiffness^i, quad a_s mass - stepsize thick b_s thick damping^i)
- mat(delim:"[", #position ^(i+1) - #position ^i; #velocity ^(i+1) - #velocity ^i) = -r(state^i)
+ mat( #position ^(i+1) - #position ^i; #velocity ^(i+1) - #velocity ^i) = -r(state^i)
 $
 
 === Solve for #velocity
@@ -135,13 +135,13 @@ $
 === Rayleigh Damping
 
 $
-r(state) = r(position, velocity) = \ a_s mat(delim:"[", position; mass velocity)
-+ sum_(j=0)^(s-1) a_j mat(delim:"[", position_(n+j); mass velocity_(n+j)) 
+r(state) = r(position, velocity) = \ a_s mat( position; mass velocity)
++ sum_(j=0)^(s-1) a_j mat( position_(n+j); mass velocity_(n+j)) 
 \ - stepsize (b_s 
-mat(delim:"[", velocity; force(position, velocity) + (-alpha mass + beta stiffness(position, velocity))velocity)
-+\ sum_(j=0)^(s-1) b_j mat(delim:"[", velocity_(n+j); force(position_(n+j), velocity_(n+j)) + (-alpha mass + beta stiffness(position_(n+j), velocity_(n+j))) velocity)
+mat( velocity; force(position, velocity) + (-alpha mass + beta stiffness(position, velocity))velocity)
++\ sum_(j=0)^(s-1) b_j mat( velocity_(n+j); force(position_(n+j), velocity_(n+j)) + (-alpha mass + beta stiffness(position_(n+j), velocity_(n+j))) velocity)
 )\
-= mat(delim:"[", r_1(state); r_2(state))
+= mat( r_1(state); r_2(state))
 $
 
 Only the second line is modified, so only the derivatives of $r_2$ must be computed:
@@ -158,7 +158,7 @@ $
 The final expression of the Jacobian is:
 
 $
-J_r = mat(delim:"[",
+J_r = mat(
 a_s identity, quad -stepsize thick b_s thick identity;
  -stepsize thick b_s thick stiffness, quad (a_s + stepsize thick b_s alpha) mass -stepsize thick b_s (damping + beta stiffness))
 $
@@ -166,10 +166,10 @@ $
 Newton-Raphson to solve $r(state)=0$:
 
 $
-mat(delim:"[",
+mat(
 a_s identity, quad -stepsize thick b_s thick identity;
  -stepsize thick b_s thick stiffness, quad (a_s + stepsize thick b_s alpha) mass -stepsize thick b_s (damping + beta stiffness))
- mat(delim:"[", #position ^(i+1) - #position ^i; #velocity ^(i+1) - #velocity ^i) = -r(state^i)
+ mat( #position ^(i+1) - #position ^i; #velocity ^(i+1) - #velocity ^i) = -r(state^i)
 $
 
 ==== Solve for #velocity
