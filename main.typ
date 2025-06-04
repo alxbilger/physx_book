@@ -1,3 +1,5 @@
+#import "@preview/showybox:2.0.4": showybox
+
 #let title = "Physics Simulation Cookbook"
 #let author = "Alexandre Bilger"
 
@@ -8,7 +10,7 @@
 #let purple = rgb(160, 150, 221)
 #let gray   = rgb(151, 163, 146)
 
-#let maincolor = orange
+#let maincolor = blue
 
 #set page(
   paper: "a4",
@@ -47,7 +49,7 @@
 }
 
 #align(center, text(45pt)[
-  #title
+  #text(fill:maincolor, title)
 ])
 
 #align(center)[
