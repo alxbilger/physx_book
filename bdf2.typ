@@ -1,8 +1,9 @@
 #import "variables.typ": * 
+#import "box.typ": *
 
 == 2-step BDF
 
-In @initial_value_problem, the time derivative can be approximated using the backward first-order finite differences:
+In @initial_value_problem, the time derivative can be approximated such as:
 
 $
 y'_(n+2) approx (3 y_(n+2) - 4 y_(n+1) + y_n)/(2 stepsize)
@@ -56,6 +57,7 @@ force(position_(n+2), velocity_(n+2))
 )
 $ <bdf2>
 
+#mybox(title: "Residual Function")[
 Definition of the residual function $r$:
 
 $
@@ -66,9 +68,11 @@ mass (velocity- 4/3 velocity_(n+1) + 1/3 velocity_(n)) - 2/3 Delta t thick force
 )
 = mat( r_1(state);r_2(state))
 $
+]
 
 Based on @bdf2, we want to find the root $state_(n+1) = mat( position_(n+1); velocity_(n+1))$ of $r$ such that $r(state_(n+1))=0$.
 
+#mybox(title: "Computation of the Jacobian")[
 We will need to compute the Jacobian $J_r = (partial r)/(partial x) = mat(
 (partial r_1)/(partial #position), (partial r_1)/(partial #velocity);
 (partial r_2)/(partial #position), (partial r_2)/(partial #velocity);
@@ -97,6 +101,7 @@ J_r = mat(
 identity, quad - 2/3 stepsize thick identity;
 - 2/3 stepsize thick stiffness, quad mass - 2/3 stepsize thick damping)
 $
+]
 
 Newton-Raphson to solve $r(state)=0$:
 

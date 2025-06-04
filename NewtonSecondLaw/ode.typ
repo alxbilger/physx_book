@@ -1,4 +1,5 @@
 #import "../variables.typ": *
+#import "../box.typ": *
 
 == Ordinary Differential Equation
 
@@ -25,11 +26,13 @@ $ <ODE>
 
 === Rayleigh Damping
 
+#definition(title: "Rayleigh Damping")[
 Rayleigh damping is defined as:
 
 $
 F_"Rayleigh" = (-alpha mass + beta underbrace((partial force(position, velocity))/(partial position), stiffness(position, velocity))) velocity
 $ <F_rayleigh>
+]
 
 $F_"Rayleigh"$ is added to the sum of forces in @ODE:
 

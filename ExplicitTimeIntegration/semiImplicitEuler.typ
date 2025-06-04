@@ -1,4 +1,5 @@
 #import "../variables.typ": *
+#import "../box.typ": *
 
 == Semi-implicit Euler method
 
@@ -43,7 +44,9 @@ $
 
 Finally,
 
+#result[
 $
 mat( position_(n+1); velocity _(n+1)) =
 mat( position_n& + Delta t thick velocity _(n+1); velocity _n& + Delta t thick mass^(-1)(force(position_n, velocity _n) - coriolismatrix(position_n, velocity_n) velocity_n))
 $
+]

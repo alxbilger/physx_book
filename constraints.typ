@@ -1,20 +1,25 @@
-#import "variables.typ": * 
+#import "variables.typ": *
+#import "box.typ": *
 
 = Constraints
 
 == Definitions
 
+#definition(title: "Holonomic Constraints")[
 Holonomic constraints are relations between position variables:
 
 $
 constraint(position, t) = 0
 $ <holonomic_definition>
+]
 
+#definition(title: "Non-Holonomic Constraints")[
 Non-holonomic constraints are relations between velocity variables, or higher time-derivatives of position:
 
 $
 constraint(position, velocity, t) = 0
 $
+]
 
 Solving both the ODE from @ODE and the constraint is a Differential-algebraic system of equations (DAE):
 

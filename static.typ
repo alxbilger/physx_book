@@ -1,11 +1,21 @@
 #import "variables.typ": *
+#import "box.typ": *
 
 = Statics
 
-The physical system does not experience any acceleration ($acceleration=0$).
+#definition(title: "Statics")[
+The physical system does not experience any acceleration
+$
+acceleration(t)=0
+$
+]
+
+#definition(title: "Dyanmic Equilibrium")[
 $acceleration = 0$ does not necessarily imply $velocity=0$.
 It means that $velocity$ is a constant.
 If this constant is nonzero, it is called dynamic equilibrium or steady motion.
+]
+
 In this section, we consider $velocity=0$.
 Second Newton's law (@second_newton_law) becomes:
 

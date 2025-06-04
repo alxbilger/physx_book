@@ -1,4 +1,5 @@
 #import "../variables.typ": *
+#import "../box.typ": *
 
 == Forward Euler Method
 
@@ -41,7 +42,9 @@ $ <forward_euler>
 
 Grouping the terms in $n+1$ on the left-hand side:
 
+#result[
 $
 mat( #position _(n+1); #velocity _(n+1))=
 mat( #position _n& + Delta t thick #velocity _n; #velocity _n& + Delta t thick mass^(-1)(force(position _n, velocity _n) - coriolismatrix(position_n, velocity_n) velocity_n))
 $
+]

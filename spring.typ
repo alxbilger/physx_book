@@ -1,5 +1,5 @@
 #import "@preview/cetz:0.2.0"
-#import "define.typ": result, definition
+#import "box.typ": *
 
 = Spring
 

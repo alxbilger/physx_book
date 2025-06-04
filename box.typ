@@ -9,25 +9,25 @@
       sep-thickness: 0pt,
     ),
     frame: (
-      title-color: color.lighten(70%),
+      title-color: color.lighten(80%),
       border-color: color.darken(20%),
       footer-color: color.lighten(80%),
-      body-inset: (left: 1em, right: 0em, y:1em),
+      body-inset: (left: 1em, right: 0em, y:0.8em),
       thickness: (left: 2pt),
       radius: 0pt,
     ),
     title: ( title ),
-    spacing: 1em,
+    spacing: 0.8em,
     breakable: false,
   )[#body]
 }
 
 #let prefixedbox(body, title: none, prefix: none, color: maincolor) = {
   if title != none {
-    mybox(body, title: prefix + ": " + title, color: color)
+    mybox(body, title: smallcaps(prefix) + " | " + title, color: color)
   }
   else if prefix != none {
-    mybox(body, title: prefix, color: color)
+    mybox(body, title: smallcaps(prefix), color: color)
   }
   else {
     mybox(body, title: none, color: color)
@@ -41,4 +41,8 @@
 
 #let property(body, title: none, color: purple) = {
   prefixedbox(body, prefix: "Property", title: title, color: color)
+}
+
+#let result(body, title: none, color: red) = {
+  prefixedbox(body, prefix: "Result", title: title, color: color)
 }

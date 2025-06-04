@@ -1,12 +1,15 @@
 #import "variables.typ": *
+#import "box.typ": *
 
 = Mapping
 
+#definition(title: "Mapping")[
 A mapping is a coordinate transformation function $mapping$ such that:
 
 $
   position_"out" = mapping(position_"in")
 $ <mapping_function>
+]
 
 == Velocity
 
@@ -16,11 +19,13 @@ $
   velocity_"out" = (d position_"out")/(d t) = (d mapping(position_"in"))/(d t) = (d mapping(position_"in")) / (d position_"in") (d position_"in") / (d t) = (d mapping(position_"in")) / (d position_"in") velocity_"in"
 $
 
+#definition(title: "Mapping Jacobian Matrix")[
 We introduce the jacobian matrix $jacobianmapping$ of the mapping:
 
 $
   jacobianmapping(position) = bold(partial) mapping(position) = (partial mapping(position)) / (partial position)
 $
+]
 
 Such that:
 

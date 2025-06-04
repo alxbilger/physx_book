@@ -1,4 +1,5 @@
 #import "variables.typ": *
+#import "box.typ": *
 
 = Implicit Time Integration
 
@@ -59,6 +60,8 @@ mat( velocity; force(position, velocity))
 = mat( r_1(state); r_2(state))
 $
 
+#mybox(title: "Computation of the Jacobian")[
+
 We will need to compute the Jacobian $J_r = (partial r)/(partial x) = mat(
 (partial r_1)/(partial #position), (partial r_1)/(partial #velocity);
 (partial r_2)/(partial #position), (partial r_2)/(partial #velocity);
@@ -86,7 +89,7 @@ $
 J_r = mat(
 a_s identity, quad -stepsize thick b_s thick identity;
  -stepsize thick b_s thick stiffness, quad a_s mass - stepsize thick b_s thick damping)
-$
+$]
 
 We define $stiffness^i = stiffness(position^i, velocity^i)$ and $damping^i = damping(position^i, velocity^i)$.
 

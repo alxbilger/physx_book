@@ -1,4 +1,5 @@
 #import "variables.typ": *
+#import "box.typ": *
 
 = Numerical Integration
 
@@ -16,11 +17,13 @@ $
 t_n = t_0 + n thick Delta t
 $
 
+#definition(title: "Initial Value Problem")[
 Numerical methods for ordinary ordinary differential equation approximate solutions to initial value problems of the form:
 
 $
 y'=f(t,y), quad y(t_0) = y_0
 $ <initial_value_problem>
+]
 
 == Linear Multistep Method
 

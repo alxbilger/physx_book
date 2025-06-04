@@ -1,4 +1,5 @@
 #import "variables.typ": *
+#import "box.typ": *
 
 == Crank–Nicolson method
 
@@ -37,6 +38,7 @@ force(position_n,velocity_n) + force(position_(n+1), velocity_(n+1))
 )
 $<trapezoidal_rule>
 
+#mybox(title: "Residual Function")[
 Definition of the residual function $r$:
 
 $
@@ -46,9 +48,11 @@ position - position_(n) - stepsize/2 (velocity_n + velocity);
 mass(velocity - velocity_n) - stepsize/2 (force(position_n, velocity_n)+force(position, velocity))
 )
 $
+]
 
 Based on @trapezoidal_rule, we want to find the root $state_(n+1) = mat( position_(n+1); velocity_(n+1))$ of $r$ such that $r(state_(n+1))=0$.
 
+#mybox(title: "Computation of the Jacobian")[
 We will need to compute the Jacobian $J_r = (partial r)/(partial x) = mat(
 (partial r_1)/(partial #position), (partial r_1)/(partial #velocity);
 (partial r_2)/(partial #position), (partial r_2)/(partial #velocity);
@@ -77,6 +81,7 @@ J_r = mat(
 identity, quad -stepsize/2 thick identity;
  - stepsize/2 thick K, quad M - stepsize/2 thick B)
 $
+]
 
 Newton-Raphson to solve $r(state)=0$:
 

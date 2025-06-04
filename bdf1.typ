@@ -1,4 +1,5 @@
 #import "variables.typ": *
+#import "box.typ": *
 
 == 1-step BDF (Backward Euler)
 
@@ -58,12 +59,14 @@ $ <backward_euler>
 
 This is a non-linear set of equations: $force$ is non-linear with respect to the unknown $#position _(n+1)$ and $#velocity _(n+1)$.
 
+#mybox(title: "Residual Function")[
 Let's define the residual function $r$ such that:
 
 $
 r(state) = r(position, velocity) = mat( position - position _n - stepsize thick velocity ; mass(velocity -velocity _n) - stepsize thick force(state))
 = mat( r_1(state); r_2(state))
 $<h_backward_euler>
+]
 
 Based on @backward_euler, we want to find the root $#state _(n+1) = mat(#position _(n+1); #velocity _(n+1))$ of $r$ such that 
 
@@ -71,6 +74,7 @@ $
 r(#state _(n+1))=0
 $
 
+#mybox(title: "Computation of the Jacobian")[
 We will need to compute the Jacobian $J_r$ of $r$:
 
 $
@@ -106,6 +110,7 @@ identity, quad -stepsize thick identity;
 -stepsize thick #stiffness, quad mass - stepsize thick #damping;
 )
 $
+]
 
 Let's define $position^0$ and $velocity^0$ the first estimate of the solution of this equation, called the initial guess.
 
@@ -116,18 +121,17 @@ $
 J_r (#state ^i) (#state ^(i+1) - #state ^i) = -r(#state ^i)
 $
 
-
 $
 mat(
-identity, quad -stepsize thick identity;
--stepsize thick #stiffness (#state^i), quad mass - stepsize thick #damping (#state^i);
+identity, -stepsize thick identity;
+-stepsize thick #stiffness (#state^i), mass - stepsize thick #damping (#state^i);
 )
 mat( #position ^(i+1) - #position ^i; #velocity ^(i+1) - #velocity ^i) 
 =
 mat( -position^i + position_n + stepsize thick velocity^i ; -mass(velocity^i - velocity_n) + stepsize thick force(state^i))
 $
 
-=== Solve for #velocity
+=== Solve for $velocity$
 
 Using the Schur complement (see @schur_complement_linear_system_y), we obtain the reduced equation in $velocity ^(i+1) - velocity ^i$:
 
@@ -178,24 +182,26 @@ mass (#velocity _(n+1) - #velocity _n) &= stepsize thick (force(#position _(n+1)
 &= stepsize thick (force(#position _(n+1), #velocity _(n+1)) + (-alpha mass + beta stiffness) #velocity _(n+1))
 $ <backward_euler_rayleigh>
 
+#mybox(title: "Residual Function")[
 We define the residual function $r$ such that:
 
 $
 r(#state) = mat( #position - #position _n - stepsize thick #velocity ; mass(#velocity -#velocity _n) - stepsize thick (force(#state) + (-alpha mass + beta stiffness) velocity _(n+1)))
 = mat( r_1(#state); r_2(#state))
 $<r_backward_euler_rayleigh>
+]
 
 The nonlinear equation to solve is $r(position,velocity) = 0$
 
-The derivatives of $r_1$ with respect to $position$ and $velocity$ can be found respectively in @backward_euler_derivative_r1_position and @backward_euler_derivative_r1_velocity.
-
 #let backward_euler_rayleigh_dr2dposition = $- stepsize thick stiffness$
+#let backward_euler_rayleigh_dr2dvelocity = $(1+alpha stepsize) mass - stepsize damping - beta stepsize thick stiffness$
+
+#mybox(title: "Computation of the Jacobian")[
+The derivatives of $r_1$ with respect to $position$ and $velocity$ can be found respectively in @backward_euler_derivative_r1_position and @backward_euler_derivative_r1_velocity.
 
 $
 (partial r_2) / (partial position) = - stepsize (partial force) / (partial position) = #backward_euler_rayleigh_dr2dposition
 $
-
-#let backward_euler_rayleigh_dr2dvelocity = $(1+alpha stepsize) mass - stepsize damping - beta stepsize thick stiffness$
 
 $
 (partial r_2) / (partial velocity) 
@@ -211,6 +217,7 @@ mat(
 I, quad -stepsize I;
 #backward_euler_rayleigh_dr2dposition, quad #backward_euler_rayleigh_dr2dvelocity)
 $
+]
 
 Newton-Raphson to solve $r(state)=0$:
 
