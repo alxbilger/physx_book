@@ -1,19 +1,3 @@
-// #import "@preview/arkheion:0.1.0": arkheion, arkheion-appendices
-// #import "@preview/dashy-todo:0.0.2": todo
-
-// #show: arkheion.with(
-//   title: "Physics Simulation Cookbook",
-//   authors: (
-//   (
-//       name: "Alexandre Bilger", 
-//       email: "alexandre.bilger@inria.fr", 
-//       affiliation: "DEFROST/SED"),
-//   ),
-//   abstract: [This cookbook provides a curated collection of fundamental equations essential for simulating solid bodies.],
-//   keywords: ("Physics simulation",),
-//   date: datetime.today().display("[day] [month repr:long] [year]"),
-// )
-
 #let title = "Physics Simulation Cookbook"
 #let author = "Alexandre Bilger"
 
@@ -24,7 +8,7 @@
 #let purple = rgb(160, 150, 221)
 #let gray   = rgb(151, 163, 146)
 
-#let maincolor = blue
+#let maincolor = orange
 
 #set page(
   paper: "a4",
@@ -37,7 +21,9 @@
 #show heading: set text(maincolor)
 #set document(
   title: [#title],
-  date: auto
+  date: auto,
+  author: (author),
+  keywords: ("Physics simulation", )
 )
 
 // reset counter at each chapter
@@ -67,6 +53,8 @@
 #align(center)[
 
   #author
+
+  DEFROST/SED, Inria
 
   This cookbook provides a curated collection of fundamental equations essential for simulating solid bodies.
 ]
