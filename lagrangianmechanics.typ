@@ -105,11 +105,11 @@ $
 ]
 
 #definition(title: "Stiffness")[
-$#stiffness (#position, #velocity) = (partial #force)/(partial #position)$ is called stiffness.
+$stiffness (position, velocity) = (partial force)/(partial position)$ is called stiffness.
 ]
 
 #definition(title: "Damping")[
-$#damping (#position, #velocity) = (partial #force)/(partial #velocity)$ is called damping.
+$damping (position, velocity) = (partial force)/(partial velocity)$ is called damping.
 ]
 
 == Momentum

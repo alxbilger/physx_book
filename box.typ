@@ -1,4 +1,5 @@
 #import "color.typ":maincolor, green, purple
+#import "mode.typ":*
 #import "@preview/showybox:2.0.4": showybox
 
 #let mybox(body, title: none, color: maincolor) = {
@@ -9,12 +10,16 @@
       sep-thickness: 0pt,
     ),
     frame: (
-      title-color: color.lighten(80%),
+      body-color: pagecolor,
+      title-color: if darkmode == true {color.darken(65%)} else {color.lighten(80%)},
       border-color: color.darken(20%),
       footer-color: color.lighten(80%),
       body-inset: (left: 1em, right: 0em, y:0.8em),
       thickness: (left: 2pt),
       radius: 0pt,
+    ),
+    body-style: (
+      color: textcolor
     ),
     title: ( title ),
     spacing: 0.8em,

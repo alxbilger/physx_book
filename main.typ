@@ -1,4 +1,7 @@
-#import "color.typ":*
+#import "mode.typ":*
+
+#set page(fill: pagecolor)
+#set text(fill: textcolor)
 
 #let title = "Physics Simulation Cookbook"
 #let author = "Alexandre Bilger"
@@ -39,15 +42,16 @@
   strong(it)
 }
 
-#align(center, text(55pt)[
-  #text(fill:maincolor, title)
+#align(center, text(65pt)[
+  #text(fill:maincolor, smallcaps(title))
 ])
 
 #align(center)[
 
   #author
 
-  DEFROST/SED, Inria
+  DEFROST/SED #image("img/inr_logo_rouge.svg", height: 1.5em)
+  
 
   This cookbook provides a curated collection of fundamental equations essential for simulating solid bodies.
 ]

@@ -10,7 +10,7 @@ acceleration(t)=0
 $
 ]
 
-#definition(title: "Dyanmic Equilibrium")[
+#definition(title: "Dynamic Equilibrium")[
 $acceleration = 0$ does not necessarily imply $velocity=0$.
 It means that $velocity$ is a constant.
 If this constant is nonzero, it is called dynamic equilibrium or steady motion.

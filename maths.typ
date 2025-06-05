@@ -1,4 +1,4 @@
-#import "define.typ": result
+#import "box.typ": *
 
 = Maths
 
