@@ -147,7 +147,7 @@ dots.v, dots.down, dots.v;
 )
 $
 
-== Static
+== Static Equilibrium
 
 In statics
 $
@@ -257,7 +257,7 @@ $
 = -constraint(position^i) + constraintmatrix^i (stiffness(position^i) + geometricstiffness_lambda(position^i))^(-1)  (force(position^i) + constraintmatrix^i^T lambda^i)
 $
 
-$compliancematrix = constraintmatrix^i (stiffness(position^i) + geometricstiffness_lambda(position^i, lambda^i))^(-1) constraintmatrix^i^T$ is called the compliance matrix.
+$compliancematrix = constraintmatrix^i (stiffness(position^i) + geometricstiffness_lambda(position^i, lambda^i))^(-1) constraintmatrix^i^T$ is the compliance matrix projected in the constraints space.
 
 From @block_elimination_x, we can deduce:
 

@@ -76,6 +76,7 @@
 #include "implicittimeintegration.typ"
 #include "constraints.typ"
 #include "mapping.typ"
+#include "differentiable_simu.typ"
 #include "maths.typ"
 
 = Other Resources

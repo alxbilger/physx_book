@@ -393,22 +393,19 @@ $
 Substituting into $r_2=0$:
 
 $
-  mass(velocity - velocity_n) - stepsize force(position, velocity) = 0
+  r_2(position, velocity)=0 & <=> 
+  mass(velocity - velocity_n) - stepsize force(position, velocity) = 0 \
   & <=> mass((position - position_n) / stepsize - velocity_n) - stepsize force(position, (position - position_n) / stepsize) = 0 \
   & <=> mass (position - position_n - stepsize velocity_n)/stepsize^2 - force(position, (position - position_n) / stepsize) = 0 \
   & <=> mass (position - position_n - stepsize velocity_n)/stepsize^2 + (partial potentialenergy)/(partial position)(position, (position - position_n) / stepsize) = 0
 $
 
-Let's define $h(position) = mass (position - position_n - stepsize velocity_n)/stepsize^2 + (partial potentialenergy)/(partial position)(position, (position - position_n) / stepsize)$
+Let's define $h(position) = mass (position - position_n - stepsize velocity_n)/stepsize^2 + (partial potentialenergy)/(partial position)(position, (position - position_n) / stepsize)$.
 
-We can define an energy $E$ such that its minimization corresponds to $h(position)=0$:
+Solving $h(position)=0$ is equivalent to minimize $norm(h(position))$. However, minimizing $norm(h(position))$ using the Newton-Raphson method requires the second derivative of $h$ (see @newton_raphson_optimization), hence the forces. The standard approach only requires the first derivative.
 
-$
-  E(position) = 1/(2 stepsize^2) (position - hat(position)) mass (position - hat(position)) + potentialenergy
-$
-
-In that case,
+To rely only on the first derivative, $h$ is integrated to find an energy function $E = E(position)$, such that $h=(partial E)/(partial position)$.
 
 $
-  h = (partial E)/(partial position)
+  E(position) = 1/(2 stepsize^2) (position - position_n - stepsize velocity_n)^T mass (position - position_n - stepsize velocity_n) + potentialenergy
 $

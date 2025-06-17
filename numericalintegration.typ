@@ -5,6 +5,7 @@
 
 == Definition
 
+#definition[
 For any function $y=y(t)$, we call 
 
 $
@@ -16,6 +17,7 @@ with
 $
 t_n = t_0 + n thick Delta t
 $
+]
 
 #definition(title: "Initial Value Problem")[
 Numerical methods for ordinary ordinary differential equation approximate solutions to initial value problems of the form:
@@ -211,7 +213,7 @@ $
 r(x_r) approx r(x_0) + lr((partial r)/(partial x)|)_(x^0) Delta x^0
 $
 
-If we use this approximation to solve the equation, it leads to:
+If we use this approximation to solve the equation @nonlinear_equation, it leads to:
 
 $
 r(x^0) + lr((partial r)/(partial x)|)_(x^0) Delta x^0 = 0
@@ -233,6 +235,22 @@ The process is repeated as
 
 $
 lr((partial r)/(partial x)|)_(x^i) (x^(i+1)-x^i) = -r(x^i)
+$
+
+=== Optimization <newton_raphson_optimization>
+
+Newton-Raphson method can also be used in optimization problems.
+
+Given a twice-differentiable function $r = r(x)$, optimizing $r$ is equivalent to finding the roots of $nabla r = (partial r)/(partial x)$, i.e. solving $nabla r(x)=0$. This can be done using the Newton-Raphson method.
+
+The solution may be a minima, maxima, or saddle point.
+
+Note that applying the Newton-Raphson method on $nabla r$ requires the Hessian matrix $nabla^2 r = (partial^2 r)/(partial x^2)$.
+
+The iteration process is:
+
+$
+  lr((partial^2 r)/(partial x^2)|)_(x^i) (x^(i+1)-x^i) = -lr((partial r)/(partial x)|)_(x^i)
 $
 
 #include "ExplicitTimeIntegration/explicitTimeIntegration.typ"
