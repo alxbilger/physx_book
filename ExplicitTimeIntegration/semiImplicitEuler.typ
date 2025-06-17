@@ -3,17 +3,17 @@
 
 == Semi-implicit Euler method
 
-The time derivative in @states_ode can be approximated using a backward first-order finite difference for $x$ and a forward first-order finite difference for $v$:
+The time derivative in @states_ode can be approximated using a backward first-order finite difference for $position$ and a forward first-order finite difference for $velocity$:
 
 $
-d/(d t) mat( #position (t); #velocity (t)) approx 1/(Delta t) (mat( #position (t); #velocity (t + Delta t)) - mat( #position (t - Delta t); #velocity (t)) )
+d/(d t) mat( position (t); velocity (t)) approx 1/stepsize (mat( position (t); velocity (t + Delta t)) - mat( position (t - stepsize); velocity (t)) )
 $
 
 Substituting this approximation into @states_ode:
 
 $
-mat( #velocity (t); acceleration(t))=
-1/(Delta t) (mat( #position (t); #velocity (t + Delta t)) - mat( #position (t - Delta t); #velocity (t)) )
+mat(velocity (t); acceleration(t))=
+1/(stepsize) (mat( #position (t); #velocity (t + stepsize)) - mat( #position (t - stepsize); velocity (t)) )
 $
 
 From @sequence, we can also write:
