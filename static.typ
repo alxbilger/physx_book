@@ -1,9 +1,9 @@
 #import "variables.typ": *
 #import "box.typ": *
 
-= Statics
+= Static Equilibrium
 
-#definition(title: "Statics")[
+#definition(title: "Static Equilibrium")[
 The physical system does not experience any acceleration
 $
 acceleration(t)=0

@@ -101,21 +101,21 @@ $
 Replacing the linearized force from @force_linearization in the bottom row of @trapezoidal_rule:
 
 $
-M thick Delta v = 1/2 Delta t (2 F(#position _n, #velocity _n) + K Delta x + B Delta v)
+mass thick Delta velocity = 1/2 stepsize (2 force(position_n, velocity_n) + stiffness Delta position + damping Delta velocity)
 $ <trapezoidal_rule_linearized>
 
-==== Solve for $Delta v$
+==== Solve for $Delta velocity$
 
-Replacing $Delta x$ from  in @trapezoidal_rule_linearized:
-
-$
-M thick Delta v = 1/2 Delta t (2 F(#position _n, #velocity _n) + K 1/2 thick Delta t (Delta v + 2 #velocity _n) + B Delta v)
-$
-
-Grouping terms in $Delta v$ in LHS:
+Replacing $Delta position$ from  in @trapezoidal_rule_linearized:
 
 $
-(M- 1/2 Delta t thick B - 1/4 Delta t^2 thick K) Delta v = Delta t thick F(#position _n, #velocity _n) + 1/2 Delta t^2 K #velocity _n
+mass thick Delta velocity = 1/2 stepsize (2 force(position_n, velocity_n) + stiffness 1/2 thick stepsize (Delta velocity + 2 velocity_n) + damping Delta velocity)
+$
+
+Grouping terms in $Delta velocity$ in LHS:
+
+$
+(mass - 1/2 stepsize thick damping - 1/4 stepsize^2 thick stiffness) Delta velocity = stepsize thick force(position_n, velocity_n) + 1/2 stepsize^2 stiffness velocity_n
 $
 
 === Force Linearization with Rayleigh Damping
@@ -123,13 +123,13 @@ $
 Replacing the linearized force from @force_linearization_rayleigh in the bottom row of @trapezoidal_rule:
 
 $
-M thick Delta v =& 1/2 Delta t [2 F(#position _n, #velocity _n) + 2 (-alpha M + beta K)#velocity _n \ &+ K thick Delta x + (B-alpha M + beta K) Delta v]
+mass thick Delta velocity = 1/2 stepsize [2 force(position_n, velocity_n) + 2 (-alpha mass + beta stiffness) velocity_n + stiffness thick Delta position + (damping-alpha mass + beta stiffness) Delta velocity]
 $ <trapezoidal_rule_linearized_rayleigh>
 
-==== Solve for $Delta v$
+==== Solve for $Delta velocity$
 
-Replacing $Delta x$ from in @trapezoidal_rule_linearized:
+Replacing $Delta position$ from in @trapezoidal_rule_linearized:
 
 $
-[(1+ 1/2 alpha Delta t) M - 1/2 Delta t B - 1/2 Delta t (1/2 Delta t + beta) K] Delta v \ = Delta t thick F(#position _n, #velocity _n) + Delta t (-alpha M + (beta + 1/2 Delta t)K)#velocity _n
+[(1+ 1/2 alpha stepsize) mass - 1/2 stepsize damping - 1/2 stepsize (1/2 stepsize + beta) stiffness] Delta velocity \ = stepsize thick force(position_n, velocity_n) + stepsize (-alpha mass + (beta + 1/2 stepsize) stiffness) velocity_n
 $
