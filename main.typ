@@ -75,6 +75,7 @@
 #include "numericalintegration.typ"
 #include "implicittimeintegration.typ"
 #include "constraints.typ"
+#include "inverse_simu.typ"
 #include "mapping.typ"
 #include "differentiable_simu.typ"
 #include "maths.typ"
