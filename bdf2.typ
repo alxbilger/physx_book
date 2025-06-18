@@ -1,7 +1,7 @@
 #import "variables.typ": * 
 #import "box.typ": *
 
-== 2-step BDF
+== 2-step BDF <section_bdf2>
 
 In @initial_value_problem, the time derivative can be approximated such as:
 

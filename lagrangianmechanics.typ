@@ -156,7 +156,7 @@ The action principles state that the true path of $position$ from $t_1$ to $t_2$
 
 $
 delta S = (d S) / (d position) = 0
-$
+$ <action_principle>
 
 where $delta$ represents a small variation of the trajectory.
 

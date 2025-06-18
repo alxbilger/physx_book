@@ -1,7 +1,7 @@
 #import "variables.typ": *
 #import "box.typ": *
 
-== 1-step BDF (Backward Euler)
+== 1-step BDF (Backward Euler) <section_backward_euler>
 
 In @initial_value_problem, the time derivative can be approximated using the backward first-order finite differences:
 

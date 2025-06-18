@@ -45,32 +45,58 @@ $
 $
 ]
 
-== Gradient-based Optimization for Static Equilibrium
+== Gradient-based Optimization
 
-
-
-The objective is to optimize a parameter $theta$ of the simulation, such as the Young's modulus $E$, using a gradient-based optimization, so it minimizes a loss function $l(position^*, theta)$, where $position^* = position^*(theta)$ is the solution of $force(position, theta) = 0$.
+The objective is to optimize a parameter $theta$ of the simulation, such as the Young's modulus $E$, using a gradient-based optimization, so it minimizes a task-specific loss function $l(position^*, theta)$, where $position^* = position^*(theta)$ is a solution of an implicit function $f(state, theta)=0$.
 
 An example of loss function can be $l(position^*) = norm(position^* - position_d)$, where $position_t$ is a desired position.
+
+The implicit function $f$ can be:
+- The variation of the action (@action_principle)
+- The Euler-Lagrange equation (@euler_lagrange_equation)
+- The static equilibrium equation (@static_equation)
+- A residual function when a numerical method is applied. For example, after applying the backward Euler method (@section_backward_euler), BDF-2 (@section_bdf2) etc.
 
 To apply a gradient descent, the gradient $(d l)/(d theta)$ is required. Since $l=l(position^*(theta), theta)$ and $position^*(theta)$ is an implicit function, $(d l)/(d theta)$ cannot be computed directly. Chain rule applies:
 
 $
-  (d l)/(d theta) &= (partial l)/(partial position) (d position^*)/(d theta) + (partial l)/(partial theta) 
-$
+  (d l)/(d theta) = (partial l)/(partial position) (d position^*)/(d theta) + (partial l)/(partial theta) 
+$<derivative_loss_function>
 
-The gradient $(d position*)/(d E)$ is required,  the implicit function theorem applies:
-
-$
-  (d position^*)/(d theta) = &-((partial force)/(partial position))^(-1) (partial force)/(partial theta) \
-  =& - stiffness^(-1) (partial force)/(partial theta)
-$
-
-Finally,
+The gradient $(d position*)/(d theta)$ is required, the implicit function theorem applies:
 
 $
-  (d l)/(d theta) = -(partial l)/(partial position) stiffness^(-1) (partial force)/(partial theta) + (partial l)/(partial theta) 
+  (d position^*)/(d theta) = -((partial f)/(partial position))^(-1) (partial f)/(partial theta) 
 $
+
+Replacing in @derivative_loss_function:
+
+$
+(d l)/(d theta) = -(partial l)/(partial position) ((partial f)/(partial position))^(-1) (partial f)/(partial theta) + (partial l)/(partial theta) 
+$
+
+This is implicit differentiation.
+
+To speed up the computation, the adjoint vector $lambda$ is introduced:
+
+$
+  lambda^T = (partial l)/(partial position) ((partial f)/(partial position))^(-1)
+$
+
+that can be computed using a linear solver on the following linear system:
+
+$
+  (partial f)/(partial position) lambda^T = (partial l)/(partial position)
+$
+
+Once the adjoint vector is found:
+
+$
+(d l)/(d theta) = -lambda^T (partial f)/(partial theta) + (partial l)/(partial theta) 
+$
+
+This gradient can now be used in a gradient-based optimization method, such as a gradient descent:
+
 
 #algorithm(inset: 0.5em, {
   import algorithmic: *
@@ -78,21 +104,19 @@ $
   let Compute = Call.with("Compute")
   Procedure(
     "Gradient Descent",
-    ($theta_0$, $l$, $gamma$),
+    ($theta_0$, $l$, $f$, $gamma$),
     {
       LineComment(Assign[$theta$][$theta_0$], $theta_0$ + " is the initial guess")
       While(
         "not converged",
         {
-          LineComment(Assign[$position^*$][Solve $force(position)=0$], "Newton-Raphson method can be used for example")
+          LineComment(Assign[$position^*$][Solve $f(state, theta)=0$], "Newton-Raphson method can be used for example")
           Compute($(partial l)/(partial position)$ + " evaluated at " + $(position^*, theta)$)
           Compute($(partial l)/(partial theta)$ + " evaluated at " + $(position^*, theta)$)
-          Compute($(partial force)/(partial position)$ + " evaluated at " + $(position^*, theta)$)
-          Compute($(partial force)/(partial theta)$ + " evaluated at " + $(position^*, theta)$)
+          Compute($lambda^T$ + " from " + $(partial f)/(partial position) lambda^T = (partial l)/(partial position)$)
+          Compute($(partial f)/(partial theta)$ + " evaluated at " + $(position^*, theta)$)
 
-          LineComment(Assign($(d position^*)/(d theta)$, $-((partial force)/(partial position))^(-1) (partial force)/(partial theta)$), "From the implicit function theorem")
-
-          Assign($(d l)/(d theta)$, $(partial l)/(partial position) (d position^*)/(d theta) + (partial l)/(partial theta)$)
+          Assign($(d l)/(d theta)$, $-lambda^T (partial f)/(partial theta) + (partial l)/(partial theta) $)
 
           LineComment(Assign($theta$, $theta - gamma (d l)/(d theta)$), "Move against the gradient")
 
@@ -102,3 +126,23 @@ $
     }
   )
 })
+
+=== Gradient-based Optimization for Static Equilibrium <optim_static>
+
+The implicit function is @static_equation: $force(position, theta)=0$
+
+In this case:
+
+$
+  (partial f)/(partial position) = (partial force)/(partial position) = stiffness
+$
+
+$
+  (partial f)/(partial theta) = (partial force)/(partial theta)
+$
+
+The adjoint vector is computed by solving the linear system:
+
+$
+  stiffness lambda^T = (partial l)/(partial position)
+$

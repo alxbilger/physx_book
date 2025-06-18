@@ -20,8 +20,8 @@ In this section, we consider $velocity=0$.
 Second Newton's law (@second_newton_law) becomes:
 
 $
-force(#position)=0
-$
+force(position)=0
+$ <static_equation>
 
 This is a non-linear equation. It is solved using Newton-Raphson method.
 

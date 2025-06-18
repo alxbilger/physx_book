@@ -513,7 +513,7 @@ $ <constraint_linearmultistep_system>
 
 This linear system can be solved directly, or in 2 steps:
 
-==== 2-steps Solver
+=== 2-steps Solver
 
 Using the Schur complement (@schur_complement_linear_system_y), we obtain the reduced equation in $lambda^(i+1) - lambda^i$:
 
