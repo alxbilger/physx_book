@@ -71,11 +71,15 @@ $
 
 Replacing in @derivative_loss_function:
 
+#result(title:"Implicit differentiation")[
 $
 (d l)/(d theta) = -(partial l)/(partial position) ((partial f)/(partial position))^(-1) (partial f)/(partial theta) + (partial l)/(partial theta) 
-$
+$ <implicit_differentiation>
 
 This is implicit differentiation.
+]
+
+#mybox(title:"Adjoint Vector")[
 
 To speed up the computation, the adjoint vector $lambda$ is introduced:
 
@@ -83,17 +87,25 @@ $
   lambda^T = (partial l)/(partial position) ((partial f)/(partial position))^(-1)
 $
 
-that can be computed using a linear solver on the following linear system:
+Right product with $(partial f)/(partial position):$
 
 $
-  (partial f)/(partial position) lambda^T = (partial l)/(partial position)
+  lambda^T (partial f)/(partial position) = (partial l)/(partial position)
 $
 
-Once the adjoint vector is found:
+Transpose:
+
+$
+  ((partial f)/(partial position))^T lambda  = ((partial l)/(partial position))^T
+$ <adjoint_linear_system>
+This is a linear system to solve:
+
+Once the adjoint vector $lambda$ is found:
 
 $
 (d l)/(d theta) = -lambda^T (partial f)/(partial theta) + (partial l)/(partial theta) 
 $
+]
 
 This gradient can now be used in a gradient-based optimization method, such as a gradient descent:
 
@@ -131,18 +143,39 @@ This gradient can now be used in a gradient-based optimization method, such as a
 
 The implicit function is @static_equation: $force(position, theta)=0$
 
-In this case:
+To compute $(d l)/(d theta)$ in @implicit_differentiation ($(d l)/(d theta) = -(partial l)/(partial position) ((partial f)/(partial position))^(-1) (partial f)/(partial theta) + (partial l)/(partial theta) $), we need $(partial f)/(partial position)$:
 
 $
   (partial f)/(partial position) = (partial force)/(partial position) = stiffness
 $
 
+and $(partial f)/(partial theta)$:
+
 $
   (partial f)/(partial theta) = (partial force)/(partial theta)
 $
 
-The adjoint vector is computed by solving the linear system:
+The adjoint vector is computed by solving the linear system (@adjoint_linear_system):
 
 $
-  stiffness lambda^T = (partial l)/(partial position)
+((partial f)/(partial position))^T lambda  = ((partial l)/(partial position))^T <=>
+  stiffness^T lambda = ((partial l)/(partial position))^T
+$
+
+Finally,
+$
+(d l)/(d theta) = -lambda^T (partial force)/(partial theta) + (partial l)/(partial theta)
+$
+
+If $force$ results from a mapping, such as $force_"in" = force_"out"$, then:
+
+$
+  (partial force_"in")/(partial theta) &= (partial jacobianmapping^T force_"out")/(partial theta) \
+  &= (partial jacobianmapping^T)/(partial theta) force_"out" + jacobianmapping^T (partial force_"out")/(partial theta)
+$
+
+It is unlikely that both $J$ and $force_"out"$ depend on $theta$, so:
+
+$
+  (partial force_"in")/(partial theta) = jacobianmapping^T (partial force_"out")/(partial theta)
 $
