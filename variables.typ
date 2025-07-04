@@ -20,3 +20,4 @@
 #let mapping = $bold(cal(F))$
 #let jacobianmapping = $bold(cal(J))$
 #let coriolismatrix = $bold(cal(C))$
+#let diffusivity = $alpha$

@@ -163,7 +163,9 @@ y_(n+2) - 4/3 y_(n+1) + 1/3 y_(n) = 2/3 stepsize thick f(t_(n+2), y_(n+2))
 $
 
 
-== Numerical Integration of Newton's Second Law of Motion
+== Numerical Integration of ODE
+
+=== Newton's Second Law of Motion
 
 The second Newton's law (@ODE) is a first-order ordinary differential equation of the form of @initial_value_problem ($y'=f(t,y), quad y(t_0) = y_0$) where:
 
@@ -179,6 +181,18 @@ In case of Rayleigh damping (@F_rayleigh):
 
 $
 f(t,y) = mat( velocity(t); mass^(-1) (force(position, velocity) - coriolismatrix velocity + (-alpha mass + beta stiffness(position, velocity)) velocity))
+$
+
+=== Heat Equation
+
+@heat_equation is of the form of @initial_value_problem where:
+
+$
+y(t) = u(t)
+$
+
+$
+f(t,y) = diffusivity laplace u
 $
 
 == Newton-Raphson

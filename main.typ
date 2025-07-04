@@ -71,6 +71,7 @@
 #include "lagrangianmechanics.typ"
 #include "NewtonSecondLaw/newtonsecondlaw.typ"
 #include "static.typ"
+#include "heat.typ"
 #include "spring.typ"
 #include "numericalintegration.typ"
 #include "implicittimeintegration.typ"
