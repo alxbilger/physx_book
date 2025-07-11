@@ -55,3 +55,7 @@
 #let proof(body, title: none, color: orange) = {
   prefixedbox(body, prefix: "Proof", title: title, color: color)
 }
+
+#let todo(body, title: none, color: green) = {
+  prefixedbox(body, prefix: "TODO", title: title, color: color)
+}

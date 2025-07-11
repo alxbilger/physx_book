@@ -68,7 +68,7 @@ r(state) = r(position, velocity) = mat( position - position _n - stepsize thick 
 $<h_backward_euler>
 ]
 
-Based on @backward_euler, we want to find the root $#state _(n+1) = mat(#position _(n+1); #velocity _(n+1))$ of $r$ such that 
+Based on @backward_euler, we want to find the root $state _(n+1) = mat(position _(n+1); velocity _(n+1))$ of $r$ such that 
 
 $
 r(#state _(n+1))=0
@@ -107,7 +107,7 @@ $
 J_r = (partial r)/(partial state) = 
 mat(
 identity, quad -stepsize thick identity;
--stepsize thick #stiffness, quad mass - stepsize thick #damping;
+-stepsize thick stiffness, quad mass - stepsize thick damping;
 )
 $
 ]
@@ -248,7 +248,7 @@ lr(((1+alpha stepsize) mass - stepsize damping - stepsize (beta + stepsize) thic
 mass(velocity^i - velocity_n) + stepsize thick (force(state^i) + (-alpha mass + beta stiffness) #velocity _(n+1) + stiffness(-position^i + position_n + stepsize thick velocity^i))
 $
 
-=== Force Linearization
+=== Force Linearization <section_backward_euler_force_linearization>
 
 @backward_euler is a nonlinear equation. Instead of solving it iteratively, we use an approximation of the expression of forces.
 

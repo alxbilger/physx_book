@@ -21,3 +21,4 @@
 #let jacobianmapping = $bold(cal(J))$
 #let coriolismatrix = $bold(cal(C))$
 #let diffusivity = $alpha$
+#let loss = $cal(l)$
