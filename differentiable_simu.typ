@@ -201,11 +201,13 @@ $
 f(state_(n+1), state_n, theta) = 0  
 $
 
+#mybox(title:"Example")[
 An example of such a function is the backward Euler residual function (@h_backward_euler):
 
 $
   mat( position_(n+1) - position _n - stepsize thick velocity_(n+1) ; mass(velocity_(n+1) -velocity _n) - stepsize thick force(state_(n+1))) = 0
 $
+]
 
 The goal is to compute $(d loss)/(d theta)$ where $loss=loss(state_N, theta)$, a scalar loss function depending on the final state (after $N$ time steps) and parameter $theta$.
 

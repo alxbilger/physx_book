@@ -59,3 +59,7 @@
 #let todo(body, title: none, color: green) = {
   prefixedbox(body, prefix: "TODO", title: title, color: color)
 }
+
+#let examplebox(body, title: none, color: gray) = {
+  prefixedbox(body, prefix: "Example", title: title, color: color)
+}
