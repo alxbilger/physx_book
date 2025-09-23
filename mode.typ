@@ -1,6 +1,6 @@
 #import "color.typ":*
 
-#let darkmode = false
+#let darkmode = true
 
 #let pagecolor = none
 #let textcolor = luma(0%)
