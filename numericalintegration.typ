@@ -267,5 +267,3 @@ $
   lr((partial^2 r)/(partial x^2)|)_(x^i) (x^(i+1)-x^i) = -lr((partial r)/(partial x)|)_(x^i)
 $
 
-#include "ExplicitTimeIntegration/explicitTimeIntegration.typ"
-
