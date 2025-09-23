@@ -74,6 +74,7 @@
 #include "heat.typ"
 #include "spring.typ"
 #include "numericalintegration.typ"
+#include "linear_solvers.typ"
 #include "implicittimeintegration.typ"
 #include "constraints.typ"
 #include "inverse_simu.typ"
