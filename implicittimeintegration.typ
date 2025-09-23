@@ -51,8 +51,8 @@ To find the next unknown state $y_(n+s)$, we need to compute the root $x_r$ of $
 In the case of the Newton's second law (@ODE),
 
 $
-r(state) = r(position, velocity) = \ a_s mat( position; mass velocity)
-+ sum_(j=0)^(s-1) a_j mat( position_(n+j); mass velocity_(n+j)) 
+r(state) = r(position, velocity) = \ a_s mat( position; massmatrix velocity)
++ sum_(j=0)^(s-1) a_j mat( position_(n+j); massmatrix velocity_(n+j)) 
 - stepsize (b_s 
 mat( velocity; force(position, velocity))
 + sum_(j=0)^(s-1) b_j mat( velocity_(n+j); force(position_(n+j), velocity_(n+j)))
@@ -80,7 +80,7 @@ $
 $
 
 $
-(partial r_2)/(partial velocity) = a_s mass - stepsize thick b_s thick (partial force)/(partial velocity) = a_s mass - stepsize thick b_s thick damping
+(partial r_2)/(partial velocity) = a_s massmatrix - stepsize thick b_s thick (partial force)/(partial velocity) = a_s massmatrix - stepsize thick b_s thick damping
 $
 
 The final expression of the Jacobian is:
@@ -88,7 +88,7 @@ The final expression of the Jacobian is:
 $
 J_r = mat(
 a_s identity, quad -stepsize thick b_s thick identity;
- -stepsize thick b_s thick stiffness, quad a_s mass - stepsize thick b_s thick damping)
+ -stepsize thick b_s thick stiffness, quad a_s massmatrix - stepsize thick b_s thick damping)
 $]
 
 We define $stiffness^i = stiffness(position^i, velocity^i)$ and $damping^i = damping(position^i, velocity^i)$.
@@ -98,7 +98,7 @@ Newton-Raphson to solve $r(state)=0$:
 $
 mat(
 a_s identity, quad -stepsize thick b_s thick identity;
- -stepsize thick b_s thick stiffness^i, quad a_s mass - stepsize thick b_s thick damping^i)
+ -stepsize thick b_s thick stiffness^i, quad a_s massmatrix - stepsize thick b_s thick damping^i)
  mat( #position ^(i+1) - #position ^i; #velocity ^(i+1) - #velocity ^i) = -r(state^i)
 $
 
@@ -107,7 +107,7 @@ $
 Using the Schur complement (see @schur_complement_linear_system_y), we obtain the reduced equation in $velocity ^(i+1) - velocity ^i$:
 
 $
-(a_s mass - stepsize thick b_s thick damping^i - stepsize^2 b_s^2 / a_s stiffness^i)(velocity ^(i+1) - velocity ^i) = -r_2(position^i, velocity^i) - stepsize b_s/a_s stiffness^i r_1(position^i, velocity^i)
+(a_s massmatrix - stepsize thick b_s thick damping^i - stepsize^2 b_s^2 / a_s stiffness^i)(velocity ^(i+1) - velocity ^i) = -r_2(position^i, velocity^i) - stepsize b_s/a_s stiffness^i r_1(position^i, velocity^i)
 $ <detailed_linearmultistep_velocity_linearsystem>
 
 
@@ -121,7 +121,7 @@ where
 
 $
 cases(
-  A^i = a_s mass - stepsize thick b_s thick damping^i - stepsize^2 b_s^2 / a_s stiffness^i,
+  A^i = a_s massmatrix - stepsize thick b_s thick damping^i - stepsize^2 b_s^2 / a_s stiffness^i,
   x^i = velocity ^(i+1) - velocity ^i,
   b^i = -r_2(position^i, velocity^i) - stepsize b_s/a_s stiffness^i r_1(position^i, velocity^i)
 )
@@ -138,11 +138,11 @@ $
 === Rayleigh Damping
 
 $
-r(state) = r(position, velocity) = \ a_s mat( position; mass velocity)
-+ sum_(j=0)^(s-1) a_j mat( position_(n+j); mass velocity_(n+j)) 
+r(state) = r(position, velocity) = \ a_s mat( position; massmatrix velocity)
++ sum_(j=0)^(s-1) a_j mat( position_(n+j); massmatrix velocity_(n+j)) 
 \ - stepsize (b_s 
-mat( velocity; force(position, velocity) + (-alpha mass + beta stiffness(position, velocity))velocity)
-+\ sum_(j=0)^(s-1) b_j mat( velocity_(n+j); force(position_(n+j), velocity_(n+j)) + (-alpha mass + beta stiffness(position_(n+j), velocity_(n+j))) velocity)
+mat( velocity; force(position, velocity) + (-alpha massmatrix + beta stiffness(position, velocity))velocity)
++\ sum_(j=0)^(s-1) b_j mat( velocity_(n+j); force(position_(n+j), velocity_(n+j)) + (-alpha massmatrix + beta stiffness(position_(n+j), velocity_(n+j))) velocity)
 )\
 = mat( r_1(state); r_2(state))
 $
@@ -154,8 +154,8 @@ $
 $
 
 $
-(partial r_2)/(partial velocity) &= a_s mass - stepsize thick b_s thick ((partial force)/(partial velocity) - alpha mass + beta stiffness) \ &= a_s mass - stepsize thick b_s thick (damping - alpha mass +beta stiffness) \
-&= (a_s + stepsize thick b_s alpha) mass -stepsize thick b_s (damping + beta stiffness)
+(partial r_2)/(partial velocity) &= a_s massmatrix - stepsize thick b_s thick ((partial force)/(partial velocity) - alpha massmatrix + beta stiffness) \ &= a_s massmatrix - stepsize thick b_s thick (damping - alpha massmatrix +beta stiffness) \
+&= (a_s + stepsize thick b_s alpha) massmatrix -stepsize thick b_s (damping + beta stiffness)
 $
 
 The final expression of the Jacobian is:
@@ -163,7 +163,7 @@ The final expression of the Jacobian is:
 $
 J_r = mat(
 a_s identity, quad -stepsize thick b_s thick identity;
- -stepsize thick b_s thick stiffness, quad (a_s + stepsize thick b_s alpha) mass -stepsize thick b_s (damping + beta stiffness))
+ -stepsize thick b_s thick stiffness, quad (a_s + stepsize thick b_s alpha) massmatrix -stepsize thick b_s (damping + beta stiffness))
 $
 
 Newton-Raphson to solve $r(state)=0$:
@@ -171,7 +171,7 @@ Newton-Raphson to solve $r(state)=0$:
 $
 mat(
 a_s identity, quad -stepsize thick b_s thick identity;
- -stepsize thick b_s thick stiffness, quad (a_s + stepsize thick b_s alpha) mass -stepsize thick b_s (damping + beta stiffness))
+ -stepsize thick b_s thick stiffness, quad (a_s + stepsize thick b_s alpha) massmatrix -stepsize thick b_s (damping + beta stiffness))
  mat( #position ^(i+1) - #position ^i; #velocity ^(i+1) - #velocity ^i) = -r(state^i)
 $
 
@@ -180,7 +180,7 @@ $
 Using the Schur complement (see @schur_complement_linear_system_y), we obtain the reduced equation in $velocity ^(i+1) - velocity ^i$:
 
 $
-((a_s + stepsize thick b_s alpha) mass - stepsize thick b_s thick damping^i  -stepsize thick b_s (beta + stepsize b_s / a_s) stiffness^i)(velocity ^(i+1) - velocity ^i) =\ -r_2(position^i, velocity^i) - stepsize b_s/a_s stiffness^i r_1(position^i, velocity^i)
+((a_s + stepsize thick b_s alpha) massmatrix - stepsize thick b_s thick damping^i  -stepsize thick b_s (beta + stepsize b_s / a_s) stiffness^i)(velocity ^(i+1) - velocity ^i) =\ -r_2(position^i, velocity^i) - stepsize b_s/a_s stiffness^i r_1(position^i, velocity^i)
 $
 
 From @block_elimination_x, we can deduce $position^(i+1) - position^i$:

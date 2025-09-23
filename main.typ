@@ -79,6 +79,7 @@
 #include "inverse_simu.typ"
 #include "mapping.typ"
 #include "differentiable_simu.typ"
+#include "continuum_mechanics.typ"
 #include "fem.typ"
 #include "maths.typ"
 

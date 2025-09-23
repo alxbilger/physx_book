@@ -147,6 +147,6 @@ $ <schur_complement_linear_system_x>
 == Integration by parts
 
 $
-integral_a^b u(x) v'(x) thick d x &= [u(x) v(x)]_a^b - integral_a^b u'(x) v(x) thick d x \
-&= u(b)v(b) - u(a)v(a) - integral_a^b u'(x) v(x) thick d x
+integral_a^b u(x) v'(x) thick dif x &= [u(x) v(x)]_a^b - integral_a^b u'(x) v(x) thick dif x \
+&= u(b)v(b) - u(a)v(a) - integral_a^b u'(x) v(x) thick dif x
 $ <integration_by_parts>

@@ -39,16 +39,16 @@ velocity_(n+2) - 4/3 velocity_(n+1) + 1/3 velocity_n
 2/3 stepsize
 mat(
 velocity_(n+2);
-mass^(-1) force(position_(n+2), velocity_(n+2))
+massmatrix^(-1) force(position_(n+2), velocity_(n+2))
 )
 $
 
-We multiply the second line by $mass$ to get rid of the inverse:
+We multiply the second line by $massmatrix$ to get rid of the inverse:
 
 $
 mat(
 position_(n+2) - 4/3 position_(n+1) + 1/3 position_n;
-mass(velocity_(n+2) - 4/3 velocity_(n+1) + 1/3 velocity_n)
+massmatrix(velocity_(n+2) - 4/3 velocity_(n+1) + 1/3 velocity_n)
 ) = 
 2/3 stepsize
 mat(
@@ -64,7 +64,7 @@ $
 r(position, velocity) =
 mat(
 position- 4/3 position_(n+1) + 1/3 position_(n) - 2/3 stepsize thick velocity;
-mass (velocity- 4/3 velocity_(n+1) + 1/3 velocity_(n)) - 2/3 Delta t thick force(position, velocity)
+massmatrix (velocity- 4/3 velocity_(n+1) + 1/3 velocity_(n)) - 2/3 Delta t thick force(position, velocity)
 )
 = mat( r_1(state);r_2(state))
 $
@@ -91,7 +91,7 @@ $
 $
 
 $
-(partial r_2)/(partial velocity) = mass - 2/3 stepsize (partial F)/(partial velocity) = mass - 2/3 stepsize thick damping
+(partial r_2)/(partial velocity) = massmatrix - 2/3 stepsize (partial F)/(partial velocity) = massmatrix - 2/3 stepsize thick damping
 $
 
 The final expression of the Jacobian is:
@@ -99,7 +99,7 @@ The final expression of the Jacobian is:
 $
 J_r = mat(
 identity, quad - 2/3 stepsize thick identity;
-- 2/3 stepsize thick stiffness, quad mass - 2/3 stepsize thick damping)
+- 2/3 stepsize thick stiffness, quad massmatrix - 2/3 stepsize thick damping)
 $
 ]
 
@@ -108,7 +108,7 @@ Newton-Raphson to solve $r(state)=0$:
 $
 mat(
 identity, quad - 2/3 stepsize thick identity;
-- 2/3 stepsize thick stiffness, quad mass - 2/3 stepsize thick damping)
+- 2/3 stepsize thick stiffness, quad massmatrix - 2/3 stepsize thick damping)
 mat( #position ^(i+1) - #position ^i; #velocity ^(i+1) - #velocity ^i) =
 mat(
 -r_1(state^i);

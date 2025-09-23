@@ -30,16 +30,16 @@ mat( #velocity _(n+1); #acceleration _n)=
 1/(Delta t) mat( position_(n+1) - position_n; #velocity _(n+1) - #velocity _(n))
 $ <initial_semiimplicit_euler>
 
-Multiplying the second line of @initial_semiimplicit_euler by $mass$:
+Multiplying the second line of @initial_semiimplicit_euler by $massmatrix$:
 $
-mat( #velocity _(n+1); mass acceleration _n)=
-1/(Delta t) mat( position_(n+1) - position_n; mass(velocity _(n+1) - velocity _(n)))
+mat( #velocity _(n+1); massmatrix acceleration _n)=
+1/(Delta t) mat( position_(n+1) - position_n; massmatrix(velocity _(n+1) - velocity _(n)))
 $
 
 From @second_newton_law:
 $
 mat( #velocity _(n+1); force(position_n, velocity _n) - coriolismatrix(position_n, velocity_n) velocity_n) =
-1/(Delta t) mat( position_(n+1) - position_n; mass(#velocity _(n+1) - #velocity _(n)))
+1/(Delta t) mat( position_(n+1) - position_n; massmatrix(#velocity _(n+1) - #velocity _(n)))
 $
 
 Finally,
@@ -47,6 +47,6 @@ Finally,
 #result[
 $
 mat( position_(n+1); velocity _(n+1)) =
-mat( position_n& + Delta t thick velocity _(n+1); velocity _n& + Delta t thick mass^(-1)(force(position_n, velocity _n) - coriolismatrix(position_n, velocity_n) velocity_n))
+mat( position_n& + Delta t thick velocity _(n+1); velocity _n& + Delta t thick massmatrix^(-1)(force(position_n, velocity _n) - coriolismatrix(position_n, velocity_n) velocity_n))
 $
 ]

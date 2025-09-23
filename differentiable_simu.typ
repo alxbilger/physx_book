@@ -205,7 +205,7 @@ $
 An example of such a function is the backward Euler residual function (@h_backward_euler):
 
 $
-  mat( position_(n+1) - position _n - stepsize thick velocity_(n+1) ; mass(velocity_(n+1) -velocity _n) - stepsize thick force(state_(n+1))) = 0
+  mat( position_(n+1) - position _n - stepsize thick velocity_(n+1) ; massmatrix(velocity_(n+1) -velocity _n) - stepsize thick force(state_(n+1))) = 0
 $
 ]
 

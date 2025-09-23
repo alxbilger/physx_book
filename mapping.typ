@@ -74,26 +74,26 @@ The term $jacobianmapping(position_"in")^T  stiffness_"out" (position_"out") jac
 
 The kinetic energy:
 $
-  kineticenergy_"out" = 1/2 velocity_"out"^T mass_"out" (position_"out") velocity_"out"
+  kineticenergy_"out" = 1/2 velocity_"out"^T massmatrix_"out" (position_"out") velocity_"out"
 $
 
 From @mapping_velocity:
 
 $
-  kineticenergy_"out" &= 1/2 (jacobianmapping(position_"in") velocity_"in")^T mass_"out" (position_"out") (jacobianmapping(position_"in") velocity_"in") \
-  &= 1/2 velocity_"in"^T jacobianmapping(position_"in")^T mass_"out" (position_"out")  jacobianmapping(position_"in") velocity_"in"
+  kineticenergy_"out" &= 1/2 (jacobianmapping(position_"in") velocity_"in")^T massmatrix_"out" (position_"out") (jacobianmapping(position_"in") velocity_"in") \
+  &= 1/2 velocity_"in"^T jacobianmapping(position_"in")^T massmatrix_"out" (position_"out")  jacobianmapping(position_"in") velocity_"in"
 $
 
 We also have
 
 $
-  kineticenergy_"in" = 1/2 velocity_"in"^T mass_"in" (position_"in")  velocity_"in"
+  kineticenergy_"in" = 1/2 velocity_"in"^T massmatrix_"in" (position_"in")  velocity_"in"
 $
 
 The kinetic energy is invariant under coordinate transformation: $kineticenergy_"in"=kineticenergy_"out"$. By identification, we can deduce that
 
 $
-  mass_"in" (position_"in") = jacobianmapping(position_"in")^T mass_"out" (position_"out") jacobianmapping(position_"in")
+  massmatrix_"in" (position_"in") = jacobianmapping(position_"in")^T massmatrix_"out" (position_"out") jacobianmapping(position_"in")
 $ <mapping_mass>
 
 == Momentum
@@ -102,23 +102,23 @@ From @momentum,
 
 $
   momentum_"in" = (partial kineticenergy_"in")/(partial velocity_"in") 
-  &= partial/(partial velocity_"in") (1/2 velocity_"in"^T mass_"in" (position_"in") velocity_"in")\
-  &= mass_"in" (position_"in") velocity_"in"\
-  &= jacobianmapping(position_"in")^T mass_"out" (position_"out") jacobianmapping(position_"in") velocity_"in"\
+  &= partial/(partial velocity_"in") (1/2 velocity_"in"^T massmatrix_"in" (position_"in") velocity_"in")\
+  &= massmatrix_"in" (position_"in") velocity_"in"\
+  &= jacobianmapping(position_"in")^T massmatrix_"out" (position_"out") jacobianmapping(position_"in") velocity_"in"\
 $
 
 From @mapping_velocity:
 
 $
-  momentum_"in" &= jacobianmapping(position_"in")^T mass_"out" (position_"out") velocity_"out"
+  momentum_"in" &= jacobianmapping(position_"in")^T massmatrix_"out" (position_"out") velocity_"out"
 $
 
 We also have:
 
 $
   momentum_"out" = (partial kineticenergy_"out")/(partial velocity_"out")
-  &= partial/(partial velocity_"out") (1/2 velocity_"out"^T mass_"out" (position_"out") velocity_"out")\
-  &= mass_"out" (position_"out") velocity_"out"
+  &= partial/(partial velocity_"out") (1/2 velocity_"out"^T massmatrix_"out" (position_"out") velocity_"out")\
+  &= massmatrix_"out" (position_"out") velocity_"out"
 $
 
 We can deduce that:
@@ -132,37 +132,37 @@ $
 In @law_motion_deduced_from_lagrangian, we deduced the Newton's second law of motion from the Euler-Lagrange equation (@euler_lagrange_equation):
 
 $
-  mass_"in" (position_"in") acceleration_"in"(t) + coriolismatrix(position_"in", velocity_"in") velocity_"in"(t) = force_"in" (position_"in", velocity_"in")
+  massmatrix_"in" (position_"in") acceleration_"in"(t) + coriolismatrix(position_"in", velocity_"in") velocity_"in"(t) = force_"in" (position_"in", velocity_"in")
 $
 
-We are already able to compute the inertia term ($mass_"in" = jacobianmapping^T mass_"out" jacobianmapping$ in @mapping_mass) and the forces ($force_"in" = jacobianmapping force_"out"$ in @mapping_force), so let's focus on the Coriolis term:
+We are already able to compute the inertia term ($massmatrix_"in" = jacobianmapping^T massmatrix_"out" jacobianmapping$ in @mapping_mass) and the forces ($force_"in" = jacobianmapping force_"out"$ in @mapping_force), so let's focus on the Coriolis term:
 
 $
-  coriolismatrix(position_"in", velocity_"in") velocity_"in"(t) = dot(mass_"in")(position_"in") velocity_"in"(t) - 1/2 velocity_"in" (t)^T (partial mass_"in")/(partial position_"in") velocity_"in"(t)
+  coriolismatrix(position_"in", velocity_"in") velocity_"in"(t) = dot(massmatrix_"in")(position_"in") velocity_"in"(t) - 1/2 velocity_"in" (t)^T (partial massmatrix_"in")/(partial position_"in") velocity_"in"(t)
 $ 
 
 First term:
 
 $
-  dot(mass_"in")(position_"in") velocity_"in"(t) 
-  &= (d mass_"in")/(d t) velocity_"in"\
-  &= d/(d t) [jacobianmapping^T mass_"out" jacobianmapping] velocity_"in"\
-  &= dot(jacobianmapping)^T mass_"out" jacobianmapping velocity_"in" + jacobianmapping^T dot(mass)_"out" jacobianmapping velocity_"in" + jacobianmapping^T mass_"out" dot(jacobianmapping) velocity_"in"
+  dot(massmatrix_"in")(position_"in") velocity_"in"(t) 
+  &= (d massmatrix_"in")/(d t) velocity_"in"\
+  &= d/(d t) [jacobianmapping^T massmatrix_"out" jacobianmapping] velocity_"in"\
+  &= dot(jacobianmapping)^T massmatrix_"out" jacobianmapping velocity_"in" + jacobianmapping^T dot(massmatrix)_"out" jacobianmapping velocity_"in" + jacobianmapping^T massmatrix_"out" dot(jacobianmapping) velocity_"in"
 $
 
 The second term involve the derivative of the mass with respect to the state:
 
 $
-  (partial mass_"in")/(partial position_"in") &= (partial [jacobianmapping(position_"in")^T mass_"out" (position_"out") jacobianmapping(position_"in")])/(partial position_"in") \
-  &= (partial jacobianmapping^T)/(partial position_"in") mass_"out" (position_"out") jacobianmapping(position_"in")
-  + jacobianmapping(position_"in")^T (partial mass_"out" (position_"out"))/(partial position_"in") jacobianmapping(position_"in")
-  + jacobianmapping(position_"in")^T mass_"out" (position_"out") (partial jacobianmapping(position_"in"))/(partial position_"in")
+  (partial massmatrix_"in")/(partial position_"in") &= (partial [jacobianmapping(position_"in")^T massmatrix_"out" (position_"out") jacobianmapping(position_"in")])/(partial position_"in") \
+  &= (partial jacobianmapping^T)/(partial position_"in") massmatrix_"out" (position_"out") jacobianmapping(position_"in")
+  + jacobianmapping(position_"in")^T (partial massmatrix_"out" (position_"out"))/(partial position_"in") jacobianmapping(position_"in")
+  + jacobianmapping(position_"in")^T massmatrix_"out" (position_"out") (partial jacobianmapping(position_"in"))/(partial position_"in")
 $
 
-The term $(partial mass_"out" (position_"out"))/(partial position_"in")$:
+The term $(partial massmatrix_"out" (position_"out"))/(partial position_"in")$:
 
 $
-  (partial mass_"out" (position_"out"))/(partial position_"in") 
-  &= (partial mass_"out" (position_"out"))/(partial position_"out") (partial position_"out")/(partial position_"in") \
-  &= (partial mass_"out" (position_"out"))/(partial position_"out") jacobianmapping(position_"in")
+  (partial massmatrix_"out" (position_"out"))/(partial position_"in") 
+  &= (partial massmatrix_"out" (position_"out"))/(partial position_"out") (partial position_"out")/(partial position_"in") \
+  &= (partial massmatrix_"out" (position_"out"))/(partial position_"out") jacobianmapping(position_"in")
 $

@@ -54,13 +54,13 @@ $
 The continuous total kinetic energy $T$ of a deformable body with mass density $rho(position)$ is given by integrating over the entire volume $V$:
 
 $
-kineticenergy &= 1/2 integral_V norm(velocity (t))^2 thick rho(position) thick d v
+kineticenergy &= 1/2 integral_V norm(velocity (t))^2 thick rho(position) thick dif V
 $
 ]
 
 $
-kineticenergy &= 1/2 integral_V norm(velocity (t))^2 thick rho(position) thick d v \
-&= 1/2 integral_V velocity (t)^T dot velocity(t) thick rho(position) thick d v \
+kineticenergy &= 1/2 integral_V norm(velocity (t))^2 thick rho(position) thick dif V \
+&= 1/2 integral_V velocity (t)^T dot velocity(t) thick rho(position) thick dif V \
 &= 1/2 velocity(t)^T (integral_V rho(position) d v) velocity(t)
 $
 
@@ -68,22 +68,22 @@ $
 The term $integral_V rho(position) d v$ is called mass:
 
 $
-  mass(position) = integral_V rho(position) d v
+  massmatrix(position) = integral_V rho(position) d v
 $
 ]
 
 Therefore,
 
 $
-  kineticenergy = 1/2 thick velocity(t)^T thick mass(position) thick velocity(t)
+  kineticenergy = 1/2 thick velocity(t)^T thick massmatrix(position) thick velocity(t)
 $
 
-In general, the mass $mass$ depends on the state $position$, and therefore varies with time.
+In general, the mass $massmatrix$ depends on the state $position$, and therefore varies with time.
 
 == Lagrangian
 
 #definition(title: "Lagrangian")[
-The Lagrangian $lagrangian$ of a system is defined as:
+The Lagrangian $lagrangian$ of a system of particles is defined as:
 
 $
 lagrangian(position, velocity, t) = kineticenergy - potentialenergy
@@ -92,6 +92,18 @@ $ <the_lagrangian>
 where:
 - $kineticenergy$ is the total kinetic energy
 - $potentialenergy$ is the potential energy
+]
+
+#definition(title:"Lagrangian Density")[
+  The Lagrangian density $lagrangian$ of a vector field $phi$ is defined as:
+  $
+    lagrangiandensity(phi, dot(phi), nabla phi) = kineticenergy - potentialenergy
+  $
+
+  Then, the Lagrangian is defined as:
+  $
+    lagrangian = integral_Omega lagrangiandensity thick dif V
+  $
 ]
 
 == Forces
@@ -135,9 +147,9 @@ $
 
 Therefore,
 
-#result[
+#result(title:"Linear Momentum")[
 $
-momentum = (partial kineticenergy)/(partial velocity) = mass(position) thick velocity(t)
+momentum = (partial kineticenergy)/(partial velocity) = massmatrix(position) thick velocity(t)
 $
 #emoji.warning This result is valid only if the potential energy does not depend on the velocity
 ]
@@ -148,8 +160,20 @@ $
 The action is the accumulation of values of the Lagrangian between two states:
 
 $
-S = integral_(t_1)^(t_2) lagrangian thick d t
+S = integral_(t_1)^(t_2) lagrangian thick dif t
 $
+
+For a vector field $phi$,
+
+$
+  S = integral_(t_1)^(t_2) integral_Omega lagrangiandensity thick dif V dif t
+$
+
+More generally, we can write:
+$
+  S = integral lagrangiandensity thick dif^(d+1) x
+$
+where $d^(d+1) x$ denotes integration over space and time ($d=0$ for particles and $d>=1$ for fields).
 ]
 
 The action principles state that the true path of $position$ from $t_1$ to $t_2$ is a stationary point of the action:
@@ -162,7 +186,7 @@ where $delta$ represents a small variation of the trajectory.
 
 == Euler-Lagrange Equation
 
-We develop the Lagrangian at the first-order:
+For a system of particles, we develop the Lagrangian at the first-order:
 
 $
 lagrangian(position + delta position, velocity + delta velocity, t) approx lagrangian(position, velocity, t) + (partial lagrangian)/(partial position) delta position + (partial lagrangian)/(partial velocity) delta velocity
@@ -172,15 +196,15 @@ The variation of the action in terms of the first-order development:
 
 $
 delta S &= S[position + delta position] - S[position] \
-&= integral_(t_1)^(t_2) (lagrangian(position, velocity, t) + (partial lagrangian)/(partial position) delta position + (partial lagrangian)/(partial velocity) delta velocity) d t - integral_(t_1)^(t_2) lagrangian(position, velocity, t) thick d t \
+&= integral_(t_1)^(t_2) (lagrangian(position, velocity, t) + (partial lagrangian)/(partial position) delta position + (partial lagrangian)/(partial velocity) delta velocity) d t - integral_(t_1)^(t_2) lagrangian(position, velocity, t) thick dif t \
 &= integral_(t_1)^(t_2) [(partial lagrangian) / (partial position) delta position + (partial lagrangian) / (partial velocity) delta velocity] d t \
-&= integral_(t_1)^(t_2) (partial lagrangian) / (partial position) delta position thick d t + integral_(t_1)^(t_2)  (partial lagrangian) / (partial velocity) delta velocity thick d t
+&= integral_(t_1)^(t_2) (partial lagrangian) / (partial position) delta position thick dif t + integral_(t_1)^(t_2)  (partial lagrangian) / (partial velocity) delta velocity thick dif t
 $ <action_variation_first_order>
 
 The velocity term is transformed using integration by parts (@integration_by_parts):
 
 $
-integral_(t_1)^(t_2) (partial lagrangian) / (partial velocity) delta velocity thick d t = [(partial lagrangian)/(partial velocity) delta position]_(t_1)^(t_2) - integral_(t_1)^(t_2) d/(d t) ((partial lagrangian)/(partial velocity)) delta position  thick d t
+integral_(t_1)^(t_2) (partial lagrangian) / (partial velocity) delta velocity thick dif t = [(partial lagrangian)/(partial velocity) delta position]_(t_1)^(t_2) - integral_(t_1)^(t_2) d/(d t) ((partial lagrangian)/(partial velocity)) delta position  thick dif t
 $
 
 
@@ -189,10 +213,10 @@ The position at $t_1$ and $t_2$ is fixed. Only the path from $t_1$ to $t_2$ is s
 Finally, the velocity term is replaced in @action_variation_first_order:
 
 $
-delta S &= integral_(t_1)^(t_2) (partial lagrangian) / (partial position) delta position thick d t + integral_(t_1)^(t_2)  (partial lagrangian) / (partial velocity) delta velocity thick d t \ 
-&= integral_(t_1)^(t_2) (partial lagrangian) / (partial position) delta position thick d t - integral_(t_1)^(t_2) d/(d t) ((partial lagrangian)/(partial velocity)) delta position  thick d t \
-&= integral_(t_1)^(t_2) [(partial lagrangian) / (partial position) delta position - d/(d t) ((partial lagrangian)/(partial velocity)) delta position ] d t \
-&= integral_(t_1)^(t_2) [(partial lagrangian) / (partial position) - d/(d t) ((partial lagrangian)/(partial velocity)) ] delta position thick d t
+delta S &= integral_(t_1)^(t_2) (partial lagrangian) / (partial position) delta position thick dif t + integral_(t_1)^(t_2)  (partial lagrangian) / (partial velocity) delta velocity thick dif t \ 
+&= integral_(t_1)^(t_2) (partial lagrangian) / (partial position) delta position thick dif t - integral_(t_1)^(t_2) d/(d t) ((partial lagrangian)/(partial velocity)) delta position  thick dif t \
+&= integral_(t_1)^(t_2) [(partial lagrangian) / (partial position) delta position - d/(d t) ((partial lagrangian)/(partial velocity)) delta position ] dif t \
+&= integral_(t_1)^(t_2) [(partial lagrangian) / (partial position) - d/(d t) ((partial lagrangian)/(partial velocity)) ] delta position thick dif t
 $
 
 From the fundamental lemma of the calculus of variations:
@@ -202,5 +226,11 @@ $
 $ <euler_lagrange_equation>
 
 #definition(title: "Euler-Lagrange Equation")[
-@euler_lagrange_equation is the Euler-Lagrange equation.
+@euler_lagrange_equation is the Euler-Lagrange equation for a system of particles.
+]
+
+#result(title:"General Euler-Lagrange Equation")[
+  $
+    (partial lagrangian)/(partial phi) - "Div" dot ((partial lagrangiandensity)/(partial nabla lagrangiandensity)) = 0
+  $
 ]

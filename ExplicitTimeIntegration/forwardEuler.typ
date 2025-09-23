@@ -22,7 +22,7 @@ $
 1/stepsize
 mat(
 position(t+stepsize)-position(t);
-mass(position) thick (velocity(t+stepsize)-velocity(t)) 
+massmatrix(position) thick (velocity(t+stepsize)-velocity(t)) 
 )
 =
 mat(
@@ -37,7 +37,7 @@ $
 1/stepsize
 mat(
 position_(n+1)-position_n;
-mass(velocity_(n+1)-velocity_n)
+massmatrix(velocity_(n+1)-velocity_n)
 )
 =
 mat(
@@ -51,7 +51,7 @@ Grouping the terms in $n+1$ on the left-hand side:
 #result[
 $
 mat( #position _(n+1); #velocity _(n+1))=
-mat( #position _n& + Delta t thick #velocity _n; #velocity _n& + Delta t thick mass^(-1)(force(position _n, velocity _n) - coriolismatrix(position_n, velocity_n) velocity_n))
+mat( #position _n& + Delta t thick #velocity _n; #velocity _n& + Delta t thick massmatrix^(-1)(force(position _n, velocity _n) - coriolismatrix(position_n, velocity_n) velocity_n))
 $
 
 This is the time-discrete version of the Newton's second law of motion when the forward Euler method is applied.

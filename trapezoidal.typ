@@ -9,12 +9,12 @@ $
 underbrace(1/stepsize
 mat(
 position_(n+1)-position_n;
-mass(velocity_(n+1)-velocity_n)), "forward")
+massmatrix(velocity_(n+1)-velocity_n)), "forward")
 + 
 underbrace(1/stepsize
 mat(
 position_(n+1) - position_n;
-mass ( velocity_(n+1) - velocity_n)
+massmatrix ( velocity_(n+1) - velocity_n)
 ), "backward")
 =
 underbrace(mat(
@@ -30,7 +30,7 @@ $
 2/stepsize
 mat(
 position_(n+1)-position_n;
-mass(velocity_(n+1)-velocity_n))
+massmatrix(velocity_(n+1)-velocity_n))
 =
 mat(
 velocity_n + velocity_(n+1);
@@ -45,7 +45,7 @@ $
 r(state) = r(position, velocity) =
 mat(
 position - position_(n) - stepsize/2 (velocity_n + velocity);
-mass(velocity - velocity_n) - stepsize/2 (force(position_n, velocity_n)+force(position, velocity))
+massmatrix(velocity - velocity_n) - stepsize/2 (force(position_n, velocity_n)+force(position, velocity))
 )
 $
 ]
@@ -88,7 +88,7 @@ Newton-Raphson to solve $r(state)=0$:
 $
 mat(
 identity, quad -stepsize/2 thick identity;
- - stepsize/2 thick K, quad mass - stepsize/2 thick B)
+ - stepsize/2 thick K, quad massmatrix - stepsize/2 thick B)
 mat( #position ^(i+1) - #position ^i; #velocity ^(i+1) - #velocity ^i) =
 mat(
 -position^i + position_(n) + stepsize/2 (velocity_n + velocity^i);
@@ -101,7 +101,7 @@ $
 Replacing the linearized force from @force_linearization in the bottom row of @trapezoidal_rule:
 
 $
-mass thick Delta velocity = 1/2 stepsize (2 force(position_n, velocity_n) + stiffness Delta position + damping Delta velocity)
+massmatrix thick Delta velocity = 1/2 stepsize (2 force(position_n, velocity_n) + stiffness Delta position + damping Delta velocity)
 $ <trapezoidal_rule_linearized>
 
 ==== Solve for $Delta velocity$
@@ -109,13 +109,13 @@ $ <trapezoidal_rule_linearized>
 Replacing $Delta position$ from  in @trapezoidal_rule_linearized:
 
 $
-mass thick Delta velocity = 1/2 stepsize (2 force(position_n, velocity_n) + stiffness 1/2 thick stepsize (Delta velocity + 2 velocity_n) + damping Delta velocity)
+massmatrix thick Delta velocity = 1/2 stepsize (2 force(position_n, velocity_n) + stiffness 1/2 thick stepsize (Delta velocity + 2 velocity_n) + damping Delta velocity)
 $
 
 Grouping terms in $Delta velocity$ in LHS:
 
 $
-(mass - 1/2 stepsize thick damping - 1/4 stepsize^2 thick stiffness) Delta velocity = stepsize thick force(position_n, velocity_n) + 1/2 stepsize^2 stiffness velocity_n
+(massmatrix - 1/2 stepsize thick damping - 1/4 stepsize^2 thick stiffness) Delta velocity = stepsize thick force(position_n, velocity_n) + 1/2 stepsize^2 stiffness velocity_n
 $
 
 === Force Linearization with Rayleigh Damping
@@ -123,7 +123,7 @@ $
 Replacing the linearized force from @force_linearization_rayleigh in the bottom row of @trapezoidal_rule:
 
 $
-mass thick Delta velocity = 1/2 stepsize [2 force(position_n, velocity_n) + 2 (-alpha mass + beta stiffness) velocity_n + stiffness thick Delta position + (damping-alpha mass + beta stiffness) Delta velocity]
+massmatrix thick Delta velocity = 1/2 stepsize [2 force(position_n, velocity_n) + 2 (-alpha massmatrix + beta stiffness) velocity_n + stiffness thick Delta position + (damping-alpha massmatrix + beta stiffness) Delta velocity]
 $ <trapezoidal_rule_linearized_rayleigh>
 
 ==== Solve for $Delta velocity$
@@ -131,5 +131,5 @@ $ <trapezoidal_rule_linearized_rayleigh>
 Replacing $Delta position$ from in @trapezoidal_rule_linearized:
 
 $
-[(1+ 1/2 alpha stepsize) mass - 1/2 stepsize damping - 1/2 stepsize (1/2 stepsize + beta) stiffness] Delta velocity \ = stepsize thick force(position_n, velocity_n) + stepsize (-alpha mass + (beta + 1/2 stepsize) stiffness) velocity_n
+[(1+ 1/2 alpha stepsize) massmatrix - 1/2 stepsize damping - 1/2 stepsize (1/2 stepsize + beta) stiffness] Delta velocity \ = stepsize thick force(position_n, velocity_n) + stepsize (-alpha massmatrix + (beta + 1/2 stepsize) stiffness) velocity_n
 $

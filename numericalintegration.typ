@@ -174,13 +174,13 @@ y(t) = mat( position(t); velocity(t))
 $ <definition_y>
 
 $
-f(t,y) = mat( velocity(t); mass^(-1) (force(position, velocity) - coriolismatrix velocity))
+f(t,y) = mat( velocity(t); massmatrix^(-1) (force(position, velocity) - coriolismatrix velocity))
 $ <definition_f>
 
 In case of Rayleigh damping (@F_rayleigh):
 
 $
-f(t,y) = mat( velocity(t); mass^(-1) (force(position, velocity) - coriolismatrix velocity + (-alpha mass + beta stiffness(position, velocity)) velocity))
+f(t,y) = mat( velocity(t); massmatrix^(-1) (force(position, velocity) - coriolismatrix velocity + (-alpha massmatrix + beta stiffness(position, velocity)) velocity))
 $
 
 === Heat Equation

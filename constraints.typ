@@ -27,7 +27,7 @@ $
 cases(
 mat(
 (d position)/(d t);
-mass (d velocity)/(d t)
+massmatrix (d velocity)/(d t)
 ) &=
 mat(
 velocity;
@@ -284,13 +284,13 @@ $
 Constraint Newton's second law of motion can be deduced from @euler_lagrange_equation_with_constraints (see also @law_motion_deduced_from_lagrangian):
 
 $
-force(position, velocity) - mass (d velocity)/(d t) + constraintmatrix(state)^T lambda = 0
+force(position, velocity) - massmatrix (d velocity)/(d t) + constraintmatrix(state)^T lambda = 0
 $
 
 By rearranging the terms:
 
 $
-mass (d velocity)/(d t) = force(position, velocity) + constraintmatrix(state)^T lambda
+massmatrix (d velocity)/(d t) = force(position, velocity) + constraintmatrix(state)^T lambda
 $ <second_newton_law_constraint>
 
 === Position-level Equation of Motion
@@ -298,7 +298,7 @@ $ <second_newton_law_constraint>
 $
 cases(
   (d position)/(d t) = velocity\
-  mass (d velocity)/(d t) = force(position, velocity) + constraintmatrix(state)^T lambda\
+  massmatrix (d velocity)/(d t) = force(position, velocity) + constraintmatrix(state)^T lambda\
   constraint(position, t) = 0
 )
 $
@@ -308,7 +308,7 @@ $
 $
 cases(
   (d position)/(d t) = velocity\
-  mass (d velocity)/(d t) = force(position, velocity) + constraintmatrix(state)^T lambda\
+  massmatrix (d velocity)/(d t) = force(position, velocity) + constraintmatrix(state)^T lambda\
   constraintmatrix velocity = 0
 )
 $
@@ -318,8 +318,8 @@ $
 Based on @second_newton_law_constraint, we add the constraint term in the residual function of the linear multistep methods (@linear_multistep_method_section):
 
 $
-tilde(r)(state, lambda) = tilde(r)(position, velocity, lambda) = \ a_s mat( position; mass velocity)
-+ sum_(j=0)^(s-1) a_j mat( position_(n+j); mass velocity_(n+j)) \
+tilde(r)(state, lambda) = tilde(r)(position, velocity, lambda) = \ a_s mat( position; massmatrix velocity)
++ sum_(j=0)^(s-1) a_j mat( position_(n+j); massmatrix velocity_(n+j)) \
 - stepsize (b_s 
 mat( velocity; force(position, velocity) + constraintmatrix(position, t)^T thick lambda)
 + sum_(j=0)^(s-1) b_j mat( velocity_(n+j); force(position_(n+j), velocity_(n+j)) + constraintmatrix(position_(n+j), t_(n+j))^T thick lambda_(n+j))
@@ -371,7 +371,7 @@ $
 $
 
 $
-(partial tilde(r_2))/(partial velocity) = a_s mass - stepsize thick b_s thick damping
+(partial tilde(r_2))/(partial velocity) = a_s massmatrix - stepsize thick b_s thick damping
 $
 
 $
@@ -398,7 +398,7 @@ mat(
 a_s identity, -stepsize thick b_s thick identity, 0;
 
 -stepsize thick b_s (stiffness(state) + geometricstiffness_lambda(position, lambda)),
-a_s mass - stepsize thick b_s thick damping(state),
+a_s massmatrix - stepsize thick b_s thick damping(state),
 -stepsize thick b_s constraintmatrix(position)^T;
 
 constraintmatrix(position), 0, 0
@@ -414,7 +414,7 @@ mat(
 a_s identity, -stepsize thick b_s thick identity, 0;
 
 -stepsize thick b_s (stiffness + geometricstiffness_lambda),
-a_s mass - stepsize thick b_s thick damping,
+a_s massmatrix - stepsize thick b_s thick damping,
 -stepsize thick b_s constraintmatrix^i^T;
 constraintmatrix^i, 0, 0
 )
@@ -437,7 +437,7 @@ augment: #(hline:1, vline:1))
 mat(
 a_s identity, -stepsize thick b_s thick identity, 0;
 -stepsize thick b_s (stiffness + geometricstiffness_lambda),
-a_s mass - stepsize thick b_s thick damping,
+a_s massmatrix - stepsize thick b_s thick damping,
 -stepsize thick b_s constraintmatrix^i^T;
 constraintmatrix^i, 0, 0;
 augment: #(hline:1,vline:1),
@@ -477,7 +477,7 @@ $
 Finally:
 $
 mat(
-a_s mass - stepsize thick b_s thick damping - stepsize^2 b_s^2/a_s (stiffness + geometricstiffness_lambda),
+a_s massmatrix - stepsize thick b_s thick damping - stepsize^2 b_s^2/a_s (stiffness + geometricstiffness_lambda),
 -stepsize thick b_s constraintmatrix^i^T;
 stepsize thick b_s/a_s constraintmatrix^i,0;
 augment: #(hline:1,vline:1))
