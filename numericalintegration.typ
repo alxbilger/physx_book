@@ -249,7 +249,7 @@ The process is repeated as
 
 $
 lr((partial r)/(partial x)|)_(x^i) (x^(i+1)-x^i) = -r(x^i)
-$
+$ <linear_system_in_newton_raphson>
 
 === Optimization <newton_raphson_optimization>
 

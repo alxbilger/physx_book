@@ -3,6 +3,8 @@
 
 = Linear Solvers
 
+In @linear_system_in_newton_raphson, a linear system needs to be solved in every iteration of Newton-Raphson. This chapter describes several methods to solve linear systems.
+
 == Conjugate Gradient
 
 == Jacobi
@@ -67,4 +69,25 @@ $
   L x^((k+1)) = b - U x^((k)) <=>  x^((k+1)) = L^(-1) (b - U x^((k)))
 $
 
-=== Projected Gauss-Seidel
+== Successive over-relaxation
+
+Matrix splitting:
+$
+  A = D + L + U
+$
+
+Solving the linear system:
+
+$
+  A x = b & <=> omega A x = omega b \
+  & <=> omega (D + L + U) x = omega b \
+  & <=> (omega (D + L + U) + D - D) x = omega b \
+  & <=> (D + omega L) x = omega b - (omega U + (omega - 1) D) x
+$
+
+Iterative process:
+
+$
+  (D + omega L) x^((k+1)) &= omega b - (omega U + (omega - 1) D) x^((k)) \
+  <=>  x^((k+1)) &= (D + omega L)^(-1)(omega b - (omega U + (omega - 1) D) x^((k)))
+$
