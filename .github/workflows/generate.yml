@@ -6,18 +6,33 @@ jobs:
   render-book:
     runs-on: ubuntu-latest
     steps:
-        - uses: actions/checkout@v4
+        - uses: actions/checkout@v5
         - uses: typst-community/setup-typst@v4
+        
         - name: Add details
           run: |
             echo "Compiled from #link(\"https://github.com/alxbilger/physx_book/commit/${{ github.sha }}\")[${{ github.sha }}] from " >> details.typ
             typst --version >> details.typ
-        - run: typst compile main.typ physx_book.pdf
+        
+        - name: Create output dir
+          # Note: `github-pages-temp` should not exist yet
+          run: mkdir github-pages-temp
+        
+        - name: Build PDF
+          run: typst compile main.typ github-pages-temp/physx_book.pdf
+        
+        - name: Upload site files as artifact
+          id: deployment
+          uses: actions/upload-pages-artifact@v4
+          with:
+            path: github-pages-temp
+
         - name: Upload Artifacts
           uses: actions/upload-artifact@v4
           with:
               name: PDF
-              path: 'physx_book.pdf'
+              path: 'github-pages-temp/physx_book.pdf'
+        
         - name: Release
           uses: softprops/action-gh-release@v2
           if: github.ref_type == 'tag'
