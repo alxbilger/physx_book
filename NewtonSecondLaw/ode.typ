@@ -30,8 +30,10 @@ $ <ODE>
 Rayleigh damping is defined as:
 
 $
-F_"Rayleigh" = (-alpha massmatrix + beta underbrace((partial force(position, velocity))/(partial position), stiffness(position, velocity))) velocity
+F_"Rayleigh" = (-alpha massmatrix(position) + beta stiffness(position, velocity)) velocity
 $ <F_rayleigh>
+
+where $alpha$ is a stiffness-proportional damping coefficient, and $beta$ is a mass-proportional damping coefficient.
 ]
 
 $F_"Rayleigh"$ is added to the sum of forces in @ODE:

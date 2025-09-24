@@ -51,7 +51,7 @@ $
 == Kinetic Energy
 
 #definition(title: "Kinetic Energy")[
-The continuous total kinetic energy $T$ of a deformable body with mass density $rho(position)$ is given by integrating over the entire volume $V$:
+The continuous total kinetic energy $kineticenergy$ of a deformable body with mass density $rho(position)$ is given by integrating over the entire volume $V$:
 
 $
 kineticenergy &= 1/2 integral_V norm(velocity (t))^2 thick rho(position) thick dif V
@@ -83,7 +83,7 @@ In general, the mass $massmatrix$ depends on the state $position$, and therefore
 == Lagrangian
 
 #definition(title: "Lagrangian")[
-The Lagrangian $lagrangian$ of a system of particles is defined as:
+The Lagrangian $lagrangian$ of a system of particles is a scalar defined as:
 
 $
 lagrangian(position, velocity, t) = kineticenergy - potentialenergy
