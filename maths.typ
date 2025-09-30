@@ -1,3 +1,4 @@
+#import "variables.typ": *
 #import "box.typ": *
 
 = Maths
@@ -18,6 +19,61 @@ u_m v_1, u_m v_2, dots, u_m v_n
 $
 
 The outer product $u times.circle v$ is equivalent to a matrix multiplication $u v^T$.
+
+== Double dot product
+
+#definition(title:"Double dot product")[
+The double dot product of two 2nd order tensors $tensor2(A)$ and $tensor2(B)$ is denoted $tensor2(A) : tensor2(B)$
+
+It is also called double contraction, or the Frobenius inner product.
+]
+
+#property()[
+  $
+  tensor2(A) : tensor2(B) = sum_(i=1)^n sum_(j=1)^n A_(i j) B_(i j)
+  $
+]
+
+#property()[
+  $
+  tensor2(A) : tensor2(B) = tr(tensor2(A)^T tensor2(B))
+  $
+]
+
+== Determinant
+
+#definition(title:"Determinant")[
+Let $deformationgradient in RR^(n times n)$, the determinant of $deformationgradient$ is denoted $det(deformationgradient)$.
+
+$
+  det(deformationgradient) = 
+  mat(delim:"|",
+    f_(1,1), f_(1,2), ..., f_(1,n);
+    f_(2,1), f_(2,2), ..., f_(2,n);
+    dots.v, dots.v, dots.down, dots.v;
+    f_(n,1), f_(n,2), ..., f_(n,n);
+    )
+$
+]
+
+#property(title:"In 2D")[
+$
+  mat(delim:"|",
+    a,b;
+    c,d
+  ) = a d - b c
+$
+]
+
+#property(title:"In 3D")[
+$
+  mat(delim:"|",
+      a,b,c;
+      d,e,f;
+      g,h,i
+    ) = a e i + b f g + c d h - c e g - b d i - a f h
+$
+]
 
 == Derivative of the 2-norm
 
