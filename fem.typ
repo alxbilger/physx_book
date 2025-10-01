@@ -218,3 +218,172 @@ $
     c_1, b_1, 0, c_2, b_2, 0, c_3, b_3, 0, c_4, b_4, 0
   ) 
 $
+
+== Forces in an element
+
+If we apply @total_deformation_energy to the finite element, the total internal strain energy in a finite element is
+
+$
+  potentialenergy_e = integral_(domain_e_0) strainenergydensity(deformationgradient) dif V
+$
+
+The internal force comes from the variation of the strain energy:
+
+$
+  force_e (position) = (partial potentialenergy_e)/(partial displacement)
+$
+
+#examplebox(title:"4-nodes element")[
+  In a 4-nodes elements:
+  $
+  force_e (position) = mat(
+    (partial strainenergydensity_e)/(partial displacement_0),
+    (partial strainenergydensity_e)/(partial displacement_1),
+    (partial strainenergydensity_e)/(partial displacement_2),
+    (partial strainenergydensity_e)/(partial displacement_3)
+  )^T
+  $
+
+  In 3D, displacement has 3 components $[displacement_x, displacement_y, displacement_z]$. It results in a force vector of 12 scalars:
+
+  $
+  force_e (position) = mat(
+    (partial strainenergydensity_e)/(partial displacement_0_x),
+    (partial strainenergydensity_e)/(partial displacement_0_y),
+    (partial strainenergydensity_e)/(partial displacement_0_z),
+    (partial strainenergydensity_e)/(partial displacement_1_x),
+    (partial strainenergydensity_e)/(partial displacement_1_y),
+    (partial strainenergydensity_e)/(partial displacement_1_z),
+    (partial strainenergydensity_e)/(partial displacement_2_x),
+    (partial strainenergydensity_e)/(partial displacement_2_y),
+    (partial strainenergydensity_e)/(partial displacement_2_z),
+    (partial strainenergydensity_e)/(partial displacement_3_x),
+    (partial strainenergydensity_e)/(partial displacement_3_y),
+    (partial strainenergydensity_e)/(partial displacement_3_z)
+  )^T
+  $
+]
+
+Substituting,
+$
+  force_e (position) = (partial)/(partial displacement) integral_(domain_e) strainenergydensity(deformationgradient) dif V_0
+$
+
+Moving the derivative inside the integral:
+
+$
+  force_e (position) =  integral_(Omega_e_0) (partial strainenergydensity(deformationgradient))/(partial displacement)  dif V_0
+$
+
+From the chain rule (@chain_rule_double_dot_product):
+
+$
+  (partial strainenergydensity)/(partial displacement) = (partial strainenergydensity) / (partial deformationgradient) : (partial deformationgradient) / (partial displacement)
+$
+
+So,
+
+$
+  force_e (position) =  integral_(Omega_e_0) (partial strainenergydensity) / (partial deformationgradient) : (partial deformationgradient) / (partial displacement) dif V_0
+$
+
+$(partial strainenergydensity) / (partial deformationgradient)$ is the first Piola-Kirchhoff stress tensor $pk1$.
+
+$
+  force_e (position) = integral_(Omega_e_0) pk1(deformationgradient) : (partial deformationgradient) / (partial displacement) dif V_0
+$
+
+In index notation:
+
+$
+  force_e_b_k (position) = integral_(Omega_e_0) sum_i sum_j pk1_(i j)(deformationgradient) (partial deformationgradient_(i j)) / (partial displacement_b_k) dif V_0
+$
+
+Let's focus on the term $(partial deformationgradient) / (partial displacement)$.
+
+Recall that, in the element:
+
+$
+  displacement(undefposition) = sum_i^(n_e) N_i (undefposition) displacement_i
+$
+
+Replacing $displacement$ in @deformation_gradient_displacement:
+
+$
+  deformationgradient &= tensor2(identity) + (partial )/(partial undefposition)(sum_i^(n_e) N(undefposition) displacement_i) \
+  &= tensor2(identity) + sum_i^(n_e) displacement_i (partial N_i (undefposition))/(partial undefposition)
+$
+
+In index notation,
+
+$
+  deformationgradient_(i j) = delta_(i j) + sum_a^(n_e) displacement_a_i (partial N_a (undefposition))/(partial undefposition_j)
+$
+
+Now we want to derivate this expression of $deformationgradient$ with respect to the displacement $displacement_k$ of the nodes in the element:
+
+$
+  (partial deformationgradient_(i j))/(partial displacement_b_k) &= (partial)/(partial displacement_b_k) sum_a^(n_e) displacement_a_i (partial N_a (undefposition))/(partial undefposition_j) \
+  &=sum_a^(n_e)  (partial)/(partial displacement_b_k) (displacement_a_i (partial N_a (undefposition))/(partial undefposition_j)) \
+  &=sum_a^(n_e)  delta_(a b) delta_(i k) (partial N_a (undefposition))/(partial undefposition_j) \
+  &= delta_(i k) (partial N_b (undefposition))/(partial undefposition_j)
+$ <derivative_deformation_gradient_wrt_displacement_index_notation>
+
+Insert back this expression into the force expression:
+
+$
+  force_e_b_k (position) &= integral_(Omega_e_0) sum_i sum_j pk1_(i j)(deformationgradient) delta_(i k) (partial N_b (undefposition))/(partial undefposition_j) dif V_0 \
+  &= integral_(Omega_e_0) sum_j pk1_(k j)(deformationgradient) (partial N_b (undefposition))/(partial undefposition_j) dif V_0 \
+  &= integral_(Omega_e_0) (pk1(deformationgradient) (partial N_b (undefposition))/(partial undefposition))_k dif V_0
+$
+
+$
+  force_e_b = integral_(Omega_e_0) pk1(deformationgradient) (partial N_b (undefposition))/(partial undefposition) dif V_0
+$
+
+Finally, we change the variable to compute the force in the reference element:
+
+$
+  force_e_b = integral_hat(Omega_e) pk1(deformationgradient) (partial N_b (undefposition))/(partial undefposition) det(tensor2(J)) dif hat(V)
+$
+
+Using Gauss quadrature:
+
+$
+  force_e_b approx sum_i omega_i pk1(deformationgradient) (partial N_b (undefposition))/(partial undefposition) det(tensor2(J)) 
+$
+
+== Hessian
+
+The Hessian (consistent tangent) is the derivative of the force w.r.t. nodal displacements:
+
+$
+  stiffness_((b k), (c l)) &= (partial force_b_k)/(partial displacement_(c l)) \
+  &= (partial)/(partial displacement_(c l)) integral_(Omega_e_0) sum_j thick pk1_(k j)(deformationgradient) (partial N_b (undefposition))/(partial undefposition_j) dif V_0 \
+  &= integral_(Omega_e_0) sum_j thick (partial pk1_(k j)(deformationgradient))/(partial displacement_(c l))  (partial N_b (undefposition))/(partial undefposition_j) dif V_0 \
+$
+
+Using the chain rule:
+
+$
+  (partial pk1_(k j)(deformationgradient))/(partial displacement_(c l)) = 
+  sum_p sum_q (partial pk1_(k j)(deformationgradient))/(partial deformationgradient_(p q)) (partial deformationgradient_(p q))/(partial displacement_(c l))
+$
+
+We apply @derivative_deformation_gradient_wrt_displacement_index_notation:
+
+$
+  (partial pk1_(k j)(deformationgradient))/(partial displacement_(c l)) &= 
+  sum_p sum_q (partial pk1_(k j)(deformationgradient))/(partial deformationgradient_(p q)) delta_(p l) (partial N_c (undefposition))/(partial undefposition_q) \
+  &= 
+  sum_q (partial pk1_(k j)(deformationgradient))/(partial deformationgradient_(l q)) (partial N_c (undefposition))/(partial undefposition_q)
+$
+
+Insert back into the Hessian:
+
+$
+  stiffness_((b k), (c l)) &= 
+  integral_(Omega_e_0) sum_j thick sum_q (partial pk1_(k j)(deformationgradient))/(partial deformationgradient_(l q)) (partial N_c (undefposition))/(partial undefposition_q)  (partial N_b (undefposition))/(partial undefposition_j) dif V_0
+$
+
+$(partial pk1(deformationgradient))/(partial deformationgradient)$ is a 4th-order tensor, that can be flattened as a $d^2 times d^2$ 2nd-order tensor.

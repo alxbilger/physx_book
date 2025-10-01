@@ -20,7 +20,7 @@ $
 
 The outer product $u times.circle v$ is equivalent to a matrix multiplication $u v^T$.
 
-== Double dot product
+== Double dot product <double_dot_product>
 
 #definition(title:"Double dot product")[
 The double dot product of two 2nd order tensors $tensor2(A)$ and $tensor2(B)$ is denoted $tensor2(A) : tensor2(B)$
@@ -38,6 +38,28 @@ It is also called double contraction, or the Frobenius inner product.
   $
   tensor2(A) : tensor2(B) = tr(tensor2(A)^T tensor2(B))
   $
+]
+
+#property(title:"Chain rule")[
+  Suppose a scalar function $strainenergydensity$ depending on a 2nd order tensor $deformationgradient$. We want to derivate $strainenergydensity$ with respect to a vector $displacement_e$. Then,
+
+  $
+    (partial strainenergydensity)/(partial displacement_e) = (partial strainenergydensity)/(partial deformationgradient) : (partial deformationgradient) / (partial displacement_e)
+  $ <chain_rule_double_dot_product>
+
+  #emoji.warning Here the double dot product is generalized. $(partial deformationgradient) / (partial displacement_e)$ is a 3rd order tensor, so the definition of the double dot product does not apply. To be rigorous, we should write with the index notation:
+
+  $
+    (tensor2(A) : tensor3(B))_k = sum_(i=1)^n sum_(j=1)^n A_(i j) B_(i j k)
+  $
+
+  Then,
+
+  $
+    (partial strainenergydensity)/(partial displacement_e_k) = sum_(i=1)^n sum_(j=1)^n (partial strainenergydensity)/(partial deformationgradient_(i j)) : (partial deformationgradient_(i j)) / (partial displacement_e_k)
+  $
+
+  resulting in a vector.
 ]
 
 == Determinant

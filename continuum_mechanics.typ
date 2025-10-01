@@ -105,7 +105,7 @@ $
 $
   deformationgradient = (partial position)/(partial undefposition) &= partial/(partial undefposition) (undefposition + displacement) \
   &= identity + (partial displacement)/(partial undefposition)
-$
+$ <deformation_gradient_displacement>
 ]
 
 #definition(title:"Displacement gradient")[
@@ -306,3 +306,23 @@ $
 $
   tensor2(bold(C)) = lambda tensor2(bold(I)_text("vol")) + 2 mu tensor2(bold(I)_text("dev"))
 $
+
+#definition(title:"Strain energy density")[
+  We introduce the strain energy density function $strainenergydensity(undefposition)$ which measures the strain energy per unit of undeformed volume on an infinitesimal domain $dif V$ around the material point $undefposition$.
+]
+
+#property(title:"Function of deformation gradient")[
+  It is expected that strain energy density function $strainenergydensity$ is a function of the deformation gradient $deformationgradient$.
+]
+
+#property(title:"Total Deformation Energy")[
+  $
+    potentialenergy = integral_domain_0 strainenergydensity(deformationgradient) dif undefposition
+  $ <total_deformation_energy>
+]
+
+#definition(title:"Force from strain energy")[
+  $
+    force = - (partial potentialenergy)/(partial displacement)
+  $
+]
