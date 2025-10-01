@@ -97,6 +97,19 @@ $
 $
 ]
 
+#property(title:"Derivative")[
+  It can be shown that for any 2nd order tensor $tensor2(S)$
+  $
+    (partial det(tensor2(S)))/(partial tensor2(S)) = det(tensor2(S)) [tensor2(S)^(-1)]^T
+  $ <derivative_determinant>
+]
+
+== Adjugate Matrix
+
+$
+  bold(A) "adj"(bold(A)) = det(bold(A)) identity
+$ <adjugate>
+
 == Derivative of the 2-norm
 
 The 2-norm of vector $x=(x_1,dots, x_n)$ is
