@@ -85,12 +85,15 @@ $
 
 == Neo Hookean Material
 
+#mybox(title:"Strain Energy")[
 $
   strainenergydensity = mu / 2 (I_C - d) - mu log J + lambda / 2 (log J)^2 
 $
 
-According to Bonet et al.
+According to @bonet1997nonlinear.
+]
 
+#mybox(title: "First Piola-Kirchhoff Stress Tensor")[
 $
 pk1 = (partial strainenergydensity) / (partial deformationgradient) 
 &= mu/2 (partial I_rightcauchygreen)/(partial deformationgradient) - mu (partial log J)/(partial deformationgradient) + lambda log J (partial log J)/(partial deformationgradient) \
@@ -102,9 +105,12 @@ According to @derivative_determinant and @adjugate,
 $
   (partial J)/(partial deformationgradient) = J [deformationgradient^(-1)]^T = J [1/J "adj"(F)]^T = "adj"(F)^T
 $
+]
 
+#mybox(title:"Hessian")[
 Now the Hessian:
 
 $
   (partial pk1)/(partial deformationgradient) = 
 $
+]
