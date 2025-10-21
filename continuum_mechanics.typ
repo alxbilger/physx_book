@@ -112,10 +112,18 @@ $ <deformation_gradient_displacement>
   From the previous property, $(partial displacement)/(partial undefposition)$ is called the displacement gradient.
 ]
 
-#definition(title:"Right Cauchy-Green tensor")[
+#definition(title:"Right Cauchy-Green Deformation Tensor")[
 $
   rightcauchygreen = deformationgradient^T deformationgradient
-$
+$ <right_cauchy_green_tensor>
+]
+
+#property(title: "Symmetric Tensor")[
+  Based on @right_cauchy_green_tensor, $rightcauchygreen$ is a symmetric tensor:
+
+  $
+  rightcauchygreen^T = (deformationgradient^T deformationgradient)^T = deformationgradient^T deformationgradient = rightcauchygreen
+  $
 ]
 
 #definition(title:"Green's strain")[
@@ -308,21 +316,45 @@ $
 $
 
 #definition(title:"Strain energy density")[
-  We introduce the strain energy density function $strainenergydensity(undefposition)$ which measures the strain energy per unit of undeformed volume on an infinitesimal domain $dif V$ around the material point $undefposition$.
+  We introduce the strain energy density function $undefstrainenergydensity(undefposition)$ which measures the strain energy per unit of undeformed volume on an infinitesimal domain $dif undefvolume$ around the material point $undefposition$.
 ]
 
 #property(title:"Function of deformation gradient")[
-  It is expected that strain energy density function $strainenergydensity$ is a function of the deformation gradient $deformationgradient$.
+  It is expected that strain energy density function $undefstrainenergydensity$ is a function of the deformation gradient $deformationgradient$.
 ]
 
-#property(title:"Total Deformation Energy")[
+#property(title:"Total Deformation Energy (Total Lagrangian Formulation)")[
   $
-    potentialenergy = integral_domain_0 strainenergydensity(deformationgradient) dif undefposition
-  $ <total_deformation_energy>
+    potentialenergy = integral_domain_0 undefstrainenergydensity(deformationgradient) dif undefvolume
+  $ <total_deformation_energy_total_lagrangian>
+]
+
+#property(title:"Total Deformation Energy (Updated Lagrangian Formulation)")[
+  $
+    potentialenergy = integral_domain strainenergydensity(deformationgradient) dif volume
+  $ <total_deformation_energy_updated_lagrangian>
 ]
 
 #definition(title:"Force from strain energy")[
   $
     force = - (partial potentialenergy)/(partial displacement)
   $
+]
+
+#definition(title:"First Piola-Kirchhoff Stress Tensor")[
+  $
+    pk1 = (partial undefstrainenergydensity) / (partial deformationgradient)
+  $ <pk1>
+]
+
+#definition(title:"Second Piola-Kirchhoff Stress Tensor")[
+  $
+    pk2 = deformationgradient dot pk1
+  $ <pk2>
+]
+
+#property(title:"Properties")[
+  $
+    pk2 = 2 (partial undefstrainenergydensity)/(partial rightcauchygreen) = (partial undefstrainenergydensity)/(partial greenstrain)
+  $ <pk2_properties>
 ]

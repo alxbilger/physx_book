@@ -8,7 +8,10 @@
 #let velocity = $bold(dot(#position))$
 #let acceleration = $bold(dot.double(#position))$
 #let state = $bold(x_q)$
+#let volume = $V$
+#let undefvolume = $V_0$
 #let force = $bold(f)$
+#let forceelement = $force^"element"$
 #let momentum = $bold(p)$
 #let mass = $m$
 #let density = $rho$
@@ -50,5 +53,10 @@
 #let configurationmapping = $phi$
 #let deformationjacobian = $J$
 #let strainenergydensity = $psi$
+#let undefstrainenergydensity = $Psi$
 #let domain = $Omega$
 #let pk1 = $tensor2(P)$
+#let pk2 = $tensor2(S)$
+#let invariant1 = $I_rightcauchygreen$
+#let invariant2 = $I #h(-2pt) I_rightcauchygreen$
+#let invariant3 = $I #h(-2pt) I #h(-2pt) I_rightcauchygreen$

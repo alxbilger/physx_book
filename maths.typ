@@ -3,6 +3,31 @@
 
 = Maths
 
+== Kronecker Delta
+
+#definition(title:"Kronecker Delta")[
+  $
+    delta_(i j) = cases(
+      0 "if" i != j,
+      1 "if" i = j
+    )
+  $ <kronecker_delta>
+]
+
+#property(title:"Properties")[
+  $
+    sum_j delta_(i j) a_j = a_i
+  $ <kronecker_delta_properties1>
+
+  $
+    sum_i a_i delta_(i j) = a_j
+  $ <kronecker_delta_properties2>
+
+  $
+    sum_k delta_(i k) delta_(k j) = delta_(i j)
+  $ <kronecker_delta_properties3>
+]
+
 == Outer Product
 
 Given two vectors of size $m times 1$ and $n times 1$ respectively $u = (u_1,dots, u_n)$, $v = (v_1,dots, v_n)$,
@@ -23,7 +48,7 @@ The outer product $u times.circle v$ is equivalent to a matrix multiplication $u
 == Double dot product <double_dot_product>
 
 #definition(title:"Double dot product")[
-The double dot product of two 2nd order tensors $tensor2(A)$ and $tensor2(B)$ is denoted $tensor2(A) : tensor2(B)$
+The double dot product of two second-order tensors $tensor2(A)$ and $tensor2(B)$ is denoted $tensor2(A) : tensor2(B)$
 
 It is also called double contraction, or the Frobenius inner product.
 ]
@@ -41,7 +66,7 @@ It is also called double contraction, or the Frobenius inner product.
 ]
 
 #property(title:"Chain rule")[
-  Suppose a scalar function $strainenergydensity$ depending on a 2nd order tensor $deformationgradient$. We want to derivate $strainenergydensity$ with respect to a vector $displacement_e$. Then,
+  Suppose a scalar function $strainenergydensity$ depending on a second-order tensor $deformationgradient$. We want to derivate $strainenergydensity$ with respect to a vector $displacement_e$. Then,
 
   $
     (partial strainenergydensity)/(partial displacement_e) = (partial strainenergydensity)/(partial deformationgradient) : (partial deformationgradient) / (partial displacement_e)
@@ -51,7 +76,7 @@ It is also called double contraction, or the Frobenius inner product.
 
   $
     (tensor2(A) : tensor3(B))_k = sum_(i=1)^n sum_(j=1)^n A_(i j) B_(i j k)
-  $
+  $ <double_dot_product_tensor3>
 
   Then,
 
@@ -98,7 +123,7 @@ $
 ]
 
 #property(title:"Derivative")[
-  It can be shown that for any 2nd order tensor $tensor2(S)$
+  It can be shown that for any second-order tensor $tensor2(S)$
   $
     (partial det(tensor2(S)))/(partial tensor2(S)) = det(tensor2(S)) [tensor2(S)^(-1)]^T
   $ <derivative_determinant>
