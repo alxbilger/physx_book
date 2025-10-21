@@ -58,7 +58,7 @@ Therefore, in tensor notation:
 
 $
   (partial invariant1)/(partial deformationgradient) = 2 deformationgradient
-$
+$ <derivative_invariant1_wrt_deformationgradient>
 ]
 
 === Second Invariant of $rightcauchygreen$
@@ -73,6 +73,12 @@ $
   $
     (partial invariant2)/(partial rightcauchygreen) = tr(rightcauchygreen) tensor2(identity) - rightcauchygreen
   $ <derivative_invariant2_wrt_rightcauchygreen>
+]
+
+#property(title:"Derivative w.r.t. " + $deformationgradient$)[
+  $
+    (partial invariant2)/(partial deformationgradient) = 2 (tr(rightcauchygreen) deformationgradient - deformationgradient rightcauchygreen)
+  $ <derivative_invariant2_wrt_deformationgradient>
 ]
 
 #mybox(title:"Bonet et al.")[
@@ -124,7 +130,7 @@ $
 
   $
     (partial det(rightcauchygreen))/(partial deformationgradient) = 2 det(rightcauchygreen) deformationgradient rightcauchygreen^(-1)
-  $
+  $ <derivative_invariant3_wrt_deformationgradient>
 
   And using the adjugate matrix:
 
@@ -142,7 +148,28 @@ $
   $
 ]
 
-From @pk2_properties:
+==== First Piola-Kirchhoff Stress Tensor
+
+From @pk1:
+
+$
+  pk1 &= (partial undefstrainenergydensity)/(partial deformationgradient) \
+    &= (partial undefstrainenergydensity)/(partial invariant1) (partial invariant1)/(partial deformationgradient)
+     + (partial undefstrainenergydensity)/(partial invariant2) (partial invariant2)/(partial deformationgradient)
+     + (partial undefstrainenergydensity)/(partial invariant3) (partial invariant3)/(partial deformationgradient)
+$ <pk1_as_function_of_invariants>
+
+From @derivative_invariant1_wrt_deformationgradient, @derivative_invariant2_wrt_deformationgradient and @derivative_invariant3_wrt_deformationgradient:
+$
+  pk1
+    = (partial undefstrainenergydensity)/(partial invariant1) 2 deformationgradient
+    + (partial undefstrainenergydensity)/(partial invariant2) 2 (tr(rightcauchygreen) deformationgradient - deformationgradient rightcauchygreen)
+    + (partial undefstrainenergydensity)/(partial invariant3) 2 det(rightcauchygreen) deformationgradient rightcauchygreen^(-1)
+$
+
+==== Second Piola-Kirchhoff Stress Tensor
+
+From @pk2:
 
 $
   pk2 &= 2 (partial undefstrainenergydensity)/(partial rightcauchygreen) \ 
@@ -158,6 +185,28 @@ $
    + 2 (partial undefstrainenergydensity)/(partial invariant2) (tr(rightcauchygreen) tensor2(identity) - rightcauchygreen)
    + 2 (partial undefstrainenergydensity)/(partial invariant3) det(rightcauchygreen) rightcauchygreen^(-1)
 $ <pk2_as_function_of_invariants>
+
+We can observe that @pk1_as_function_of_invariants and @pk2_as_function_of_invariants are consistant with @pk2.
+
+== St Venant-Kichhoff Material
+
+#mybox(title:"Strain Energy")[
+$
+  undefstrainenergydensity = 1/2 lambda thin tr(greenstrain)^2 + mu thin greenstrain : greenstrain
+$ <strain_energy_stvenantkirchhoff>
+
+Based on @double_dot_product_trace, it can also be written as:
+
+$
+  undefstrainenergydensity = 1/2 lambda thin tr(greenstrain)^2 + mu thin tr(greenstrain^2)
+$
+]
+
+#mybox(title: "First Piola-Kirchhoff Stress Tensor")[
+  $
+    pk1 = mu deformationgradient greenstrain + lambda (tr(greenstrain)) deformationgradient
+  $
+]
 
 == Neo Hookean Material
 

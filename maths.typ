@@ -62,7 +62,7 @@ It is also called double contraction, or the Frobenius inner product.
 #property()[
   $
   tensor2(A) : tensor2(B) = tr(tensor2(A)^T tensor2(B))
-  $
+  $ <double_dot_product_trace>
 ]
 
 #property(title:"Chain rule")[
