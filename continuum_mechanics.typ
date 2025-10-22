@@ -407,6 +407,12 @@ $
   $
 ]
 
+#property(title:"Property")[
+  $
+    elasticitytensor = 1/2 (partial pk2)/(partial greenstrain)
+  $
+]
+
 
 Based on @pk2,
 
