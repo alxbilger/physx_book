@@ -43,7 +43,24 @@ u_m v_1, u_m v_2, dots, u_m v_n
 )
 $
 
-The outer product $u times.circle v$ is equivalent to a matrix multiplication $u v^T$.
+The outer product $u times.circle v$ is equivalent to a matrix multiplication $u thin v^T$.
+
+#definition(title:"Outer product on tensors")[
+  Given two tensors $u$,$v$ with dimensions $(k_1, dots, k_m)$ and $(l_1, dots, l_n)$, their outer product $u times.circle v$ is a tensor with dimensions $(k_1, dots, k_m, l_1, dots, l_n)$ and entries
+
+  $
+    (u times.circle v)_(i_1, dots, i_m, j_1, dots, j_n) = u_(i_1, dots, i_m) v_(j_1, dots, j_n)
+  $ <outer_product_tensor>
+]
+
+#definition(title:"Mixed outer product on tensors")[
+  Given two second-order tensors $u$,$v$, their outer product $u times.circle v$ is a 4th-order tensor and entries
+
+  $
+    (u overline(times.circle) v)_(i, j, k, l) = u_(i k) v_(j l)
+  $ <mixed_outer_product_tensor>
+]
+
 
 == Double dot product <double_dot_product>
 

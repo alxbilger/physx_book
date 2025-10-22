@@ -126,6 +126,18 @@ $ <right_cauchy_green_tensor>
   $
 ]
 
+#property(title: "Derivative Right Cauchy-Green Deformation Tensor w.r.t " + $deformationgradient$)[
+  In index notation:
+  $
+    (partial rightcauchygreen_(i j))/(partial deformationgradient_(k l)) 
+      &= (partial)/(partial deformationgradient_(k l))(sum_q deformationgradient_(q i) deformationgradient_(q j)) \
+      &= sum_q (partial deformationgradient_(q i) deformationgradient_(q j))/(partial deformationgradient_(k l)) \
+      &= sum_q ((partial deformationgradient_(q i) )/(partial deformationgradient_(k l)) deformationgradient_(q j) + deformationgradient_(q i) (partial deformationgradient_(q j))/(partial deformationgradient_(k l))) \
+      &= sum_q (delta_(q k) delta_(i l) deformationgradient_(q j) + deformationgradient_(q i) delta_(q k) delta_(j l)) \
+      &= delta_(i l) deformationgradient_(k j) + deformationgradient_(k i) delta_(j l)
+  $ <derivative_right_cauchy_green_tensor_wrt_deformation_gradient>
+]
+
 #definition(title:"Green's strain")[
 $
   greenstrain = 1/2 (deformationgradient^T deformationgradient - identity)
@@ -226,6 +238,8 @@ $
 is a 2nd-order tensor
 ]
 
+== Hooke's law
+
 #definition(title: "Hooke's law")[
 $
   cauchystresscomponent_(i j) = sum_k sum_l C_(i j k l) linearstraintensorcomponent_(k l)
@@ -315,8 +329,14 @@ $
   tensor2(bold(C)) = lambda tensor2(bold(I)_text("vol")) + 2 mu tensor2(bold(I)_text("dev"))
 $
 
+== Hyperelasticity
+
 #definition(title:"Strain energy density")[
   We introduce the strain energy density function $undefstrainenergydensity(undefposition)$ which measures the strain energy per unit of undeformed volume on an infinitesimal domain $dif undefvolume$ around the material point $undefposition$.
+]
+
+#definition(title:"Hyperelastic materials")[
+  A hyperelastic material has a stress–strain relationship deriving from a strain energy density function.
 ]
 
 #property(title:"Function of deformation gradient")[
@@ -349,12 +369,98 @@ $
 
 #definition(title:"Second Piola-Kirchhoff Stress Tensor")[
   $
-    pk2 = deformationgradient dot pk1
+    pk1 = deformationgradient dot pk2
   $ <pk2>
 ]
 
-#property(title:"Properties")[
+#property(title:"Piola-Kirchhoff Stress Tensors")[
   $
     pk2 = 2 (partial undefstrainenergydensity)/(partial rightcauchygreen) = (partial undefstrainenergydensity)/(partial greenstrain)
   $ <pk2_properties>
+]
+
+
+#definition(title:"Material Tangent Modulus")[
+  The term $(partial pk1(deformationgradient))/(partial deformationgradient)$ is called the material tangent modulus and is a 4th-order tensor.
+
+  $
+    tangentmodulus = (partial pk1(deformationgradient))/(partial deformationgradient)
+  $
+]
+
+#property(title:"Major Symmetry of the material tangent modulus")[
+  Since the material tangent modulus derives from a second derivative, it is symmetric in the sense of pair symmetry:
+
+  $
+    (partial pk1_(i j))/(partial deformationgradient_(k l)) = (partial^2 undefstrainenergydensity)/(partial deformationgradient_(i j) partial deformationgradient_(k l))
+    = (partial^2 undefstrainenergydensity)/(partial deformationgradient_(k l) partial deformationgradient_(i j))
+    = (partial pk1_(k l))/(partial deformationgradient_(i j))
+  $
+
+  $tangentmodulus in RR^(d times d times d times d)$, but using the symmetry, the tensor can be written using a $d^2 times d^2$ symmetric matrix, i.e. $d^2((d^2+1)/2)$ independent components.
+]
+
+#definition(title:"Lagrangian Elasticity Tensor")[
+  The following 4th-order tensor is called Lagrangian elasticity tensor:
+  $
+    elasticitytensor = (partial pk2)/(partial rightcauchygreen)
+  $
+]
+
+
+Based on @pk2,
+
+$
+  pk1_(i j) = sum_q deformationgradient_(i q) pk2_(q j)
+$
+
+By derivation w.r.t. $deformationgradient$:
+
+$
+  tangentmodulus_(i j k l) = (partial pk1_(i j))/(partial deformationgradient_(k l))
+    &= (partial)/(partial deformationgradient_(k l))(sum_q deformationgradient_(i q) pk2_(q j)) \
+    &= sum_q (partial deformationgradient_(i q) pk2_(q j))/(partial deformationgradient_(k l)) \
+    &= sum_q ((partial deformationgradient_(i q) )/(partial deformationgradient_(k l)) pk2_(q j) + deformationgradient_(i q) (partial pk2_(q j))/(partial deformationgradient_(k l))) \
+    &= sum_q (delta_(i k) delta_(q l) pk2_(q j) + deformationgradient_(i q) (partial pk2_(q j))/(partial deformationgradient_(k l))) \
+$
+
+The chain rule is used to introduce $rightcauchygreen$:
+
+$
+  tangentmodulus_(i j k l) = delta_(i k) pk2_(l j) + sum_q sum_r sum_s deformationgradient_(i q) (partial pk2_(q j))/(partial rightcauchygreen_(r s)) (partial rightcauchygreen_(r s))/(partial deformationgradient_(k l))
+$
+
+Based on @derivative_right_cauchy_green_tensor_wrt_deformation_gradient:
+
+$
+  tangentmodulus_(i j k l) 
+    &= delta_(i k) pk2_(l j) + sum_q sum_r sum_s deformationgradient_(i q) (partial pk2_(q j))/(partial rightcauchygreen_(r s)) (delta_(r l) deformationgradient_(k s) + deformationgradient_(k r) delta_(s l)) \
+    &= delta_(i k) pk2_(l j) + sum_q sum_r sum_s deformationgradient_(i q) (partial pk2_(q j))/(partial rightcauchygreen_(r s)) delta_(r l) deformationgradient_(k s) + sum_q sum_r sum_s deformationgradient_(i q) (partial pk2_(q j))/(partial rightcauchygreen_(r s)) deformationgradient_(k r) delta_(s l) \
+    &= delta_(i k) pk2_(l j) + sum_q sum_s deformationgradient_(i q) (partial pk2_(q j))/(partial rightcauchygreen_(l s)) deformationgradient_(k s) + sum_q sum_r deformationgradient_(i q) (partial pk2_(q j))/(partial rightcauchygreen_(r l)) deformationgradient_(k r) \
+    &= delta_(i k) pk2_(l j) + sum_q sum_r deformationgradient_(i q) (partial pk2_(q j))/(partial rightcauchygreen_(l r)) deformationgradient_(k r) + sum_q sum_r deformationgradient_(i q) (partial pk2_(q j))/(partial rightcauchygreen_(r l)) deformationgradient_(k r) \
+    &= delta_(i k) pk2_(l j) + sum_q sum_r deformationgradient_(i q) ((partial pk2_(q j))/(partial rightcauchygreen_(l r)) + (partial pk2_(q j))/(partial rightcauchygreen_(r l))) deformationgradient_(k r) 
+$
+
+Since $rightcauchygreen$ is symmetric, $rightcauchygreen_(l r) = rightcauchygreen_(r l)$. Then,
+
+$
+  tangentmodulus_(i j k l) 
+    &= delta_(i k) pk2_(l j) + sum_q sum_r deformationgradient_(i q) ((partial pk2_(q j))/(partial rightcauchygreen_(l r)) + (partial pk2_(q j))/(partial rightcauchygreen_(l r))) deformationgradient_(k r)  \
+    &= delta_(i k) pk2_(l j) + 2 sum_q sum_r deformationgradient_(i q) (partial pk2_(q j))/(partial rightcauchygreen_(l r)) deformationgradient_(k r)  \
+    &= delta_(i k) pk2_(l j) + 2 sum_q sum_r deformationgradient_(i q) elasticitytensor_(q j l r) deformationgradient_(k r)  
+$
+
+#property(title:"Material tangent modulus and Lagrangian Elasticity Tensor")[
+
+In index notation:
+$
+  tangentmodulus_(i j k l) = delta_(i k) pk2_(l j) + 2 sum_q sum_r deformationgradient_(i q) elasticitytensor_(q j l r) deformationgradient_(k r)  
+$
+
+It can be written in tensor notation:
+$
+  tangentmodulus = tensor2(identity) times.circle pk2^T +  2 (deformationgradient times.circle deformationgradient) : elasticitytensor
+$
+
+#emoji.warning The operations $times.circle$ and $:$ can use different conventions in the index order.
 ]

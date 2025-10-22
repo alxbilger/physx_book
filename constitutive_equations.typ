@@ -204,8 +204,26 @@ $
 
 #mybox(title: "First Piola-Kirchhoff Stress Tensor")[
   $
-    pk1 = mu deformationgradient greenstrain + lambda (tr(greenstrain)) deformationgradient
+    pk1 = 2 mu deformationgradient greenstrain + lambda (tr(greenstrain)) deformationgradient
   $
+]
+
+Insert the following expression on https://www.matrixcalculus.org/:
+
+```
+1/2*lambda*tr(1/2*(F'*F-eye))^2 + mu*tr((1/2*(F'*F-eye))*(1/2*(F'*F-eye)))
+```
+
+#mybox(title: "Second Piola-Kirchhoff Stress Tensor")[
+  $
+    pk2 = 2 mu greenstrain + lambda (tr(greenstrain)) tensor2(identity)
+  $
+]
+
+#mybox(title: "Hessian w.r.t. " + $deformationgradient$)[
+$
+  (partial pk1)/(partial deformationgradient)
+$
 ]
 
 == Neo Hookean Material

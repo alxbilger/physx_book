@@ -352,6 +352,7 @@ $
   &= integral_(Omega_e_0) (pk1(deformationgradient) (partial N_b (undefposition))/(partial undefposition))_k dif V_0
 $
 
+In vector form:
 $
   forceelement_b = integral_(Omega_e_0) pk1(deformationgradient) (partial N_b (undefposition))/(partial undefposition) dif V_0
 $
@@ -400,5 +401,3 @@ $
   stiffness_((b k), (c l)) &= 
   integral_(Omega_e_0) sum_j thick sum_q (partial pk1_(k j)(deformationgradient))/(partial deformationgradient_(l q)) (partial N_c (undefposition))/(partial undefposition_q)  (partial N_b (undefposition))/(partial undefposition_j) dif V_0
 $
-
-$(partial pk1(deformationgradient))/(partial deformationgradient)$ is a 4th-order tensor, that can be flattened as a $d^2 times d^2$ 2nd-order tensor.
