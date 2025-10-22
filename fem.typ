@@ -308,6 +308,13 @@ $
 
 $(partial deformationgradient) / (partial displacement)$ is a third-order tensor.
 
+Using @tensor3_double_contraction, it can be written:
+
+$
+  forceelement (position) = integral_(Omega_e_0) "vec"((partial deformationgradient) / (partial displacement))^T "vec"(pk1) dif V_0
+$
+
+
 In index notation (see @index_notation_force and @double_dot_product_tensor3):
 
 $
@@ -398,6 +405,51 @@ $
 Insert back into the Hessian:
 
 $
-  stiffness_((b k), (c l)) &= 
-  integral_(Omega_e_0) sum_j thick sum_q (partial pk1_(k j)(deformationgradient))/(partial deformationgradient_(l q)) (partial N_c (undefposition))/(partial undefposition_q)  (partial N_b (undefposition))/(partial undefposition_j) dif V_0
+  stiffness_((b k), (c l)) 
+  &= 
+  integral_(Omega_e_0) sum_j thick sum_q (partial pk1_(k j)(deformationgradient))/(partial deformationgradient_(l q)) (partial N_c (undefposition))/(partial undefposition_q)  (partial N_b (undefposition))/(partial undefposition_j) dif V_0 \
+  &= 
+  integral_(Omega_e_0) sum_j thick sum_q tangentmodulus_(k j l q) (partial N_c (undefposition))/(partial undefposition_q)  (partial N_b (undefposition))/(partial undefposition_j) dif V_0 \
+$
+
+For a matrix $A$ and two vectors $u$ and $v$, $u^T A v$ is a scalar:
+$
+  u^T A v = sum_p sum_q u_p A_(p q) v_q
+$
+
+If $u = (partial N_b (undefposition))/(partial undefposition)$ and $v = (partial N_c (undefposition))/(partial undefposition)$, then for a matrix $A$:
+
+$
+  u^T A v = sum_j sum_q (partial N_b (undefposition))/(partial undefposition_j) A_(j q) (partial N_c (undefposition))/(partial undefposition_q)
+$
+
+If we define $A$ such that $A_(j q) = tangentmodulus_(k j l q)$, then
+
+$
+  stiffness_((b k), (c l))
+  &= 
+  integral_(Omega_e_0) ((partial N_b (undefposition))/(partial undefposition))^T A (partial N_c (undefposition))/(partial undefposition) dif V_0 \
+$
+
+This matrix $A$ depends on $k$ and $l$, so let's denote it $tensor2(A)^(k l)$:
+
+$
+  stiffness_((b k), (c l))
+  &= 
+  integral_(Omega_e_0) ((partial N_b (undefposition))/(partial undefposition))^T tensor2(A)^(k l) (partial N_c (undefposition))/(partial undefposition) dif V_0 \
+$
+
+$
+tensor2(A)^(k l)_(i j) = tangentmodulus_(k i l j) = (partial pk1_(k i))/(partial deformationgradient_(l j))
+$
+
+From @tangent_modulus_from_elasticity_tensor, we have:
+
+$
+  tangentmodulus_(k j l q) = delta_(k l) pk2_(q j) + 2 sum_s sum_t deformationgradient_(k s) elasticitytensor_(s j q t) deformationgradient_(l t)
+$
+
+$
+  stiffness_((b k), (c l)) 
+  &= integral_(Omega_e_0) sum_j thick sum_q (delta_(k l) pk2_(q j) + 2 sum_s sum_t deformationgradient_(k s) elasticitytensor_(s j q t) deformationgradient_(l t)) (partial N_c (undefposition))/(partial undefposition_q)  (partial N_b (undefposition))/(partial undefposition_j) dif V_0
 $

@@ -104,6 +104,29 @@ It is also called double contraction, or the Frobenius inner product.
   resulting in a vector.
 ]
 
+== Compressed Tensor
+
+For a matrix:
+
+$ A = mat(a_(11), a_(12); a_(21), a_(22))$
+$
+  "vec"(A) = "vec"(mat(a_(11), a_(12); a_(21), a_(22))) = mat(a_(11);a_(21);a_(12);a_(22))
+$
+
+Columns are stacked on top of each other.
+
+For a 3rd-order tensor:
+
+$
+  "vec"(tensor3(A)) = 
+$
+
+Then,
+
+$
+  tensor3(A) : tensor2(B) = "vec"(tensor3(A))^T "vec"(tensor2(B))
+$ <tensor3_double_contraction>
+
 == Determinant
 
 #definition(title:"Determinant")[
