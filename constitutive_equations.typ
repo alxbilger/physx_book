@@ -282,10 +282,34 @@ $
   $
 ]
 
-#mybox(title:"Hessian")[
-Now the Hessian:
+Let's derive the Lagrangian elasticity tensor:
 
 $
-  (partial pk1)/(partial deformationgradient) = 
+  elasticitytensor_(i j k l) 
+    &= (partial)/(partial rightcauchygreen_(k l))(mu (tensor2(identity)_(i j) - rightcauchygreen^(-1)_(i j)) + lambda (log deformationjacobian) rightcauchygreen^(-1)_(i j)) \
+    &= -mu (partial rightcauchygreen^(-1)_(i j))/(partial rightcauchygreen_(k l)) + lambda ((partial log deformationjacobian)/(partial rightcauchygreen_(k l)) rightcauchygreen^(-1)_(i j) + log deformationjacobian (partial rightcauchygreen^(-1)_(i j)/ (partial rightcauchygreen_(k l)))) \
+    &= (-mu + lambda log deformationjacobian) (partial rightcauchygreen^(-1)_(i j))/ (partial rightcauchygreen_(k l)) + lambda (partial log deformationjacobian)/(partial rightcauchygreen_(k l)) rightcauchygreen^(-1)_(i j)
+$
+
+We have two terms to derive: $(partial log deformationjacobian)/(partial rightcauchygreen_(k l))$ and $(partial rightcauchygreen^(-1)_(i j))/ (partial rightcauchygreen_(k l))$
+
+$
+  (partial log deformationjacobian)/(partial rightcauchygreen_(k l)) 
+    &= (partial log sqrt(det(rightcauchygreen)))/(partial rightcauchygreen_(k l))\
+    &= 1/2 (partial log det(rightcauchygreen))/(partial rightcauchygreen_(k l))\
+    &= 1/2 rightcauchygreen^(-1)_(k l)
+$
+
+and
+
+$
+  (partial rightcauchygreen^(-1)_(i j))/ (partial rightcauchygreen_(k l)) = -1/2 (rightcauchygreen^(-1)_(i k) rightcauchygreen^(-1)_(l j) + rightcauchygreen^(-1)_(i l) rightcauchygreen^(-1)_(k j))
+$
+
+Then,
+#mybox(title:"Lagrangian Elasticity Tensor")[
+$
+  elasticitytensor_(i j k l) 
+    &=(-mu + lambda log deformationjacobian) /2 rightcauchygreen^(-1)_(k l) - lambda /2 (rightcauchygreen^(-1)_(i k) rightcauchygreen^(-1)_(l j) + rightcauchygreen^(-1)_(i l) rightcauchygreen^(-1)_(k j)) rightcauchygreen^(-1)_(i j)
 $
 ]
