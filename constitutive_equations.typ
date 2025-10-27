@@ -229,12 +229,22 @@ Insert the following expression on https://www.matrixcalculus.org/:
 #mybox(title: "Lagrangian Elasticity Tensor")[
 $
   elasticitytensor_(i j k l) 
-    &= 1/2 (partial pk2_(i j))/(partial greenstrain_(k l)) \
-    &= 1/2 (partial)/(partial greenstrain_(k l))(2 mu greenstrain_(i j) + lambda delta_(i j) sum_p greenstrain_(p p) ) \
-    &= 1/2 ( 2 mu (partial greenstrain_(i j))/(partial greenstrain_(k l)) + lambda delta_(i j) sum_p (partial greenstrain_(p p))/(partial greenstrain_(k l))) \
-    &= mu delta_(i k) delta_(j l) + 1/2 lambda delta_(i j) sum_p delta_(p k) delta_(p l) \
-    &= mu delta_(i k) delta_(j l) + 1/2 lambda delta_(i j) delta_(k l)
+    &= (partial pk2_(i j))/(partial greenstrain_(k l)) \
+    &= (partial)/(partial greenstrain_(k l))(2 mu greenstrain_(i j) + lambda delta_(i j) sum_p greenstrain_(p p) ) \
+    &= 2 mu (partial greenstrain_(i j))/(partial greenstrain_(k l)) + lambda delta_(i j) sum_p (partial greenstrain_(p p))/(partial greenstrain_(k l)) \
 $
+
+If $greenstrain$ were independent, we would have $(partial greenstrain_(i j))/(partial greenstrain_(k l)) = delta_(i k) delta_(j l)$. However, due to the symmetry of $greenstrain$, $(partial greenstrain_(i j))/(partial greenstrain_(k l)) = 1/2(delta_(i k) delta_(j l) + delta_(i l) delta_(j k))$
+
+Therefore:
+
+$
+elasticitytensor_(i j k l) 
+    &= 2 mu 1/2(delta_(i k) delta_(j l) + delta_(i l) delta_(j k)) + lambda delta_(i j) sum_p (partial greenstrain_(p p))/(partial greenstrain_(k l)) \
+    &= mu (delta_(i k) delta_(j l) + delta_(i l) delta_(j k)) + 1/2 lambda delta_(i j) sum_p delta_(p k) delta_(p l) \
+    &= mu (delta_(i k) delta_(j l) + delta_(i l) delta_(j k)) + 1/2 lambda delta_(i j) delta_(k l)
+$
+
 ]
 
 == Neo Hookean Material
