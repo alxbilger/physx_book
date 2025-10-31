@@ -267,8 +267,15 @@ $
 According to @derivative_determinant and @adjugate,
 
 $
-  (partial J)/(partial deformationgradient) = J [deformationgradient^(-1)]^T = J [1/J "adj"(F)]^T = "adj"(F)^T
+  (partial J)/(partial deformationgradient) = J deformationgradient^(-T) = J [1/J "adj"(F)]^T = "adj"(F)^T
 $
+
+Substituting $(partial J)/(partial deformationgradient)$:
+
+$
+  pk1 &= mu (deformationgradient - 1/J J deformationgradient^(-T)) + lambda / J (log J) J deformationgradient^(-T) \
+  &= mu (deformationgradient - deformationgradient^(-T)) + lambda  (log J) deformationgradient^(-T)
+$ <pk1_neo_hookean>
 ]
 
 #mybox(title: "Second Piola-Kirchhoff Stress Tensor")[
@@ -277,7 +284,7 @@ $
     invariant3 &= det(rightcauchygreen) \ &= det(deformationgradient^T deformationgradient) \ &= det(deformationgradient^T )det(deformationgradient)\ &= det(deformationgradient) det(deformationgradient)\ &= det(deformationgradient)^2\ &= deformationjacobian^2
   $
 
-  Then @strain_energy_neohookean, the strain energy density function can be written in terms of invariants:
+  Then, the strain energy density function (@strain_energy_neohookean) can be written in terms of invariants:
 
   $
     undefstrainenergydensity = mu / 2 (invariant1 - d) - mu log sqrt(invariant3) + lambda / 2 (log sqrt(invariant3))^2 
@@ -289,16 +296,37 @@ $
    + 2 (partial undefstrainenergydensity)/(partial invariant2) (tr(rightcauchygreen) tensor2(identity) - rightcauchygreen)
    + 2 (partial undefstrainenergydensity)/(partial invariant3) det(rightcauchygreen) rightcauchygreen^(-1) \
    &= mu (tensor2(identity) - rightcauchygreen^(-1)) + lambda (log deformationjacobian) rightcauchygreen^(-1)
-  $
+  $ <pk2_neo_hookean>
 ]
 
-Let's derive the Lagrangian elasticity tensor:
+#property(title:"Relationship between Piola-Kirchhoff tensors")[
+  If we left-multiply $pk2$ by $deformationgradient$ in @pk2_neo_hookean:
+  $
+    deformationgradient dot pk2 &= deformationgradient ( mu (tensor2(identity) - rightcauchygreen^(-1)) + lambda (log deformationjacobian) rightcauchygreen^(-1)) \
+    &= mu (deformationgradient - deformationgradient rightcauchygreen^(-1)) + lambda (log J) deformationgradient rightcauchygreen^(-1)
+  $
+
+  $deformationgradient rightcauchygreen^(-1) = deformationgradient (deformationgradient^T deformationgradient)^(-1) = deformationgradient deformationgradient^(-1) deformationgradient^(-T)= deformationgradient^(-T)$
+
+  Therefore:
+
+  $
+    deformationgradient dot pk2 = mu (deformationgradient - deformationgradient^(-T)) + lambda (log J) deformationgradient^(-T)
+  $
+
+  Which is the first Piola-Kirchhoff that is computed in @pk1_neo_hookean.
+
+  @pk2 holds.
+]
+
+Let's derive the Lagrangian elasticity tensor in index notation. Recall that $elasticitytensor = 2 (partial pk2)/(partial rightcauchygreen)$ (@elasticity_tensor_rightcauchygreen). In index notation, $elasticitytensor_(i j k l) = 2 (partial pk2_(i j))/(partial rightcauchygreen_(k l))$. And the second Piola-Kirchhoff stress tensor (@pk2_neo_hookean) in index notation is $mu (tensor2(identity)_(i j) - rightcauchygreen^(-1)_(i j)) + lambda (log deformationjacobian) rightcauchygreen^(-1)_(i j)$.
 
 $
-  elasticitytensor_(i j k l) 
-    &= (partial)/(partial rightcauchygreen_(k l))(mu (tensor2(identity)_(i j) - rightcauchygreen^(-1)_(i j)) + lambda (log deformationjacobian) rightcauchygreen^(-1)_(i j)) \
-    &= -mu (partial rightcauchygreen^(-1)_(i j))/(partial rightcauchygreen_(k l)) + lambda ((partial log deformationjacobian)/(partial rightcauchygreen_(k l)) rightcauchygreen^(-1)_(i j) + log deformationjacobian (partial rightcauchygreen^(-1)_(i j)/ (partial rightcauchygreen_(k l)))) \
-    &= (-mu + lambda log deformationjacobian) (partial rightcauchygreen^(-1)_(i j))/ (partial rightcauchygreen_(k l)) + lambda (partial log deformationjacobian)/(partial rightcauchygreen_(k l)) rightcauchygreen^(-1)_(i j)
+  elasticitytensor_(i j k l)
+    &= 2 (partial pk2_(i j))/(partial rightcauchygreen_(k l)) \
+    &= 2 (partial)/(partial rightcauchygreen_(k l))(mu (tensor2(identity)_(i j) - rightcauchygreen^(-1)_(i j)) + lambda (log deformationjacobian) rightcauchygreen^(-1)_(i j)) \
+    &= -2 mu (partial rightcauchygreen^(-1)_(i j))/(partial rightcauchygreen_(k l)) + 2 lambda ((partial log deformationjacobian)/(partial rightcauchygreen_(k l)) rightcauchygreen^(-1)_(i j) + log deformationjacobian (partial rightcauchygreen^(-1)_(i j))/ (partial rightcauchygreen_(k l))) \
+    &= 2 (-mu + lambda log deformationjacobian) (partial rightcauchygreen^(-1)_(i j))/ (partial rightcauchygreen_(k l)) + 2 lambda (partial log deformationjacobian)/(partial rightcauchygreen_(k l)) rightcauchygreen^(-1)_(i j)
 $
 
 We have two terms to derive: $(partial log deformationjacobian)/(partial rightcauchygreen_(k l))$ and $(partial rightcauchygreen^(-1)_(i j))/ (partial rightcauchygreen_(k l))$
@@ -307,19 +335,39 @@ $
   (partial log deformationjacobian)/(partial rightcauchygreen_(k l)) 
     &= (partial log sqrt(det(rightcauchygreen)))/(partial rightcauchygreen_(k l))\
     &= 1/2 (partial log det(rightcauchygreen))/(partial rightcauchygreen_(k l))\
-    &= 1/2 rightcauchygreen^(-1)_(k l)
+    &= 1/2 1/det(rightcauchygreen) (partial det(rightcauchygreen))/(partial rightcauchygreen_(k l))\
 $
 
-and
+From @derivative_determinant, $(partial det(rightcauchygreen))/(partial rightcauchygreen) = det(rightcauchygreen) rightcauchygreen^(-T)$. Using indices:
 
 $
-  (partial rightcauchygreen^(-1)_(i j))/ (partial rightcauchygreen_(k l)) = -1/2 (rightcauchygreen^(-1)_(i k) rightcauchygreen^(-1)_(l j) + rightcauchygreen^(-1)_(i l) rightcauchygreen^(-1)_(k j))
+  (partial det(rightcauchygreen))/(partial rightcauchygreen_(k l)) = det(rightcauchygreen) rightcauchygreen^(-T)_(k l) = det(rightcauchygreen) rightcauchygreen^(-1)_(l k)
 $
 
-Then,
+Finally,
+
+$
+  (partial log deformationjacobian)/(partial rightcauchygreen_(k l)) = 1/2 1/det(rightcauchygreen) det(rightcauchygreen) rightcauchygreen^(-1)_(l k) = 1/2 rightcauchygreen^(-1)_(l k)
+$
+
+The second term:
+
+$
+  (partial rightcauchygreen^(-1)_(i j))/ (partial rightcauchygreen_(k l)) 
+  = -1/2 (rightcauchygreen^(-1)_(i k) rightcauchygreen^(-1)_(l j) + rightcauchygreen^(-1)_(i l) rightcauchygreen^(-1)_(k j))
+$
+
+Substituting $(partial log deformationjacobian)/(partial rightcauchygreen_(k l))$ and $(partial rightcauchygreen^(-1)_(i j))/ (partial rightcauchygreen_(k l))$:
+
+$
+  elasticitytensor_(i j k l)
+    &= 2 (-mu + lambda log deformationjacobian) (-1/2 (rightcauchygreen^(-1)_(i k) rightcauchygreen^(-1)_(l j) + rightcauchygreen^(-1)_(i l) rightcauchygreen^(-1)_(k j))) + 2 lambda 1/2 rightcauchygreen^(-1)_(l k) rightcauchygreen^(-1)_(i j) \
+    &= (mu - lambda log deformationjacobian)(rightcauchygreen^(-1)_(i k) rightcauchygreen^(-1)_(l j) + rightcauchygreen^(-1)_(i l) rightcauchygreen^(-1)_(k j)) + lambda rightcauchygreen^(-1)_(l k) rightcauchygreen^(-1)_(i j) 
+$
+
 #mybox(title:"Lagrangian Elasticity Tensor")[
 $
   elasticitytensor_(i j k l) 
-    &=(-mu + lambda log deformationjacobian) /2 rightcauchygreen^(-1)_(k l) - lambda /2 (rightcauchygreen^(-1)_(i k) rightcauchygreen^(-1)_(l j) + rightcauchygreen^(-1)_(i l) rightcauchygreen^(-1)_(k j)) rightcauchygreen^(-1)_(i j)
+    &= (mu - lambda log deformationjacobian)(rightcauchygreen^(-1)_(i k) rightcauchygreen^(-1)_(l j) + rightcauchygreen^(-1)_(i l) rightcauchygreen^(-1)_(k j)) + lambda rightcauchygreen^(-1)_(l k) rightcauchygreen^(-1)_(i j) 
 $
 ]

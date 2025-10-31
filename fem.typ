@@ -442,14 +442,3 @@ $
 $
 tensor2(A)^(k l)_(i j) = tangentmodulus_(k i l j) = (partial pk1_(k i))/(partial deformationgradient_(l j))
 $
-
-From @tangent_modulus_from_elasticity_tensor, we have:
-
-$
-  tangentmodulus_(k j l q) = delta_(k l) pk2_(q j) + 2 sum_s sum_t deformationgradient_(k s) elasticitytensor_(s j q t) deformationgradient_(l t)
-$
-
-$
-  stiffness_((b k), (c l)) 
-  &= integral_(Omega_e_0) sum_j thick sum_q (delta_(k l) pk2_(q j) + 2 sum_s sum_t deformationgradient_(k s) elasticitytensor_(s j q t) deformationgradient_(l t)) (partial N_c (undefposition))/(partial undefposition_q)  (partial N_b (undefposition))/(partial undefposition_j) dif V_0
-$

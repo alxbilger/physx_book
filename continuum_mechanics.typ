@@ -404,13 +404,13 @@ $
   The following 4th-order tensor is called Lagrangian elasticity tensor:
   $
     elasticitytensor = (partial pk2)/(partial greenstrain)
-  $
+  $ <elasticity_tensor_greenstrain>
 ]
 
 #property(title:"Property")[
   $
     elasticitytensor = 2 (partial pk2)/(partial rightcauchygreen)
-  $
+  $ <elasticity_tensor_rightcauchygreen>
 ]
 
 

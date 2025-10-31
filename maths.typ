@@ -165,7 +165,7 @@ $
 #property(title:"Derivative")[
   It can be shown that for any second-order tensor $tensor2(S)$
   $
-    (partial det(tensor2(S)))/(partial tensor2(S)) = det(tensor2(S)) [tensor2(S)^(-1)]^T
+    (partial det(tensor2(S)))/(partial tensor2(S)) = det(tensor2(S)) tensor2(S)^(-T)
   $ <derivative_determinant>
 ]
 
