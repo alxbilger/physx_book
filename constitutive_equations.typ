@@ -371,3 +371,13 @@ $
     &= (mu - lambda log deformationjacobian)(rightcauchygreen^(-1)_(i k) rightcauchygreen^(-1)_(l j) + rightcauchygreen^(-1)_(i l) rightcauchygreen^(-1)_(k j)) + lambda rightcauchygreen^(-1)_(l k) rightcauchygreen^(-1)_(i j) 
 $
 ]
+
+== Mooney-Rivlin
+
+#mybox(title:"Strain Energy")[
+$
+  undefstrainenergydensity = sum_(r,s >= 0) mu_(r s) (invariant1 - d)^r (invariant2 - d)^s 
+$ <strain_energy_mooneyrivlin>
+
+According to @bonet1997nonlinear.
+]
