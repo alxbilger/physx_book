@@ -3,24 +3,33 @@
 
 = Lagrangian Mechanics
 
+== Introduction
+
+The foundation of Classical Mechanics rests upon a powerful principle: the Lagrangian. This framework provides a way to define and analyze motion without explicitly considering forces or constraints. At its core lies the concept of generalized coordinates, which represent the key variables used to describe the system's state – essentially, how you would measure the system’s position and velocity at any given time.  This section will delve into the fundamental components of Lagrangian mechanics, exploring how these generalized quantities are defined, calculated, and ultimately connected to the dynamics of a physical system.
+
 == States
 
+#definition(title:"State")[
+A *state* of a dynamical system is simply a complete description of its condition at a specific point in time. It encompasses all relevant information about the system—its position, velocity, temperature, pressure, or any other measurable properties.  Think of it as representing the *current* state of the system.  For example, if you’re tracking the trajectory of a ball, the state might include its $x$ and $y$ coordinates (position) and its velocity components (speed in each direction).  A state can be defined in many ways – mathematically, physically, or even conceptually – but it always includes the necessary information to fully describe the system's behavior.  The choice of how to define a state depends on the specific problem and the level of detail required.
+]
+
 #definition(title: "Generalized Coordinates")[
-  $position=position (t)$ is the generalized coordinates (= position in Cartesian coordinates).
+  $position=position (t)$ is the primary generalized coordinate, representing the system's position in Cartesian coordinates.
 ]
 
 #definition(title: "Generalized Velocity")[
-$velocity=velocity (t)$ is the generalized velocity (= velocity in Cartesian coordinates), i.e. the time derivative of the generalized coordinates.
+$velocity=velocity (t)$ is the generalized velocity, representing the rate of change of generalized coordinate.  Importantly, this is the time derivative of the position vector. It captures how quickly the system is moving and provides a direct link to the dynamics of the system..
 ]
 
 #property()[
 $
 velocity (t) = (d position)/(d t)
 $ <definition_velocity>
+This expression calculates the generalized velocity, which is the time derivative of the generalized coordinate vector.
 ]
 
 #definition(title: "Generalized Acceleration")[
-$acceleration=acceleration (t)$ is the generalized acceleration (= acceleration in Cartesian coordinates), i.e. the time derivative of the generalized velocity.
+$acceleration=acceleration (t)$ is the generalized acceleration, representing the rate at which the system’s velocity changes.  It’s a measure of how quickly the system is accelerating or decelerating.
 ]
 
 #property[
@@ -32,20 +41,20 @@ $ <definition_acceleration>
 If we combine @definition_velocity and @definition_acceleration:
 
 $
-mat( #velocity (t); #acceleration (t))=
-d/(d t) mat( #position (t); #velocity (t))
+mat( velocity (t); acceleration (t))=
+d/(d t) mat( position (t); velocity (t))
 $ <states_ode>
 
 #definition(title: "Global State")[
-Global state
 $
-#state (t) =  mat( #position (t); #velocity (t))
+state (t) =  mat( position (t); velocity (t))
 $
+This expression represents the global state of the system. It is calculated by taking the concatenation of the position and velocity vectors at a specific time, `t`. This concatenation combines all the relevant information into a single vector, providing a holistic representation of the system’s configuration.
 ]
 
 $
-mat( #velocity (t); #acceleration (t))=
-(d #state)/(d t)
+mat( velocity (t); acceleration (t))=
+(d state)/(d t)
 $
 
 == Kinetic Energy
@@ -109,7 +118,7 @@ where:
 == Forces
 
 #definition(title: "Force")[
-Conservative forces $#force = #force (#position, #velocity)$ are forces deriving from a potential energy:
+Conservative forces $force = force (position, velocity)$ are forces deriving from a potential energy:
 
 $
 force = -(partial potentialenergy) / (partial position)
@@ -222,7 +231,7 @@ $
 From the fundamental lemma of the calculus of variations:
 
 $
-(partial lagrangian)/(partial #position) - d/(d t)((partial lagrangian)/(partial #velocity)) = 0
+(partial lagrangian)/(partial position) - d/(d t)((partial lagrangian)/(partial velocity)) = 0
 $ <euler_lagrange_equation>
 
 #definition(title: "Euler-Lagrange Equation")[

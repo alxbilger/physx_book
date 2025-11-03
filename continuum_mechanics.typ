@@ -460,12 +460,12 @@ $
 
 In index notation:
 $
-  tangentmodulus_(i j k l) = delta_(i k) pk2_(l j) + 2 sum_q sum_r deformationgradient_(i q) elasticitytensor_(q j l r) deformationgradient_(k r)  
+  tangentmodulus_(i j k l) = delta_(i k) pk2_(l j) + sum_q sum_r deformationgradient_(i q) elasticitytensor_(q j l r) deformationgradient_(k r)  
 $ <tangent_modulus_from_elasticity_tensor>
 
 It can be written in tensor notation:
 $
-  tangentmodulus = tensor2(identity) times.circle pk2^T + 2 (deformationgradient times.circle deformationgradient) : elasticitytensor
+  tangentmodulus = tensor2(identity) times.circle pk2^T + (deformationgradient times.circle deformationgradient) : elasticitytensor
 $
 
 #emoji.warning The operations $times.circle$ and $:$ can use different conventions in the index order.
