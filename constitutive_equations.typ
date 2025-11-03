@@ -241,11 +241,38 @@ Therefore:
 $
 elasticitytensor_(i j k l) 
     &= 2 mu 1/2(delta_(i k) delta_(j l) + delta_(i l) delta_(j k)) + lambda delta_(i j) sum_p (partial greenstrain_(p p))/(partial greenstrain_(k l)) \
-    &= mu (delta_(i k) delta_(j l) + delta_(i l) delta_(j k)) + 1/2 lambda delta_(i j) sum_p delta_(p k) delta_(p l) \
-    &= mu (delta_(i k) delta_(j l) + delta_(i l) delta_(j k)) + 1/2 lambda delta_(i j) delta_(k l)
+    &= mu (delta_(i k) delta_(j l) + delta_(i l) delta_(j k)) + lambda delta_(i j) sum_p delta_(p k) delta_(p l) \
+    &= mu (delta_(i k) delta_(j l) + delta_(i l) delta_(j k)) + lambda delta_(i j) delta_(k l)
 $
 
 ]
+
+Due to the minor symmetries of the elasticity tensor (@elasticity_tensor_minor_symmetry_1 and @elasticity_tensor_minor_symmetry_2), it can be written using the Voigt notation. Using the mapping in @voigt_3d,
+
+$
+  elasticitytensor_"Voigt" &=
+  mat(
+      elasticitytensor_(0 0 0 0),elasticitytensor_(0 0 1 1),elasticitytensor_(0 0 2 2),elasticitytensor_(0 0 1 2),elasticitytensor_(0 0 0 2),elasticitytensor_(0 0 0 1);
+
+      elasticitytensor_(1 1 0 0),elasticitytensor_(1 1 1 1),elasticitytensor_(1 1 2 2),elasticitytensor_(1 1 1 2),elasticitytensor_(1 1 0 2),elasticitytensor_(1 1 0 1);
+
+      elasticitytensor_(2 2 0 0),elasticitytensor_(2 2 1 1),elasticitytensor_(2 2 2 2),elasticitytensor_(2 2 1 2),elasticitytensor_(2 2 0 2),elasticitytensor_(2 2 0 1);
+
+      elasticitytensor_(1 2 0 0),elasticitytensor_(1 2 1 1),elasticitytensor_(1 2 2 2),elasticitytensor_(1 2 1 2),elasticitytensor_(1 2 0 2),elasticitytensor_(1 2 0 1);
+
+      elasticitytensor_(0 2 0 0),elasticitytensor_(0 2 1 1),elasticitytensor_(0 2 2 2),elasticitytensor_(0 2 1 2),elasticitytensor_(0 2 0 2),elasticitytensor_(0 2 0 1);
+
+      elasticitytensor_(0 1 0 0),elasticitytensor_(0 1 1 1),elasticitytensor_(0 1 2 2),elasticitytensor_(0 1 1 2),elasticitytensor_(0 1 2 0 2),elasticitytensor_(0 1 0 1);
+    )\
+    &= mat(
+      2 mu + lambda, lambda, lambda, 0, 0, 0;
+      lambda, 2 mu + lambda, lambda, 0, 0, 0;
+      lambda, lambda, 2 mu + lambda, 0, 0, 0;
+      0, 0, 0, 2 mu, 0, 0;
+      0, 0, 0, 0, 2 mu, 0;
+      0, 0, 0, 0, 0, 2 mu;
+    )
+$
 
 == Neo Hookean Material
 

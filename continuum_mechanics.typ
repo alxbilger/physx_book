@@ -207,6 +207,7 @@ $
 $ <voigt_notation_3D>
 ]
 
+
 #property(title:"Voigt notation of the linear strain in 3D")[
   Based on @linear_strain_tensor_3D and @voigt_notation_3D:
   $
@@ -407,12 +408,73 @@ $
   $ <elasticity_tensor_greenstrain>
 ]
 
-#property(title:"Property")[
+#property(title:"Lagrangian Elasticity Tensor from Strain Energy Density Function")[
+  Substituting @pk2_properties into @elasticity_tensor_greenstrain:
   $
-    elasticitytensor = 2 (partial pk2)/(partial rightcauchygreen)
-  $ <elasticity_tensor_rightcauchygreen>
+    elasticitytensor = (partial^2 undefstrainenergydensity)/(partial greenstrain^2)
+  $ <elasticity_tensor_second_derivative>
 ]
 
+#property(title:"Major Symmetry")[
+  Since the elasticity tensor derives from a second derivative (@elasticity_tensor_second_derivative), it is symmetric in the sense of pair symmetry:
+
+  $
+    elasticitytensor_(i j k l) 
+    = (partial^2 undefstrainenergydensity)/(partial greenstrain_(i j) partial greenstrain_(k l))
+    = (partial^2 undefstrainenergydensity)/(partial greenstrain_(k l) partial greenstrain_(i j))
+    = elasticitytensor_(k l i j)
+  $ <elasticity_tensor_major_symmetry>
+]
+
+#property(title:"Minor Symmetry")[
+  Symmetry of the first two indices:
+  $
+    elasticitytensor_(i j k l) = elasticitytensor_(j i k l)
+  $ <elasticity_tensor_minor_symmetry_1>
+
+  Symmetry of the last two indices:
+  $
+    elasticitytensor_(i j k l) = elasticitytensor_(i j l k)
+  $ <elasticity_tensor_minor_symmetry_2>
+
+  Due to the minor symmetries of the elasticity tensor (@elasticity_tensor_minor_symmetry_1 and @elasticity_tensor_minor_symmetry_2), it can be written as a 2nd-order tensor using the Voigt notation. For example, in 3D using the mapping in @voigt_3d:
+
+  $
+    elasticitytensor_"Voigt" 
+    &= mat(
+      elasticitytensor_"Voigt"_(0 0), elasticitytensor_"Voigt"_(0 1), elasticitytensor_"Voigt"_(0 2), , elasticitytensor_"Voigt"_(0 3), elasticitytensor_"Voigt"_(0 4), elasticitytensor_"Voigt"_(0 5);
+
+      elasticitytensor_"Voigt"_(1 0), elasticitytensor_"Voigt"_(1 1), elasticitytensor_"Voigt"_(1 2), , elasticitytensor_"Voigt"_(1 3), elasticitytensor_"Voigt"_(1 4), elasticitytensor_"Voigt"_(1 5);
+
+      elasticitytensor_"Voigt"_(2 0), elasticitytensor_"Voigt"_(2 1), elasticitytensor_"Voigt"_(2 2), , elasticitytensor_"Voigt"_(2 3), elasticitytensor_"Voigt"_(2 4), elasticitytensor_"Voigt"_(2 5);
+
+      elasticitytensor_"Voigt"_(3 0), elasticitytensor_"Voigt"_(3 1), elasticitytensor_"Voigt"_(3 2), , elasticitytensor_"Voigt"_(3 3), elasticitytensor_"Voigt"_(3 4), elasticitytensor_"Voigt"_(3 5);
+
+      elasticitytensor_"Voigt"_(4 0), elasticitytensor_"Voigt"_(4 1), elasticitytensor_"Voigt"_(4 2), , elasticitytensor_"Voigt"_(4 3), elasticitytensor_"Voigt"_(4 4), elasticitytensor_"Voigt"_(4 5);
+
+      elasticitytensor_"Voigt"_(5 0), elasticitytensor_"Voigt"_(5 1), elasticitytensor_"Voigt"_(5 2), , elasticitytensor_"Voigt"_(5 3), elasticitytensor_"Voigt"_(5 4), elasticitytensor_"Voigt"_(5 5);
+    )    \
+    &= mat(
+      elasticitytensor_(0 0 0 0),elasticitytensor_(0 0 1 1),elasticitytensor_(0 0 2 2),elasticitytensor_(0 0 1 2),elasticitytensor_(0 0 0 2),elasticitytensor_(0 0 0 1);
+
+      elasticitytensor_(1 1 0 0),elasticitytensor_(1 1 1 1),elasticitytensor_(1 1 2 2),elasticitytensor_(1 1 1 2),elasticitytensor_(1 1 0 2),elasticitytensor_(1 1 0 1);
+
+      elasticitytensor_(2 2 0 0),elasticitytensor_(2 2 1 1),elasticitytensor_(2 2 2 2),elasticitytensor_(2 2 1 2),elasticitytensor_(2 2 0 2),elasticitytensor_(2 2 0 1);
+
+      elasticitytensor_(1 2 0 0),elasticitytensor_(1 2 1 1),elasticitytensor_(1 2 2 2),elasticitytensor_(1 2 1 2),elasticitytensor_(1 2 0 2),elasticitytensor_(1 2 0 1);
+
+      elasticitytensor_(0 2 0 0),elasticitytensor_(0 2 1 1),elasticitytensor_(0 2 2 2),elasticitytensor_(0 2 1 2),elasticitytensor_(0 2 0 2),elasticitytensor_(0 2 0 1);
+
+      elasticitytensor_(0 1 0 0),elasticitytensor_(0 1 1 1),elasticitytensor_(0 1 2 2),elasticitytensor_(0 1 1 2),elasticitytensor_(0 1 2 0 2),elasticitytensor_(0 1 0 1);
+    )
+  $ <elasticity_tensor_voigt_3d>
+]
+
+#property(title:"Property")[
+  $
+    elasticitytensor = 2 (partial pk2)/(partial rightcauchygreen) = 2 (partial^2 undefstrainenergydensity)/(partial rightcauchygreen^2)
+  $ <elasticity_tensor_rightcauchygreen>
+]
 
 Based on @pk2,
 

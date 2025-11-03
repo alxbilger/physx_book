@@ -3,6 +3,46 @@
 
 = Maths
 
+== Voigt Notation
+
+Voigt notation is a method to reduce the order of a tensor by exploiting the symmetry under the permutation of two indices.
+
+If $0 <= i < n$ and $0 <= j < n$ are indices of a tensor that can permute, they can be represented as a unique index $0 <= k < n(n+1)/2$ in the reduced tensor.
+
+In 3D:
+
+#align(center)[
+#table(
+  columns: (auto, auto, auto),
+  $i$, $j$, $k$,
+  $0$, $0$, $0$,
+  $0$, $1$, $5$,
+  $0$, $2$, $4$,
+  $1$, $0$, $5$,
+  $1$, $1$, $1$,
+  $1$, $2$, $3$,
+  $2$, $0$, $4$,
+  $2$, $1$, $3$,
+  $2$, $2$, $2$,
+)
+]
+
+or,
+
+#align(center)[
+#figure(
+table(
+  columns: (auto, auto),
+  $k$, $(i,j)$,
+  $0$, $(0,0)$,
+  $1$, $(1,1)$,
+  $2$, $(2,2)$,
+  $3$, $(1,2)$,
+  $4$, $(0,2)$,
+  $5$, $(0,1)$,
+)) <voigt_3d>
+] 
+
 == Kronecker Delta
 
 #definition(title:"Kronecker Delta")[
