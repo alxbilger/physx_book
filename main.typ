@@ -46,7 +46,7 @@
 }
 
 #align(center, text(65pt)[
-  #text(fill:maincolor, smallcaps(title))
+  #text(fill:maincolor, hyphenate: false, smallcaps(title))
 ])
 
 #align(center)[
@@ -57,6 +57,8 @@
   
 
   This cookbook provides a curated collection of fundamental equations essential for simulating solid bodies.
+
+  The sources of this book are available at https://github.com/alxbilger/physx_book
 ]
 #include "details.typ"
 

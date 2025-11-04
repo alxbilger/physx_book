@@ -332,49 +332,76 @@ $
 
 == Hyperelasticity
 
+Hyperelasticity is a fundamental theory in continuum mechanics that describes the behavior of materials capable of undergoing large, reversible deformations. These materials store mechanical energy through internal rearrangements of their structure, and their response is governed by a strain energy function that depends only on the deformation state of the material. This section introduces the core mathematical framework of hyperelasticity, focusing on the strain energy density function and its relationship to stress, strain, and deformation.
+
 #definition(title:"Strain energy density")[
   We introduce the strain energy density function $undefstrainenergydensity(undefposition)$ which measures the strain energy per unit of undeformed volume on an infinitesimal domain $dif undefvolume$ around the material point $undefposition$.
+
+  $undefstrainenergydensity$ is a scalar function.
 ]
 
 #definition(title:"Hyperelastic materials")[
-  A hyperelastic material has a stress–strain relationship deriving from a strain energy density function.
+  A hyperelastic material is defined by a stress–strain relationship that arises exclusively from a strain energy density function $undefstrainenergydensity$. The stress field is derived from $undefstrainenergydensity$ through differentiation.
+
+  This framework is particularly useful for modeling soft tissues, polymers, and other materials that exhibit large, smooth deformations.
 ]
 
 #property(title:"Function of deformation gradient")[
-  It is expected that strain energy density function $undefstrainenergydensity$ is a function of the deformation gradient $deformationgradient$.
+
+In hyperelasticity, the strain energy density $undefstrainenergydensity(deformationgradient)$ must depend on the deformation gradient $deformationgradient$. This dependency captures how the material’s internal structure changes under deformation. Crucially, $undefstrainenergydensity$ is a scalar function of $deformationgradient$, ensuring that the energy stored is purely a function of the deformation state.
+]
+
+#definition(title:"Total Deformation Energy")[
+  The total deformation energy (i.e., the total strain energy stored in the entire material) is obtained by integrating the strain energy density over the undeformed domain. Two formulations are common: Total Lagrangian Formulation and Updated Lagrangian Formulation.
 ]
 
 #property(title:"Total Deformation Energy (Total Lagrangian Formulation)")[
+  The Total Lagrangian Formulation uses the undeformed configuration:
+
   $
     potentialenergy = integral_domain_0 undefstrainenergydensity(deformationgradient) dif undefvolume
   $ <total_deformation_energy_total_lagrangian>
+
+  where $domain_0$ is the undeformed volume and $dif undefvolume$ is the volume element in the reference configuration.
 ]
 
 #property(title:"Total Deformation Energy (Updated Lagrangian Formulation)")[
+  The Updated Lagrangian Formulation uses the current configuration:
+
   $
     potentialenergy = integral_domain strainenergydensity(deformationgradient) dif volume
   $ <total_deformation_energy_updated_lagrangian>
+
+  where $domain$ is the deformed volume and $dif volume$ is the volume element in the current configuration.
 ]
 
 #definition(title:"Force from strain energy")[
+  The force acting on a material element is derived from the total deformation energy $potentialenergy$. Specifically, the force $force$ satisfies:
+
   $
     force = - (partial potentialenergy)/(partial displacement)
   $
 ]
 
 #definition(title:"First Piola-Kirchhoff Stress Tensor")[
+  The First Piola-Kirchhoff stress tensor is defined as the derivative of the strain energy density with respect to the deformation gradient:
+
   $
     pk1 = (partial undefstrainenergydensity) / (partial deformationgradient)
   $ <pk1>
 ]
 
 #definition(title:"Second Piola-Kirchhoff Stress Tensor")[
+  The Second Piola-Kirchhoff stress tensor $pk2$ is related to $pk1$ via the deformation gradient $deformationgradient$:
+
   $
     pk1 = deformationgradient dot pk2
   $ <pk2>
 ]
 
 #property(title:"Piola-Kirchhoff Stress Tensors")[
+  The Second Piola-Kirchhoff stress tensor $pk2$ can also be expressed in terms of the Green strain tensor $greenstrain$:
+
   $
     pk2 = 2 (partial undefstrainenergydensity)/(partial rightcauchygreen) = (partial undefstrainenergydensity)/(partial greenstrain)
   $ <pk2_properties>
@@ -382,15 +409,15 @@ $
 
 
 #definition(title:"Material Tangent Modulus")[
-  The term $(partial pk1(deformationgradient))/(partial deformationgradient)$ is called the material tangent modulus and is a 4th-order tensor.
+  The material tangent modulus $tangentmodulus$ is the second derivative of the strain energy density with respect to the deformation gradient $deformationgradient$:
 
   $
-    tangentmodulus = (partial pk1(deformationgradient))/(partial deformationgradient)
-  $
+    tangentmodulus = (partial pk1(deformationgradient))/(partial deformationgradient) = (partial^2 undefstrainenergydensity)/(partial deformationgradient^2)
+  $ <tangent_modulus>
 ]
 
 #property(title:"Major Symmetry of the material tangent modulus")[
-  Since the material tangent modulus derives from a second derivative, it is symmetric in the sense of pair symmetry:
+  Because $tangentmodulus$ is derived from a second derivative of the strain energy density $undefstrainenergydensity$, it exhibits major symmetry:
 
   $
     (partial pk1_(i j))/(partial deformationgradient_(k l)) = (partial^2 undefstrainenergydensity)/(partial deformationgradient_(i j) partial deformationgradient_(k l))
@@ -409,7 +436,7 @@ $
 ]
 
 #property(title:"Lagrangian Elasticity Tensor from Strain Energy Density Function")[
-  Substituting @pk2_properties into @elasticity_tensor_greenstrain:
+  Substituting the expression of $pk2$ (@pk2_properties) into the definition of $elasticitytensor$ @elasticity_tensor_greenstrain:
   $
     elasticitytensor = (partial^2 undefstrainenergydensity)/(partial greenstrain^2)
   $ <elasticity_tensor_second_derivative>
@@ -476,7 +503,9 @@ $
   $ <elasticity_tensor_rightcauchygreen>
 ]
 
-Based on @pk2,
+The relationship between the material tangent modulus and the elasticity tensor can be derived as follows:
+
+Using the relationship between $pk1$ and $pk2$ (@pk2),
 
 $
   pk1_(i j) = sum_q deformationgradient_(i q) pk2_(q j)
@@ -484,12 +513,32 @@ $
 
 By derivation w.r.t. $deformationgradient$:
 
+Substituting into the definition of the tangent modulus (@tangent_modulus):
+
 $
   tangentmodulus_(i j k l) = (partial pk1_(i j))/(partial deformationgradient_(k l))
     &= (partial)/(partial deformationgradient_(k l))(sum_q deformationgradient_(i q) pk2_(q j)) \
     &= sum_q (partial deformationgradient_(i q) pk2_(q j))/(partial deformationgradient_(k l)) \
-    &= sum_q ((partial deformationgradient_(i q) )/(partial deformationgradient_(k l)) pk2_(q j) + deformationgradient_(i q) (partial pk2_(q j))/(partial deformationgradient_(k l))) \
+$
+
+Applying the product rule:
+$
+  tangentmodulus_(i j k l) 
+    &= sum_q ((partial deformationgradient_(i q) )/(partial deformationgradient_(k l)) pk2_(q j) + deformationgradient_(i q) (partial pk2_(q j))/(partial deformationgradient_(k l)))
+$
+
+Using the Kronecker delta to simplify the first term:
+
+$
+  tangentmodulus_(i j k l) 
     &= sum_q (delta_(i k) delta_(q l) pk2_(q j) + deformationgradient_(i q) (partial pk2_(q j))/(partial deformationgradient_(k l))) \
+$
+
+Simplifying:
+
+$
+  tangentmodulus_(i j k l) 
+    &= delta_(i k) pk2_(l j) + sum_q deformationgradient_(i q) (partial pk2_(q j))/(partial deformationgradient_(k l))) \
 $
 
 The chain rule is used to introduce $rightcauchygreen$:
