@@ -76,6 +76,13 @@ $
 ]
 
 #property(title:"Derivative w.r.t. " + $deformationgradient$)[
+
+  Insert the following expression on https://www.matrixcalculus.org/:
+
+  ```
+  (1/2)*(tr(F'*F)^2 - tr((F'*F)*(F'*F)))
+  ```
+
   $
     (partial invariant2)/(partial deformationgradient) = 2 (tr(rightcauchygreen) deformationgradient - deformationgradient rightcauchygreen)
   $ <derivative_invariant2_wrt_deformationgradient>
@@ -157,15 +164,15 @@ $
     &= (partial undefstrainenergydensity)/(partial invariant1) (partial invariant1)/(partial deformationgradient)
      + (partial undefstrainenergydensity)/(partial invariant2) (partial invariant2)/(partial deformationgradient)
      + (partial undefstrainenergydensity)/(partial invariant3) (partial invariant3)/(partial deformationgradient)
-$ <pk1_as_function_of_invariants>
+$
 
 From @derivative_invariant1_wrt_deformationgradient, @derivative_invariant2_wrt_deformationgradient and @derivative_invariant3_wrt_deformationgradient:
 $
   pk1
-    = (partial undefstrainenergydensity)/(partial invariant1) 2 deformationgradient
-    + (partial undefstrainenergydensity)/(partial invariant2) 2 (tr(rightcauchygreen) deformationgradient - deformationgradient rightcauchygreen)
-    + (partial undefstrainenergydensity)/(partial invariant3) 2 det(rightcauchygreen) deformationgradient rightcauchygreen^(-1)
-$
+    = 2(partial undefstrainenergydensity)/(partial invariant1) deformationgradient
+    + 2(partial undefstrainenergydensity)/(partial invariant2) (tr(rightcauchygreen) deformationgradient - deformationgradient rightcauchygreen)
+    + 2(partial undefstrainenergydensity)/(partial invariant3) det(rightcauchygreen) deformationgradient rightcauchygreen^(-1)
+$ <pk1_as_function_of_invariants>
 
 ==== Second Piola-Kirchhoff Stress Tensor
 
@@ -187,6 +194,47 @@ $
 $ <pk2_as_function_of_invariants>
 
 We can observe that @pk1_as_function_of_invariants and @pk2_as_function_of_invariants are consistant with @pk2.
+
+
+==== Tangent Modulus Tensor
+
+Substituting the expression of $pk1$ into @tangent_modulus:
+
+$
+  tangentmodulus 
+    &= (partial pk1(deformationgradient))/(partial deformationgradient) \
+    &= (partial)/(partial deformationgradient)( 2(partial undefstrainenergydensity)/(partial invariant1) deformationgradient
+    + 2(partial undefstrainenergydensity)/(partial invariant2) (tr(rightcauchygreen) deformationgradient - deformationgradient rightcauchygreen)
+    + 2(partial undefstrainenergydensity)/(partial invariant3) det(rightcauchygreen) deformationgradient rightcauchygreen^(-1)) \
+    &= 2(partial)/(partial deformationgradient)((partial undefstrainenergydensity)/(partial invariant1) deformationgradient
+    + (partial undefstrainenergydensity)/(partial invariant2) (tr(rightcauchygreen) deformationgradient - deformationgradient rightcauchygreen)
+    + (partial undefstrainenergydensity)/(partial invariant3) det(rightcauchygreen) deformationgradient rightcauchygreen^(-1)) \
+    &= 2( (partial)/(partial deformationgradient)((partial undefstrainenergydensity)/(partial invariant1) deformationgradient)
+    + (partial)/(partial deformationgradient)((partial undefstrainenergydensity)/(partial invariant2) (tr(rightcauchygreen) deformationgradient - deformationgradient rightcauchygreen))
+    + (partial)/(partial deformationgradient)((partial undefstrainenergydensity)/(partial invariant3) det(rightcauchygreen) deformationgradient rightcauchygreen^(-1)))
+$
+
+3 terms to compute.
+
+First term:
+
+$
+  (partial)/(partial deformationgradient)((partial undefstrainenergydensity)/(partial invariant1) deformationgradient) =
+
+$
+to be continued...
+
+==== Elasticity Tensor
+
+Recall that $elasticitytensor = 2 (partial pk2)/(partial rightcauchygreen)$ (@elasticity_tensor_rightcauchygreen).
+
+$
+  elasticitytensor = 2 (partial)/(partial rightcauchygreen) (2 (partial undefstrainenergydensity)/(partial invariant1) tensor2(identity)
+   + 2 (partial undefstrainenergydensity)/(partial invariant2) (tr(rightcauchygreen) tensor2(identity) - rightcauchygreen)
+   + 2 (partial undefstrainenergydensity)/(partial invariant3) det(rightcauchygreen) rightcauchygreen^(-1))
+$
+
+to be continued...
 
 == St Venant-Kichhoff Material
 
@@ -399,12 +447,136 @@ $
 $
 ]
 
-== Mooney-Rivlin
+== Polynomial Hyperelastic Model
 
 #mybox(title:"Strain Energy")[
 $
-  undefstrainenergydensity = sum_(r,s >= 0) mu_(r s) (invariant1 - d)^r (invariant2 - d)^s 
-$ <strain_energy_mooneyrivlin>
+  undefstrainenergydensity = sum_(r,s >= 0) mu_(r s) (invariant1 - dimension)^r (invariant2 - dimension)^s 
+$ <strain_energy_polynomial>
 
 According to @bonet1997nonlinear.
 ]
+  
+The first Piola-Kirchhoff stress tensor is defined as (@pk1):
+$
+  pk1 = (partial undefstrainenergydensity) / (partial deformationgradient)
+$
+
+Using the chain rule for partial derivatives of $undefstrainenergydensity$ with respect to $deformationgradient$, we compute:
+
+$
+  pk1 = &sum_(r,s >= 0) mu_(r s) r(invariant1 - dimension)^(r-1)(invariant2 - dimension)^s (partial invariant1)/(partial deformationgradient) 
+    \ + &sum_(r,s >= 0) mu_(r s) s(invariant1 - dimension)^r (invariant2 - dimension)^(s-1) (partial invariant2)/(partial deformationgradient) 
+$
+
+Substituting the expressions of the derivatives of the invariants (@derivative_invariant1_wrt_deformationgradient and @derivative_invariant2_wrt_deformationgradient), we obtain:
+
+$
+  pk1 = &sum_(r,s >= 0) mu_(r s) r(invariant1 - dimension)^(r-1)(invariant2 - dimension)^s 2 deformationgradient
+    \ + &sum_(r,s >= 0) mu_(r s) s(invariant1 - dimension)^r (invariant2 - dimension)^(s-1) 2 (tr(rightcauchygreen) deformationgradient - deformationgradient rightcauchygreen)
+$
+
+
+#mybox(title:"First Piola-Kirchhoff Stress Tensor")[
+]
+
+Insert the following expression on https://www.matrixcalculus.org/:
+
+```
+a*(tr(F'*F)-3) + b*(1/2*(tr(F'*F)^2-tr(F'*F*F'*F)))
+```
+
+== Mooney-Rivlin
+
+#mybox(title:"Strain Energy")[
+Mooney-Rivlin material is a special case of the polynomial material where only $mu_(01)$ and $mu_(10) != 0$. It results in:
+
+$
+  undefstrainenergydensity = mu_(10) (invariant1 - dimension) + mu_(01) (invariant2 - dimension)
+$
+]
+
+This energy is defined in terms of invariants. @pk1_as_function_of_invariants applies:
+
+$
+  pk1
+    = 2(partial undefstrainenergydensity)/(partial invariant1) deformationgradient
+    + 2(partial undefstrainenergydensity)/(partial invariant2) (tr(rightcauchygreen) deformationgradient - deformationgradient rightcauchygreen)
+    + 2(partial undefstrainenergydensity)/(partial invariant3) det(rightcauchygreen) deformationgradient rightcauchygreen^(-1)
+$
+
+Let's compute the 3 terms $(partial undefstrainenergydensity)/(partial invariant1)$, $(partial undefstrainenergydensity)/(partial invariant2)$ and $(partial undefstrainenergydensity)/(partial invariant3)$:
+
+$
+  (partial undefstrainenergydensity)/(partial invariant1) = mu_(10)
+$
+
+$
+  (partial undefstrainenergydensity)/(partial invariant2) = mu_(01)
+$
+
+$
+  (partial undefstrainenergydensity)/(partial invariant3) = 0
+$
+
+Substituting the 3 terms into the expression of the first Piola-Kirchhoff stress tensor (@pk1_as_function_of_invariants):
+
+
+#mybox(title:"First Piola-Kirchhoff Stress Tensor")[
+
+$
+pk1
+  = 2 mu_(10) deformationgradient
+  + 2 mu_(01) (tr(rightcauchygreen) deformationgradient - deformationgradient rightcauchygreen)
+$
+]
+
+Similarly, @pk2_as_function_of_invariants applies:
+
+$
+  pk2 = 2 (partial undefstrainenergydensity)/(partial invariant1) tensor2(identity)
+   + 2 (partial undefstrainenergydensity)/(partial invariant2) (tr(rightcauchygreen) tensor2(identity) - rightcauchygreen)
+   + 2 (partial undefstrainenergydensity)/(partial invariant3) det(rightcauchygreen) rightcauchygreen^(-1)
+$
+
+Substituting the 3 terms into the expression of the first Piola-Kirchhoff stress tensor (@pk2_as_function_of_invariants):
+
+#mybox(title:"Second Piola-Kirchhoff Stress Tensor")[
+
+$
+pk2 = 2 mu_(10) tensor2(identity)
+   + 2 mu_(01) (tr(rightcauchygreen) tensor2(identity) - rightcauchygreen)
+$
+
+]
+
+Elasticity Tensor (@elasticity_tensor_rightcauchygreen):
+$
+  elasticitytensor 
+    &= 2(partial pk2)/(partial rightcauchygreen) \
+    &= 4 mu_(01) (partial)/(partial rightcauchygreen)(tr(rightcauchygreen) tensor2(identity) - rightcauchygreen)
+$
+
+The first term in index notation:
+
+$
+  ((partial)/(partial rightcauchygreen)(tr(rightcauchygreen) tensor2(identity)))_(i j k l) 
+  &= (partial (tr(rightcauchygreen) identity)_(i j))/(partial rightcauchygreen_(k l)) \
+  &= (partial delta_(i j) sum_p rightcauchygreen_(p p))/(partial rightcauchygreen_(k l)) \
+  &= delta_(i j) sum_p (partial rightcauchygreen_(p p))/(partial rightcauchygreen_(k l)) \
+  &= delta_(i j) sum_p delta_(p k) delta_(p l) \
+  &= delta_(i j) delta_(k l)
+$
+
+The second term in index notation:
+
+$
+  ((partial rightcauchygreen)/(partial rightcauchygreen))_(i j k l) = (partial rightcauchygreen_(i j))/(partial rightcauchygreen_(k l)) 
+  = 1/2 (delta_(i k) delta_(j l) + delta_(i l) delta_(j k))
+$
+
+Finally, the elasticity tensor in index notation:
+
+$
+  elasticitytensor_(i j k l) = 4 mu_(01) (delta_(i j) delta_(k l) - 1/2 (delta_(i k) delta_(j l) + delta_(i l) delta_(j k)))
+$

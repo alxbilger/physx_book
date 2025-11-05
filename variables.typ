@@ -3,6 +3,7 @@
 #let tensor3(body) = math.underline(tensor2(body))
 #let tensor4(body) = math.underline(tensor3(body))
 
+#let dimension = "dim"
 #let stepsize = $Delta t$
 #let position = $bold(q)$
 #let velocity = $bold(dot(#position))$
