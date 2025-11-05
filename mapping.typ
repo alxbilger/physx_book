@@ -4,23 +4,31 @@
 = Mapping
 
 #definition(title: "Mapping")[
-A mapping is a coordinate transformation function $mapping$ such that:
+A mapping is defined as a differentiable coordinate transformation function $mapping$ that satisfies the following condition:
 
 $
   position_"out" = mapping(position_"in")
 $ <mapping_function>
+
+where $position_"in"$ and $position_"out"$ are respectively the input coordinates and the output coordinates of the mapping.
 ]
 
 == Velocity
 
-The velocity is deduced from @mapping_function:
+The velocity in the transformed coordinate system is derived from the mapping function @mapping_function:
 
 $
-  velocity_"out" = (d position_"out")/(d t) = (d mapping(position_"in"))/(d t) = (d mapping(position_"in")) / (d position_"in") (d position_"in") / (d t) = (d mapping(position_"in")) / (d position_"in") velocity_"in"
+  velocity_"out" = (d position_"out")/(d t) = (d mapping(position_"in"))/(d t) 
+$
+
+Using the chain rule:
+
+$
+  velocity_"out" = (d mapping(position_"in")) / (d position_"in") (d position_"in") / (d t) = (d mapping(position_"in")) / (d position_"in") velocity_"in"
 $
 
 #definition(title: "Mapping Jacobian Matrix")[
-We introduce the jacobian matrix $jacobianmapping$ of the mapping:
+The Jacobian matrix $jacobianmapping$ of the mapping is defined as:
 
 $
   jacobianmapping(position) = bold(partial) mapping(position) = (partial mapping(position)) / (partial position)
@@ -35,19 +43,19 @@ $ <mapping_velocity>
 
 == Force
 
-The power of the force applying on $position_"in"$ is equivalent to the power of the force applying on $position_"out"$:
+The power delivered by a force is invariant under coordinate transformations. For a force $force_"in"$ acting at $position_"in"$, we have:
 
 $
   velocity_"in"^T force_"in" (position_"in") = velocity_"out"^T force_"out" (position_"out")
 $
 
-Then,
+Substituting $velocity_"out"$ from @mapping_velocity,
 
 $
   velocity_"in"^T force_"in" (position_"in") = (jacobianmapping(position_"in") velocity_"in")^T force_"out" (position_"out") = velocity_"in"^T jacobianmapping(position_"in")^T force_"out" (position_"out")
 $
 
-We can deduce from the principle of virtual work:
+By the principle of virtual work, this implies:
 
 $
   force_"in" (position_"in") = jacobianmapping(position_"in")^T force_"out" (position_"out")
