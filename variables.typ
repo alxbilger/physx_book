@@ -61,5 +61,8 @@
 #let invariant1 = $I_rightcauchygreen$
 #let invariant2 = $I #h(-2pt) I_rightcauchygreen$
 #let invariant3 = $I #h(-2pt) I #h(-2pt) I_rightcauchygreen$
+#let isochoricinvariant1 = $I_tilde(rightcauchygreen)$
+#let isochoricinvariant2 = $I #h(-2pt) I_tilde(rightcauchygreen)$
 #let tangentmodulus = $tensor4(AA)$
 #let elasticitytensor = $tensor4(CC)$
+#let bulkmodulus = $kappa$

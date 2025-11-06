@@ -70,26 +70,60 @@ $
 #definition(title:"Jacobian")[
   $
     deformationjacobian = det(deformationgradient)
-  $
+  $ <deformation_jacobian>
 ]
 
 #property(title:"Not-null jacobian")[
   $configurationmapping$ is a one-to-one mapping, so:
   $
-    J != 0
+    deformationjacobian != 0
   $
 ]
 
 #property(title:"Self penetration")[
   To prevent self penetration of the body:
   $
-    J > 0
+    deformationjacobian > 0
+  $
+]
+
+#property(title:"Volume Change")[
+
+  The Jacobian measures local volume change:
+
+  $
+    deformationjacobian = "current volume"/"reference volume"
+  $
+  
+  Volume is preserved (isochoric deformation) when:
+  $
+    deformationjacobian = 1
   $
 ]
 
 #property(title:"Inversion")[
   Because of the previous properties, the inverse of $deformationgradient$ exists.
 ]
+
+#property(title:"Deformation Gradient Decomposition")[
+  $deformationgradient$ can be decomposed such as $deformationgradient = alpha tilde(deformationgradient)$. If we apply the determinant, $deformationjacobian = det(deformationgradient) = det(alpha tilde(deformationgradient)) = det(alpha identity) det(tilde(deformationgradient)) = alpha^dimension det(tilde(deformationgradient))$.
+
+  The decomposition can be a combination of:
+  - A volumetric part (change of size)
+  - A distortional part (change of shape)
+
+  If we want that $tilde(deformationgradient)$ to be volume-preserving, then $det(tilde(deformationgradient)) = 1$. From the previous equality, we deduce that $J = alpha^dimension$, then $alpha = deformationjacobian^(1/dimension)$.
+
+  Finally the decomposition is:
+
+  $
+    deformationgradient = deformationjacobian^(1/dimension) tilde(deformationgradient)
+  $ <deformation_gradient_decomposition>
+
+  - $deformationjacobian^(1/dimension)$ represents a pure volumetric stretch (a uniform dilation or contraction).
+  - $ tilde(deformationgradient)$ represents the isochoric (volume-preserving) deformation, i.e. pure distortion.
+]
+
 
 #definition(title:"Diplacement")[
 $  
@@ -124,6 +158,16 @@ $ <right_cauchy_green_tensor>
   $
   rightcauchygreen^T = (deformationgradient^T deformationgradient)^T = deformationgradient^T deformationgradient = rightcauchygreen
   $
+]
+
+#property(title: "Decomposition of " + $rightcauchygreen$)[
+  Substituting the decomposition of the deformation gradient (@deformation_gradient_decomposition) into the definition of $rightcauchygreen$:
+
+  $
+    rightcauchygreen = deformationgradient^T deformationgradient = (deformationjacobian^(1/dimension) tilde(deformationgradient))^T (deformationjacobian^(1/dimension) tilde(deformationgradient)) = deformationjacobian^(2/dimension) tilde(deformationgradient)^T tilde(deformationgradient) = deformationjacobian^(2/dimension) tilde(rightcauchygreen)
+  $ <isochoric_right_cauchy_green>
+
+  $tilde(rightcauchygreen)$ measures isochoric (volume-free) strain.
 ]
 
 #property(title: "Derivative Right Cauchy-Green Deformation Tensor w.r.t " + $deformationgradient$)[

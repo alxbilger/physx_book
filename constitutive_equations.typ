@@ -20,7 +20,7 @@
 #definition(title:"First invariant")[
 $
   invariant1 = tr(rightcauchygreen)
-$
+$ <invariant1>
 
 In index notation,
 
@@ -65,8 +65,8 @@ $ <derivative_invariant1_wrt_deformationgradient>
 
 #definition(title:"Second invariant")[
 $
-  invariant2 = 1/2 (tr(rightcauchygreen)^2 - tr(rightcauchygreen^2))
-$
+  invariant2 = 1/2 (tr(rightcauchygreen)^2 - tr(rightcauchygreen^2)) = 1/2 (invariant1^2 - tr(rightcauchygreen)^2)
+$ <invariant2>
 ]
 
 #property(title:"Derivative w.r.t. " + $rightcauchygreen$)[
@@ -109,7 +109,13 @@ It is important to know which $invariant2$ is used.
 #definition(title:"Third invariant")[
 $
   invariant3 = det(rightcauchygreen)
-$
+$ <invariant3>
+]
+
+#property(title:"Relation to the Jacobian")[
+  $
+    invariant3 = det(rightcauchygreen) = det(deformationgradient^T deformationgradient) = det(deformationgradient^T) det(deformationgradient) = det(deformationgradient)^2 = deformationjacobian^2
+  $
 ]
 
 #property(title:"Derivative w.r.t. " + $rightcauchygreen$)[
@@ -236,6 +242,67 @@ $
 
 to be continued...
 
+== Invariants of $tilde(rightcauchygreen)$
+
+#mybox(title:"Isochoric first invariant")[
+Substituting @isochoric_right_cauchy_green into @invariant1:
+
+$
+  invariant1 = tr(rightcauchygreen) = tr(deformationjacobian^(2/dimension) tilde(rightcauchygreen)) = deformationjacobian^(2/dimension) tr( tilde(rightcauchygreen)) = deformationjacobian^(2/dimension) isochoricinvariant1
+$
+
+Therefore,
+
+$
+  isochoricinvariant1 = deformationjacobian^(-2/dimension) invariant1
+$
+]
+
+
+#mybox(title:"Isochoric second invariant")[
+  Substituting @isochoric_right_cauchy_green into @invariant2:
+
+  $
+    invariant2 
+    &= 1/2 (invariant1^2 - tr(rightcauchygreen^2))\
+    &= 1/2 ((deformationjacobian^(2/dimension) isochoricinvariant1)^2 - tr((deformationjacobian^(2/dimension) tilde(rightcauchygreen))^2))\
+    &= 1/2 (deformationjacobian^(4/dimension) isochoricinvariant1^2 - deformationjacobian^(4/dimension) tr(tilde(rightcauchygreen)^2))\
+    &= deformationjacobian^(4/dimension) [ 1/2 (isochoricinvariant1^2 - tr(tilde(rightcauchygreen)^2))]\
+    &= deformationjacobian^(4/dimension) isochoricinvariant2
+  $
+
+  Therefore,
+
+  $
+    isochoricinvariant2 = deformationjacobian^(-4/dimension) invariant2
+  $
+]
+
+#mybox(title:"Nearly incompressible materials")[
+  A common form of the strain energy density is:
+
+  $
+    undefstrainenergydensity(invariant1, invariant2, invariant3) = undefstrainenergydensity_"isochoric" (isochoricinvariant1, isochoricinvariant2) + undefstrainenergydensity_"volumetric" (deformationjacobian)
+  $ <nearly_incompressible>
+
+  - $undefstrainenergydensity_"isochoric"$ captures distortional (shape-changing) behavior
+  - $undefstrainenergydensity_"volumetric"$ penalizes changes in volume and enforces near-incompressibility
+]
+
+#mybox(title:"Common forms for " + $undefstrainenergydensity_"volumetric"$ )[
+1. Quadratic in $log deformationjacobian$:
+
+$
+  undefstrainenergydensity_"volumetric" = bulkmodulus/2 (log(deformationjacobian))^2
+$ <volumetric_energy_log>
+
+2. Quadratic in $(deformationjacobian - 1)$
+
+$
+  undefstrainenergydensity_"volumetric" = bulkmodulus/2 (deformationjacobian - 1)^2
+$
+]
+
 == St Venant-Kichhoff Material
 
 #mybox(title:"Strain Energy")[
@@ -326,7 +393,7 @@ $
 
 #mybox(title:"Strain Energy")[
 $
-  undefstrainenergydensity = mu / 2 (invariant1 - d) - mu log J + lambda / 2 (log J)^2 
+  undefstrainenergydensity = mu / 2 (invariant1 - dimension) - mu log J + lambda / 2 (log J)^2 
 $ <strain_energy_neohookean>
 
 According to @bonet1997nonlinear.
@@ -486,14 +553,14 @@ Insert the following expression on https://www.matrixcalculus.org/:
 a*(tr(F'*F)-3) + b*(1/2*(tr(F'*F)^2-tr(F'*F*F'*F)))
 ```
 
-== Mooney-Rivlin
+== Incompressible Mooney-Rivlin
 
 #mybox(title:"Strain Energy")[
 Mooney-Rivlin material is a special case of the polynomial material where only $mu_(01)$ and $mu_(10) != 0$. It results in:
 
 $
   undefstrainenergydensity = mu_(10) (invariant1 - dimension) + mu_(01) (invariant2 - dimension)
-$
+$ <incompressible_mooney_rivlin>
 ]
 
 This energy is defined in terms of invariants. @pk1_as_function_of_invariants applies:
@@ -579,4 +646,44 @@ Finally, the elasticity tensor in index notation:
 
 $
   elasticitytensor_(i j k l) = 4 mu_(01) (delta_(i j) delta_(k l) - 1/2 (delta_(i k) delta_(j l) + delta_(i l) delta_(j k)))
+$
+
+== Compressible Mooney-Rivlin
+
+#mybox(title:"Strain Energy")[
+
+The strain energy density function is based on the isochoric/volumetric decomposition from @nearly_incompressible, where $undefstrainenergydensity_"isochoric"$ is the incompressible strain energy density function (@incompressible_mooney_rivlin) applied on the isochoric invariants.
+
+$
+undefstrainenergydensity_"isochoric" 
+&= mu_(10) (isochoricinvariant1 - dimension) + mu_(01) (isochoricinvariant2 - dimension)\
+&= mu_(10) (deformationjacobian^(-2/dimension) invariant1 - dimension) + mu_(01) (deformationjacobian^(-4/dimension) invariant2 - dimension)
+$
+
+where $deformationjacobian$ is the Jacobian (@deformation_jacobian).
+
+$undefstrainenergydensity_"volumetric"$ is defined in @volumetric_energy_log.
+
+It result in:
+
+$
+  undefstrainenergydensity = mu_(10) (deformationjacobian^(-2/dimension) invariant1 - dimension) + mu_(01) (deformationjacobian^(-4/dimension) invariant2 - dimension) + kappa/2 log(deformationjacobian)^2
+$
+
+]
+
+Second Piola-Kirchhoff stress tensor (@pk2_properties):
+
+$
+  pk2 = 2 (partial undefstrainenergydensity)/(partial rightcauchygreen) = (partial)/(partial rightcauchygreen) (mu_(10) (deformationjacobian^(-2/dimension) invariant1 - dimension) + mu_(01) (deformationjacobian^(-4/dimension) invariant2 - dimension) + kappa/2 log(deformationjacobian)^2)
+$
+
+By applying the product rule:
+$
+  (partial deformationjacobian^(-2/dimension) invariant1)/(partial rightcauchygreen) 
+  = (partial deformationjacobian^(-2/dimension) )/(partial rightcauchygreen) invariant1 + deformationjacobian^(-2/dimension) (partial invariant1)/(partial rightcauchygreen) 
+$
+
+$
+  (partial deformationjacobian^(-4/dimension) invariant2)/(partial rightcauchygreen)
 $
