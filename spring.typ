@@ -72,20 +72,20 @@ $
 From @derivative_normalized_vetor_difference_b,
 
 $
-partial / (partial a) ((b - a)/delta) = -1/delta I + 1/delta^3 (b - a) times.circle (b - a)
+partial / (partial a) ((b - a)/delta) = -1/delta I + 1/delta^3 (b - a) times.o (b - a)
 $
 
 Finally,
 
 $
-(partial F_a)/(partial a) &= -k (I + L_0 (-1/delta I + 1/delta^3 (b - a) times.circle (b - a))) \
-&= -k((1-L_0/delta)I+L_0/delta^3(b-a)times.circle(b-a)) \
-&= -k((1-L_0/delta)I+L_0/delta hat(b-a)times.circle hat(b-a))
+(partial F_a)/(partial a) &= -k (I + L_0 (-1/delta I + 1/delta^3 (b - a) times.o (b - a))) \
+&= -k((1-L_0/delta)I+L_0/delta^3(b-a)times.o(b-a)) \
+&= -k((1-L_0/delta)I+L_0/delta hat(b-a)times.o hat(b-a))
 $
 
 #result(
 $
-(partial F_a)/(partial a) = -k((1-L_0/delta)I+L_0/delta hat(b-a)times.circle hat(b-a))
+(partial F_a)/(partial a) = -k((1-L_0/delta)I+L_0/delta hat(b-a)times.o hat(b-a))
 $
 )
 
@@ -100,21 +100,21 @@ $
 From @derivative_normalized_vetor_difference_a,
 
 $
-partial / (partial b) ((b - a)/delta) = 1/delta I - 1/delta^3 (b - a) times.circle (b - a)
+partial / (partial b) ((b - a)/delta) = 1/delta I - 1/delta^3 (b - a) times.o (b - a)
 $
 
 Finally,
 
 $
 (partial F_a)/(partial b)
-&= k  ( I - L_0 (1/delta I - 1/delta^3 (b - a) times.circle (b - a)))\
-&= k  ( (1-L_0/delta) I - L_0/delta^3 (b - a) times.circle (b - a))\
-&= k  ( (1-L_0/delta) I - L_0/delta hat(b - a) times.circle hat(b - a))
+&= k  ( I - L_0 (1/delta I - 1/delta^3 (b - a) times.o (b - a)))\
+&= k  ( (1-L_0/delta) I - L_0/delta^3 (b - a) times.o (b - a))\
+&= k  ( (1-L_0/delta) I - L_0/delta hat(b - a) times.o hat(b - a))
 $
 
 #result[
 $
-(partial F_a)/(partial b) = k  ( (1-L_0/delta) I - L_0/delta hat(b - a) times.circle hat(b - a))
+(partial F_a)/(partial b) = k  ( (1-L_0/delta) I - L_0/delta hat(b - a) times.o hat(b - a))
 $
 ]
 

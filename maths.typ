@@ -71,10 +71,10 @@ table(
 == Outer Product
 
 Given two vectors of size $m times 1$ and $n times 1$ respectively $u = (u_1,dots, u_n)$, $v = (v_1,dots, v_n)$,
-their outer product, denoted $u times.circle v$, is defined as the $m times n$ matrix $A$ obtained by multiplying each element of $u$ by each element of $v$:
+their outer product, denoted $u times.o v$, is defined as the $m times n$ matrix $A$ obtained by multiplying each element of $u$ by each element of $v$:
 
 $
-u times.circle v = A =
+u times.o v = A =
 mat( 
 u_1 v_1, u_1 v_2, dots, u_1 v_n;
 u_2 v_1, u_2 v_2, dots, u_2 v_n;
@@ -83,21 +83,21 @@ u_m v_1, u_m v_2, dots, u_m v_n
 )
 $
 
-The outer product $u times.circle v$ is equivalent to a matrix multiplication $u thin v^T$.
+The outer product $u times.o v$ is equivalent to a matrix multiplication $u thin v^T$.
 
 #definition(title:"Outer product on tensors")[
-  Given two tensors $u$,$v$ with dimensions $(k_1, dots, k_m)$ and $(l_1, dots, l_n)$, their outer product $u times.circle v$ is a tensor with dimensions $(k_1, dots, k_m, l_1, dots, l_n)$ and entries
+  Given two tensors $u$,$v$ with dimensions $(k_1, dots, k_m)$ and $(l_1, dots, l_n)$, their outer product $u times.o v$ is a tensor with dimensions $(k_1, dots, k_m, l_1, dots, l_n)$ and entries
 
   $
-    (u times.circle v)_(i_1, dots, i_m, j_1, dots, j_n) = u_(i_1, dots, i_m) v_(j_1, dots, j_n)
+    (u times.o v)_(i_1, dots, i_m, j_1, dots, j_n) = u_(i_1, dots, i_m) v_(j_1, dots, j_n)
   $ <outer_product_tensor>
 ]
 
 #definition(title:"Mixed outer product on tensors")[
-  Given two second-order tensors $u$,$v$, their outer product $u times.circle v$ is a 4th-order tensor and entries
+  Given two second-order tensors $u$,$v$, their outer product $u times.o v$ is a 4th-order tensor and entries
 
   $
-    (u overline(times.circle) v)_(i, j, k, l) = u_(i k) v_(j l)
+    (u overline(times.o) v)_(i, j, k, l) = u_(i k) v_(j l)
   $ <mixed_outer_product_tensor>
 ]
 
@@ -280,7 +280,7 @@ Finally,
 
 #result[
 $
-(partial hat(x))/(partial x) = 1/norm(x)_2 I - 1/norm(x)_2^3 x times.circle x
+(partial hat(x))/(partial x) = 1/norm(x)_2 I - 1/norm(x)_2^3 x times.o x
 $ <derivative_normalized_vetor>
 ]
 
@@ -289,13 +289,13 @@ Considering two points $a$ and $b$, and $gamma = a - b$:
 $
 (partial hat(a-b))/(partial a) = (partial hat(gamma))/(partial a)
 &= (partial hat(gamma))/(partial gamma) dot (partial gamma)/(partial a) \
-&= 1/norm(gamma)_2 I - 1/norm(gamma)_2^3 gamma times.circle gamma
+&= 1/norm(gamma)_2 I - 1/norm(gamma)_2^3 gamma times.o gamma
 $  <derivative_normalized_vetor_difference_a>
 
 $
 (partial hat(a-b))/(partial b) = (partial hat(gamma))/(partial b)
 &= (partial hat(gamma))/(partial gamma) dot (partial gamma)/(partial b) \
-&= -1/norm(gamma)_2 I + 1/norm(gamma)_2^3 gamma times.circle gamma \
+&= -1/norm(gamma)_2 I + 1/norm(gamma)_2^3 gamma times.o gamma \
 &= -(partial hat(a-b))/(partial a)
 $  <derivative_normalized_vetor_difference_b>
 
