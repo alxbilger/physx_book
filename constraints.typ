@@ -297,8 +297,8 @@ $ <second_newton_law_constraint>
 
 $
 cases(
-  (d position)/(d t) = velocity\
-  massmatrix (d velocity)/(d t) = force(position, velocity) + constraintmatrix(state)^T lambda\
+  (d position)/(d t) = velocity,
+  massmatrix (d velocity)/(d t) = force(position, velocity) + constraintmatrix(state)^T lambda,
   constraint(position, t) = 0
 )
 $
@@ -307,8 +307,8 @@ $
 
 $
 cases(
-  (d position)/(d t) = velocity\
-  massmatrix (d velocity)/(d t) = force(position, velocity) + constraintmatrix(state)^T lambda\
+  (d position)/(d t) = velocity,
+  massmatrix (d velocity)/(d t) = force(position, velocity) + constraintmatrix(state)^T lambda,
   constraintmatrix velocity = 0
 )
 $

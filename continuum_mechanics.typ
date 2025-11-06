@@ -268,7 +268,7 @@ No change of mass: $dot(mass)=0$
 
 $
   cases(
-    d mass(undefposition) = density_0 d V \
+    d mass(undefposition) = density_0 d V,
     d mass(position) = density d v
   ) &<=>  density_0 d V = density d v\
   & <=> density_0 = deformationjacobian density
@@ -620,8 +620,8 @@ $ <tangent_modulus_from_elasticity_tensor>
 
 It can be written in tensor notation:
 $
-  tangentmodulus = tensor2(identity) times.circle pk2^T + (deformationgradient times.circle deformationgradient) : elasticitytensor
+  tangentmodulus = tensor2(identity) times.o pk2^T + (deformationgradient times.o deformationgradient) : elasticitytensor
 $
 
-#emoji.warning The operations $times.circle$ and $:$ can use different conventions in the index order.
+#emoji.warning The operations $times.o$ and $:$ can use different conventions in the index order.
 ]
