@@ -1,7 +1,7 @@
 #import "@preview/cetz:0.2.0"
 #import "box.typ": *
 
-= Spring
+= Spring <section_spring>
 
 == Linear Spring
 

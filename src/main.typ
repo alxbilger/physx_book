@@ -78,7 +78,7 @@
 #include "NewtonSecondLaw/newtonsecondlaw.typ"
 #include "static.typ"
 #include "heat.typ"
-#include "spring.typ"
+#include "050_spring.typ"
 #include "numericalintegration.typ"
 #include "linear_solvers.typ"
 #include "ExplicitTimeIntegration/explicitTimeIntegration.typ"
