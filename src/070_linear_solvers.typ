@@ -1,7 +1,7 @@
 #import "box.typ":*
 #import "variables.typ": *
 
-= Linear Solvers
+= Linear Solvers <section_linear_solvers>
 
 In @linear_system_in_newton_raphson, a linear system needs to be solved in every iteration of Newton-Raphson. This chapter describes several methods to solve linear systems.
 

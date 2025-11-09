@@ -5,3 +5,4 @@
 #include "030_static.typ"
 #include "050_spring.typ"
 #include "060_numericalintegration.typ"
+#include "070_linear_solvers.typ"

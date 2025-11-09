@@ -80,7 +80,7 @@
 #include "heat.typ"
 #include "050_spring.typ"
 #include "060_numericalintegration.typ"
-#include "linear_solvers.typ"
+#include "070_linear_solvers.typ"
 #include "ExplicitTimeIntegration/explicitTimeIntegration.typ"
 #include "implicittimeintegration.typ"
 #include "constraints.typ"
