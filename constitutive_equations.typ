@@ -71,7 +71,7 @@ $ <invariant2>
 
 #property(title:"Derivative w.r.t. " + $rightcauchygreen$)[
   $
-    (partial invariant2)/(partial rightcauchygreen) = tr(rightcauchygreen) tensor2(identity) - rightcauchygreen
+    (partial invariant2)/(partial rightcauchygreen) = tr(rightcauchygreen) tensor2(identity) - rightcauchygreen = invariant1 tensor2(identity) - rightcauchygreen
   $ <derivative_invariant2_wrt_rightcauchygreen>
 ]
 
@@ -115,7 +115,7 @@ $ <invariant3>
 #property(title:"Relation to the Jacobian")[
   $
     invariant3 = det(rightcauchygreen) = det(deformationgradient^T deformationgradient) = det(deformationgradient^T) det(deformationgradient) = det(deformationgradient)^2 = deformationjacobian^2
-  $
+  $ <invariant3_deformation_jacobian>
 ]
 
 #property(title:"Derivative w.r.t. " + $rightcauchygreen$)[
@@ -421,10 +421,7 @@ $ <pk1_neo_hookean>
 ]
 
 #mybox(title: "Second Piola-Kirchhoff Stress Tensor")[
-  Recall that:
-  $
-    invariant3 &= det(rightcauchygreen) \ &= det(deformationgradient^T deformationgradient) \ &= det(deformationgradient^T )det(deformationgradient)\ &= det(deformationgradient) det(deformationgradient)\ &= det(deformationgradient)^2\ &= deformationjacobian^2
-  $
+  Recall that $invariant3 = deformationjacobian^2$ (@invariant3_deformation_jacobian).
 
   Then, the strain energy density function (@strain_energy_neohookean) can be written in terms of invariants:
 
@@ -490,7 +487,7 @@ Finally,
 
 $
   (partial log deformationjacobian)/(partial rightcauchygreen_(k l)) = 1/2 1/det(rightcauchygreen) det(rightcauchygreen) rightcauchygreen^(-1)_(l k) = 1/2 rightcauchygreen^(-1)_(l k)
-$
+$ <derivative_logJ_rightcauchy>
 
 The second term:
 
@@ -668,22 +665,122 @@ It result in:
 
 $
   undefstrainenergydensity = mu_(10) (deformationjacobian^(-2/dimension) invariant1 - dimension) + mu_(01) (deformationjacobian^(-4/dimension) invariant2 - dimension) + kappa/2 log(deformationjacobian)^2
-$
+$ <strain_energy_mooney_rivlin>
 
 ]
 
-Second Piola-Kirchhoff stress tensor (@pk2_properties):
+We compute the second Piola-Kirchhoff stress tensor (@pk2_properties) from the strain energy (@strain_energy_mooney_rivlin):
 
 $
-  pk2 = 2 (partial undefstrainenergydensity)/(partial rightcauchygreen) = (partial)/(partial rightcauchygreen) (mu_(10) (deformationjacobian^(-2/dimension) invariant1 - dimension) + mu_(01) (deformationjacobian^(-4/dimension) invariant2 - dimension) + kappa/2 log(deformationjacobian)^2)
+  pk2 
+  &= 2 (partial undefstrainenergydensity)/(partial rightcauchygreen) \ 
+  &= 2 (partial)/(partial rightcauchygreen) (mu_(10) (deformationjacobian^(-2/dimension) invariant1 - dimension) + mu_(01) (deformationjacobian^(-4/dimension) invariant2 - dimension) + kappa/2 log(deformationjacobian)^2) \
+  &= 2 (partial)/(partial rightcauchygreen) (mu_(10) deformationjacobian^(-2/dimension) invariant1 + mu_(01) deformationjacobian^(-4/dimension) invariant2 + kappa/2 log(deformationjacobian)^2) \
+  &= 2 (mu_(10) (partial deformationjacobian^(-2/dimension) invariant1)/(partial rightcauchygreen) + mu_(01) (partial deformationjacobian^(-4/dimension) invariant2)/(partial rightcauchygreen) + kappa/2 (partial log(deformationjacobian)^2)/(partial rightcauchygreen))
 $
 
-By applying the product rule:
+We must compute 3 terms.
+
+For the $mu_10$ and $mu_01$ terms, we need the following derivative. For any power $deformationjacobian^alpha$:
+
+$
+  (partial deformationjacobian^alpha)/(partial rightcauchygreen) = alpha deformationjacobian^(alpha-1) (partial deformationjacobian)/(partial rightcauchygreen)
+$
+
+Since $deformationjacobian = sqrt(invariant3)$ (@invariant3_deformation_jacobian), 
+$
+  (partial deformationjacobian)/(partial rightcauchygreen) 
+  &= (partial sqrt(det(rightcauchygreen)))/(partial rightcauchygreen) \
+  &= 1/2 1/sqrt(det(rightcauchygreen)) (partial det(rightcauchygreen))/(partial rightcauchygreen) \
+  &= 1/2 1/sqrt(det(rightcauchygreen)) det(rightcauchygreen) rightcauchygreen^(-1) \
+  &= 1/2 sqrt(det(rightcauchygreen)) rightcauchygreen^(-1) \
+  &= 1/2 deformationjacobian rightcauchygreen^(-1)
+$
+
+Substituting into the derivative of $deformationjacobian^alpha$:
+$
+  (partial deformationjacobian^alpha)/(partial rightcauchygreen) = 1/2 alpha deformationjacobian^(alpha-1) deformationjacobian rightcauchygreen^(-1) = 1/2 alpha deformationjacobian^alpha rightcauchygreen^(-1)
+$
+
+By applying the product rule on the $mu_10$-term:
 $
   (partial deformationjacobian^(-2/dimension) invariant1)/(partial rightcauchygreen) 
-  = (partial deformationjacobian^(-2/dimension) )/(partial rightcauchygreen) invariant1 + deformationjacobian^(-2/dimension) (partial invariant1)/(partial rightcauchygreen) 
+  &= (partial deformationjacobian^(-2/dimension) )/(partial rightcauchygreen) invariant1 + deformationjacobian^(-2/dimension) (partial invariant1)/(partial rightcauchygreen) \
+  &= -1/2 2/dimension deformationjacobian^(-2/dimension) rightcauchygreen^(-1) invariant1 + deformationjacobian^(-2/dimension) tensor2(identity) \
+  &= deformationjacobian^(-2/dimension)(tensor2(identity) - 1/dimension invariant1 rightcauchygreen^(-1))
 $
 
+By applying the product rule on the $mu_01$-term:
 $
   (partial deformationjacobian^(-4/dimension) invariant2)/(partial rightcauchygreen)
+  &= (partial deformationjacobian^(-4/dimension))/(partial rightcauchygreen) invariant2 + deformationjacobian^(-4/dimension) (partial invariant2)/(partial rightcauchygreen) \
+  &= -1/2 4/dimension deformationjacobian^(-4/dimension) rightcauchygreen^(-1) invariant2 + deformationjacobian^(-4/dimension) (tr(rightcauchygreen) tensor2(identity) - rightcauchygreen) \
+  &= deformationjacobian^(-4/dimension) (invariant1 tensor2(identity) - rightcauchygreen - 2/dimension rightcauchygreen^(-1) invariant2)
+$
+
+Finally, the $bulkmodulus$-term:
+
+$
+  (partial log(deformationjacobian)^2)/(partial rightcauchygreen) = 2 log(deformationjacobian) (partial log(deformationjacobian))/(partial rightcauchygreen)
+$
+
+Recall that $(partial log(deformationjacobian))/(partial rightcauchygreen) = 1/2 rightcauchygreen^(-T)$ (@derivative_logJ_rightcauchy). Then,
+
+$
+  (partial log(deformationjacobian)^2)/(partial rightcauchygreen) = log(deformationjacobian) rightcauchygreen^(-T)
+$
+
+Putting all together:
+
+#mybox(title:"Second Piola-Kirchhoff Stress Tensor")[
+$
+  pk2 = 
+  & 2 mu_(10) deformationjacobian^(-2/dimension)(tensor2(identity) - 1/dimension invariant1 rightcauchygreen^(-1)) \ 
+  &+ 2 mu_(01) deformationjacobian^(-4/dimension) (invariant1 tensor2(identity) - rightcauchygreen - 2/dimension rightcauchygreen^(-1) invariant2) \
+  &+ bulkmodulus log(deformationjacobian) rightcauchygreen^(-T)
+$
+]
+
+Now we compute the elasticity tensor (@elasticity_tensor_rightcauchygreen).
+
+Let's define
+
+- $pk2^((mu_10)) = deformationjacobian^(-2/dimension)(tensor2(identity) - 1/dimension invariant1 rightcauchygreen^(-1))$
+- $pk2^((mu_01)) = deformationjacobian^(-4/dimension) (invariant1 tensor2(identity) - rightcauchygreen - 2/dimension rightcauchygreen^(-1) invariant2)$
+- $pk2^((bulkmodulus)) = log(deformationjacobian) rightcauchygreen^(-T)$
+
+such that $pk2 = 2 mu_(10) pk2^((mu_10)) + 2 mu_(01) pk2^((mu_01)) + bulkmodulus pk2^((bulkmodulus))$.
+
+Similarly, we will have $elasticitytensor = 2 mu_(10) elasticitytensor^((mu_10)) + 2 mu_(01) elasticitytensor^((mu_01)) + bulkmodulus elasticitytensor^((bulkmodulus))$ with:
+- $elasticitytensor^((mu_(10)))_(i j k l) = 2 (partial pk2^((mu_10))_(i j)) / (partial rightcauchygreen_(k l))$,
+- $elasticitytensor^((mu_(01)))_(i j k l) = 2 (partial pk2^((mu_01))_(i j)) / (partial rightcauchygreen_(k l))$,
+- $elasticitytensor^((bulkmodulus))_(i j k l) = 2 (partial pk2^((bulkmodulus))_(i j)) / (partial rightcauchygreen_(k l))$
+
+Let's start by differentiating $pk2^((mu_10))$ in index notation:
+
+$
+  (partial pk2^((mu_10))_(i j))/(partial rightcauchygreen_(k l))
+  &= ((partial deformationjacobian^(-2/dimension) delta_(i j))/(partial rightcauchygreen_(k l))) - 1/dimension ((partial deformationjacobian^(-2/dimension) invariant1 rightcauchygreen^(-1)_(i j))/(partial rightcauchygreen_(k l))) \
+  &= -1/dimension delta_(i j) deformationjacobian^(-2/dimension) rightcauchygreen^(-1)_(k l) - 1/dimension ((partial deformationjacobian^(-2/dimension))/(partial rightcauchygreen_(c k)) invariant1 rightcauchygreen^(-1)_(i j) + deformationjacobian^(-2/dimension) (partial invariant1)/(partial rightcauchygreen_(k l)) rightcauchygreen^(-1)_(i j) + deformationjacobian^(-2/dimension) invariant1 (partial rightcauchygreen^(-1)_(i j))/(partial rightcauchygreen_(c k)) ) \
+  &= -1/dimension delta_(i j) deformationjacobian^(-2/dimension) rightcauchygreen^(-1)_(k l) - 1/dimension (-1/dimension deformationjacobian^(-2/dimension) rightcauchygreen^(-1)_(k l) invariant1 rightcauchygreen^(-1)_(i j) + deformationjacobian^(-2/dimension) delta_(k l) rightcauchygreen^(-1)_(i j) + deformationjacobian^(-2/dimension) invariant1 (-1/2 (rightcauchygreen^(-1)_(i k) rightcauchygreen^(-1)_(l j) + rightcauchygreen^(-1)_(i l) rightcauchygreen^(-1)_(k j))) ) \
+  &= -1/dimension deformationjacobian^(-2/dimension) (delta_(i j) rightcauchygreen^(-1)_(k l) + (delta_(k l) - 1/dimension rightcauchygreen^(-1)_(k l) invariant1) rightcauchygreen^(-1)_(i j) - 1/2 invariant1 (rightcauchygreen^(-1)_(i k) rightcauchygreen^(-1)_(l j) + rightcauchygreen^(-1)_(i l) rightcauchygreen^(-1)_(k j)))
+$
+
+Now we differentiate $pk2^((mu_10))$ in index notation:
+$
+  (partial pk2^((mu_01))_(i j))/(partial rightcauchygreen_(k l))
+  &= (partial deformationjacobian^(-4/dimension))/(partial rightcauchygreen_(k l))(invariant1 delta_(i j) - rightcauchygreen_(i j) - 2/dimension rightcauchygreen^(-1)_(i j) invariant2)
+  + deformationjacobian^(-4/dimension) (partial)/(partial rightcauchygreen_(k l))(invariant1 delta_(i j) - rightcauchygreen_(i j) - 2/dimension rightcauchygreen^(-1)_(i j) invariant2) \
+  &= -2/dimension deformationjacobian^(-4/dimension) rightcauchygreen^(k l) (invariant1 delta_(i j) - rightcauchygreen_(i j) - 2/dimension rightcauchygreen^(-1)_(i j) invariant2)
+  + deformationjacobian^(-4/dimension) ( delta_(i j) - delta_(i k) delta_(j l) - 2/dimension ((partial rightcauchygreen^(-1)_(i j))/(partial rightcauchygreen_(k l)) invariant2 + rightcauchygreen^(-1)_(i j) (partial invariant2)/(partial rightcauchygreen_(k l))) \
+  &= deformationjacobian^(-4/dimension)(-2/dimension  rightcauchygreen^(k l) (invariant1 delta_(i j) - rightcauchygreen_(i j) - 2/dimension rightcauchygreen^(-1)_(i j) invariant2) +  delta_(i j) - delta_(i k) delta_(j l) \ &- 2/dimension (-1/2 (rightcauchygreen^(-1)_(i k) rightcauchygreen^(-1)_(l j) + rightcauchygreen^(-1)_(i l) rightcauchygreen^(-1)_(k j)) invariant2 + rightcauchygreen^(-1)_(i j) (invariant1 delta_(k l) - rightcauchygreen_(k l))))
+$
+
+Finally, the differentiation of $pk2^((bulkmodulus))$:
+
+$
+  (partial pk2^((bulkmodulus)))/(partial rightcauchygreen_(k l))
+  &= (partial log deformationjacobian rightcauchygreen^(-1)_(i j))/(partial rightcauchygreen_(k l)) \
+  &= (partial log deformationjacobian)/(partial rightcauchygreen_(k l)) rightcauchygreen^(-1)_(i j) + log deformationjacobian (partial rightcauchygreen^(-1)_(i j))/(partial rightcauchygreen_(k l)) \
+  &= 1/2 rightcauchygreen^(-1)_(k l) rightcauchygreen^(-1)_(i j) + log deformationjacobian (-1/2 (rightcauchygreen^(-1)_(i k) rightcauchygreen^(-1)_(l j) + rightcauchygreen^(-1)_(i l) rightcauchygreen^(-1)_(k j))) \
 $
