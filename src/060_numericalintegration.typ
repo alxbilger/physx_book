@@ -1,7 +1,7 @@
 #import "variables.typ": *
 #import "box.typ": *
 
-= Numerical Integration
+= Numerical Integration <section_numerical_integration>
 
 == Definition
 
