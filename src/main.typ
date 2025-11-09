@@ -73,7 +73,8 @@
 
 #import "variables.typ": * 
 
-#include "lagrangianmechanics.typ"
+#include "summaries/000_summaries.typ"
+#include "010_lagrangianmechanics.typ"
 #include "NewtonSecondLaw/newtonsecondlaw.typ"
 #include "static.typ"
 #include "heat.typ"

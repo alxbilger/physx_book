@@ -1,7 +1,7 @@
 #import "box.typ":*
 #import "variables.typ": *
 
-= Lagrangian Mechanics
+= Lagrangian Mechanics <section_lagrangian_mechanics>
 
 == Introduction
 
