@@ -12,14 +12,14 @@ jobs:
         - name: Add details
           run: |
             echo "Compiled from #link(\"https://github.com/alxbilger/physx_book/commit/${{ github.sha }}\")[${{ github.sha }}] from " >> details.typ
-            typst --version >> details.typ
+            typst --version >> src/details.typ
         
         - name: Create output dir
           # Note: `github-pages-temp` should not exist yet
           run: mkdir github-pages-temp
         
         - name: Build PDF
-          run: typst compile main.typ github-pages-temp/physx_book.pdf
+          run: typst compile src/main.typ github-pages-temp/physx_book.pdf
         
         - name: Upload site files as artifact
           id: deployment
