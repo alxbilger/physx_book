@@ -1,7 +1,7 @@
 #import "variables.typ": *
 #import "box.typ": *
 
-= Static Equilibrium
+= Static Equilibrium <section_static_equilibrium>
 
 #definition(title: "Static Equilibrium")[
 The physical system does not experience any acceleration
@@ -42,5 +42,5 @@ $ <static_linear_system>
 Then,
 
 $
-#position^(i+1) = Delta #position^i + #position^i
+position^(i+1) = Delta #position^i + position^i
 $
