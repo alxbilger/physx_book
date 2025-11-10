@@ -1,7 +1,7 @@
 #import "variables.typ": *
 #import "box.typ": *
 
-= Continuum Mechanics
+= Continuum Mechanics <section_continuum_mechanics>
 
 A particle $particle$ defined in the body $body$.
 

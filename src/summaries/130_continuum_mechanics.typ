@@ -1,0 +1,9 @@
+== Continuum Mechanics
+
+@section_continuum_mechanics explains how materials change shape and respond to forces in a fundamental way. It starts by describing how a small piece of material (a particle) moves through different configurations over time. The initial shape of the material defines a reference state, and as the material deforms, each particle shifts to a new position. The key concept is how the material stretches and twists during this change—this is captured by a measure of local deformation. 
+
+When a material deforms, it may change its volume (like getting larger or smaller) or its shape (like stretching unevenly). The amount of volume change is described by a simple factor that must stay positive to prevent the material from overlapping itself. The way the material stretches and twists is further broken down into two parts: one part affects how much the material grows or shrinks uniformly, while the other part describes how its shape changes without altering volume. 
+
+For materials that respond elastically (like springs or solid objects), the force they exert depends on how they've been stretched or twisted. This relationship is defined by material properties that link the deformation to the resulting force. Some materials, particularly soft ones like biological tissues or rubber, behave differently because they store energy internally when deformed. The force they produce comes from this stored energy, which depends solely on their current shape—without needing to remember how they got there. 
+
+This framework helps model how materials react to forces in a way that works for both small and large deformations, providing a clear foundation for understanding complex behaviors like stretching, compression, and internal rearrangements in real-world materials.

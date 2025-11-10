@@ -86,7 +86,7 @@
 #include "100_constraints.typ"
 #include "110_mapping.typ"
 #include "120_differentiable_simu.typ"
-#include "continuum_mechanics.typ"
+#include "130_continuum_mechanics.typ"
 #include "constitutive_equations.typ"
 #include "fem.typ"
 #include "maths.typ"
