@@ -11,7 +11,7 @@ jobs:
         
         - name: Add details
           run: |
-            echo "Compiled from #link(\"https://github.com/alxbilger/physx_book/commit/${{ github.sha }}\")[${{ github.sha }}] from " >> details.typ
+            echo "Compiled from #link(\"https://github.com/alxbilger/physx_book/commit/${{ github.sha }}\")[${{ github.sha }}] from " >> src/details.typ
             typst --version >> src/details.typ
         
         - name: Create output dir
