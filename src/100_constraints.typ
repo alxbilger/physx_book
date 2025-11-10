@@ -1,7 +1,7 @@
 #import "variables.typ": *
 #import "box.typ": *
 
-= Constraints
+= Constraints <section_constraints>
 
 == Definitions
 

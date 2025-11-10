@@ -83,7 +83,7 @@
 #include "070_linear_solvers.typ"
 #include "ExplicitTimeIntegration/explicitTimeIntegration.typ"
 #include "090_implicittimeintegration.typ"
-#include "constraints.typ"
+#include "100_constraints.typ"
 #include "mapping.typ"
 #include "differentiable_simu.typ"
 #include "continuum_mechanics.typ"
