@@ -4,7 +4,7 @@
 
 
 
-= Finite Element Method
+= Finite Element Method <section_finite_element_method>
 
 
 $p$ dimension of the physical space

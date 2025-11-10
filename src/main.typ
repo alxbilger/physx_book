@@ -88,7 +88,7 @@
 #include "120_differentiable_simu.typ"
 #include "130_continuum_mechanics.typ"
 #include "constitutive_equations.typ"
-#include "fem.typ"
+#include "150_fem.typ"
 #include "maths.typ"
 
 = Other Resources
