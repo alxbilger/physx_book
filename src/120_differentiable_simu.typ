@@ -3,7 +3,7 @@
 #import "@preview/algorithmic:1.0.0"
 #import algorithmic: algorithm
 
-= Differentiable Simulation
+= Differentiable Simulation <section_differentiable_simulation>
 
 == Implicit Function Theorem
 

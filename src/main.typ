@@ -85,7 +85,7 @@
 #include "090_implicittimeintegration.typ"
 #include "100_constraints.typ"
 #include "110_mapping.typ"
-#include "differentiable_simu.typ"
+#include "120_differentiable_simu.typ"
 #include "continuum_mechanics.typ"
 #include "constitutive_equations.typ"
 #include "fem.typ"

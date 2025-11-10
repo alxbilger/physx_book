@@ -1,0 +1,7 @@
+== Differentiable Simulation
+
+In @section_differentiable_simulation, differentiable simulation lets you adjust parameters in physics-based models by measuring how small changes in those parameters affect the model's results. When the model's behavior depends indirectly on parameters—like finding stable positions or solving time-evolving dynamics—the system needs a way to calculate this impact efficiently. 
+
+Because the model's solution isn't directly tied to parameters, you can't easily see how parameter changes will affect the outcome. Instead, the system computes a practical sensitivity measure that shows exactly how the model reacts to parameter adjustments. This measure lets you determine the direction and size of each parameter change needed to reduce the gap between the simulation and your desired target.
+
+This approach works for common scenarios like optimizing material properties in structural simulations, adjusting time-step methods for dynamics, or refining parameters in numerical solutions. It avoids tracking every intermediate step, making optimization faster and more practical while ensuring the model moves toward the target result. The key is that this sensitivity measure gives you immediate guidance for improvement without complex calculations.
