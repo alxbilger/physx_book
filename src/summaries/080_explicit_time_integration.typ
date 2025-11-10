@@ -1,0 +1,5 @@
+== Explicit Time Integration
+
+The section @section_explicit_time_integration introduces two simple ways to numerically solve how physical systems change over time. The first method, called the Forward Euler approach, works by looking at the difference between a system's state at the next tiny time step and its current state. For motion, it uses the current velocity to predict the next position and then updates the velocity based on forces acting at that moment. For heat spread, it updates temperature at the next step using the current temperature distribution and how heat diffuses.
+
+The second method, Semi-implicit Euler, improves stability by handling position and velocity differently. It uses the new velocity (calculated from the next step) to update position while still relying on the current velocity to compute forces. This balanced approach makes it more reliable for systems that might become unstable with the simpler method, especially when dealing with oscillations or rapid changes. Both methods break time into small steps to track how systems evolve without needing complex mathematical expressions.
