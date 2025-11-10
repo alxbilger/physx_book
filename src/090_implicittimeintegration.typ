@@ -1,7 +1,7 @@
 #import "variables.typ": *
 #import "box.typ": *
 
-= Implicit Time Integration
+= Implicit Time Integration <section_implicit_time_integration>
 
 == Backward Differentiation Formula
 

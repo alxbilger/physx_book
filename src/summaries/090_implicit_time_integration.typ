@@ -1,0 +1,7 @@
+== Implicit Time Integration
+
+The @section_implicit_time_integration explains how to numerically solve time-dependent physical problems using implicit integration methods. These techniques calculate the next state of a system by using information from both the current state and the next state itself, which provides better stability than explicit methods for stiff problems—situations where the system has components that change rapidly.
+
+The simplest example is the backward Euler method, where the next position and velocity are found by solving a single equation that relates the current state to the next state. This creates a nonlinear system that requires iterative refinement, typically using Newton-Raphson steps to quickly converge to a solution. For systems with damping forces (like Rayleigh damping), the method adjusts the damping term to match the physics while maintaining computational efficiency through linearization.
+
+Advanced methods like the Crank-Nicolson approach average the forward and backward Euler steps for improved accuracy, while higher-order methods such as the two-step BDF use multiple past states to achieve greater precision. All these techniques share a common pattern: they solve for the next state by balancing the system's current behavior with future predictions, using iterative updates to handle nonlinear forces and damping without requiring unstable time steps. This framework allows accurate simulations of complex physical systems across a range of time scales.
