@@ -3,52 +3,59 @@
 
 = Continuum Mechanics <section_continuum_mechanics>
 
-A particle $particle$ defined in the body $body$.
+A particle $particle$ is defined within the body $body$. The location of this particle in the reference configuration is given by:
 
-Location of a particle $particle$ from $body$ is given as $position=configurationmapping(particle)$.
+$
+position=configurationmapping(particle)
+$
 
-Motion is a series of configurations. The location of a particle $particle$ at time $t$ is
+As the material deforms over time, the location of the same particle evolves according to:
 
 $
   position = configurationmapping(particle, t)
 $
 
-Reference configuration when $t=0$:
+The reference configuration $undefposition$ corresponds to $t = 0$, where the particle's position is:
 
 $
   undefposition = configurationmapping(particle, 0)
 $
 
-We deduce:
+This leads to the following identity:
 
 $
   position = configurationmapping(configurationmapping^(-1)(undefposition, 0), t)
 $
 
-It is often assumed that the configuration of $body$ at the begining of the simulation is equivalente to the reference configuration ($particle=undefposition$). Therefore:
+In practical simulations, we assume the initial configuration (at $t = 0$) is equivalent to the reference configuration ($particle = undefposition$). This simplification yields:
 
 $
   position = configurationmapping(undefposition, t)
 $
 
-Affine map between initial position $undefposition$ and current position $position$:
+An affine mapping between the initial position $undefposition$ and current position $position$ is:
 $
   phi(undefposition) &= deformationgradient undefposition + bold(t) \
   &= position
 $
 
-Derivation with respect to the rest position:
+#definition(title:"Deformation Gradient")[
+  The deformation gradient $deformationgradient$ quantifies how a material element deforms from the reference configuration to its current state. It is defined as the Jacobian of the configuration mapping with respect to the reference position:
 
-$
+  $
   (partial phi(undefposition))/(partial undefposition) &= partial/(partial undefposition)(deformationgradient undefposition + bold(t)) \
   &= deformationgradient
-$
+  $
 
-$
-  deformationgradient = (partial position)/(partial undefposition)
-$
+  $
+    deformationgradient = (partial position)/(partial undefposition)
+  $ <deformation_gradient>
+
+  This tensor is a linear mapping that relates infinitesimal displacements in the reference configuration to those in the deformed state.
+]
 
 #property(title:"Deformation Gradient in 2D")[
+In component form in 2D, $deformationgradient$ is
 $
   deformationgradient = mat(
     (partial position_x)/(partial undefposition_x), (partial position_x)/(partial undefposition_y);
@@ -58,6 +65,7 @@ $
 ]
 
 #property(title:"Deformation Gradient in 3D")[
+In component form in 3D, $deformationgradient$ is
 $
   deformationgradient = mat(
     (partial position_x)/(partial undefposition_x), (partial position_x)/(partial undefposition_y), (partial position_x)/(partial undefposition_z);
@@ -68,6 +76,7 @@ $
 ]
 
 #definition(title:"Jacobian")[
+  The jacobian determinant $deformationjacobian$ (a scalar) represents the local volume change during deformation.
   $
     deformationjacobian = det(deformationgradient)
   $ <deformation_jacobian>
@@ -126,16 +135,19 @@ $
 
 
 #definition(title:"Diplacement")[
+  The displacement $displacement$ is the difference between current and reference position:
 $  
   displacement(t, undefposition) = position(t) - undefposition
 $
-]
 
+  The current position can be expressed using the displacement:
 $
   position(t, undefposition) = undefposition + displacement(t, undefposition)
 $
+]
 
 #property[
+  Substituting the current position in the deformation gradient (@deformation_gradient):
 $
   deformationgradient = (partial position)/(partial undefposition) &= partial/(partial undefposition) (undefposition + displacement) \
   &= identity + (partial displacement)/(partial undefposition)
@@ -147,9 +159,15 @@ $ <deformation_gradient_displacement>
 ]
 
 #definition(title:"Right Cauchy-Green Deformation Tensor")[
-$
+
+The right Cauchy-Green tensor $rightcauchygreen$ is a fundamental second-rank tensor in continuum mechanics. It quantifies the square of the deformation from the initial configuration to the current configuration. 
+  
+  $
   rightcauchygreen = deformationgradient^T deformationgradient
-$ <right_cauchy_green_tensor>
+  $ <right_cauchy_green_tensor>
+
+Unlike linear strain measures, $rightcauchygreen$ is specifically designed for nonlinear elasticity and captures large deformations accurately. It is widely used in hyperelastic material models (e.g., rubber, biological tissues) to compute strain energy and stress fields, as it directly relates to the material's response under finite deformations.
+
 ]
 
 #property(title: "Symmetric Tensor")[
@@ -158,6 +176,18 @@ $ <right_cauchy_green_tensor>
   $
   rightcauchygreen^T = (deformationgradient^T deformationgradient)^T = deformationgradient^T deformationgradient = rightcauchygreen
   $
+]
+
+#property(title:"Positive definite")[
+  For any non-zero vector $v$,
+
+  $
+    v^T rightcauchygreen v = v^T (deformationgradient^T deformationgradient) v = (deformationgradient v)^T (deformationgradient v) = norm(deformationgradient v)^2 >= 0
+  $
+
+  Since $deformationgradient$ is invertible. Thus, for $v != 0$, we have $deformationgradient v != 0$, implying $norm(deformationgradient)^2 > 0$.
+
+  Conclusion: Since $v^T rightcauchygreen v > 0$ for all $v != 0$ and $rightcauchygreen$ is symmetric, $rightcauchygreen$ is positive-definite.
 ]
 
 #property(title: "Decomposition of " + $rightcauchygreen$)[
@@ -182,7 +212,8 @@ $ <right_cauchy_green_tensor>
   $ <derivative_right_cauchy_green_tensor_wrt_deformation_gradient>
 ]
 
-#definition(title:"Green's strain")[
+#definition(title:"Green-Lagrange Strain Tensor")[
+  The Green-Lagrange strain tensor $greenstrain$:
 $
   greenstrain = 1/2 (deformationgradient^T deformationgradient - identity)
 $
