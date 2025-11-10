@@ -1,5 +1,3 @@
-# Physics Simulation Cookbook
-
 This book presents a comprehensive approach to modeling and simulating physical systems, bridging theoretical mechanics with practical computational methods. It begins with Lagrangian mechanics—a powerful framework that describes motion using generalized coordinates, kinetic energy, and potential energy, avoiding explicit force calculations. The action principle and Euler-Lagrange equations form the foundation for deriving equations of motion, enabling analysis of complex systems without relying on Newtonian forces.
 
 To solve these equations numerically, the text explores time integration techniques (explicit, implicit, and hybrid methods like Forward Euler, Semi-implicit Euler, and Backward Euler), which discretize time to simulate dynamics while handling stiffness and stability. For systems with constraints (e.g., fixed positions, rolling wheels), the framework uses constraint multipliers to enforce rules without disrupting the core equations of motion.
@@ -8,7 +6,7 @@ Crucially, the approach accommodates real-world material behavior through contin
 
 The framework further extends to advanced applications:
 
-Differentiable simulation enables efficient parameter optimization by measuring how small changes in inputs (e.g., material properties) affect system outcomes.
-Numerical solvers (e.g., Jacobi, Gauss-Seidel, SOR) handle linear systems arising from iterative updates, while Rayleigh damping and BDF methods address energy dissipation and stiff dynamics.
-Coordinate transformations (via mapping) ensure physical consistency across different reference frames, preserving laws like Newton’s second law and work-energy principles.
+- Differentiable simulation enables efficient parameter optimization by measuring how small changes in inputs (e.g., material properties) affect system outcomes.
+- Numerical solvers (e.g., Jacobi, Gauss-Seidel, SOR) handle linear systems arising from iterative updates, while Rayleigh damping and BDF methods address energy dissipation and stiff dynamics.
+- Coordinate transformations (via mapping) ensure physical consistency across different reference frames, preserving laws like Newton’s second law and work-energy principles.
 By integrating these concepts—theoretical mechanics, numerical solvers, constraint handling, material modeling, and differentiable optimization—the book provides a robust pipeline for simulating everything from springs and static equilibria to large-scale structural dynamics and complex continuum behaviors. This unified approach ensures accurate, efficient, and physically consistent simulations across engineering, computational science, and modern AI-driven physics applications.

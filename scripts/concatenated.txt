@@ -1,0 +1,116 @@
+= Summary
+
+#include "010_lagrangianmechanics.typ"
+#include "020_newtonsecondlaw.typ"
+#include "030_static.typ"
+#include "050_spring.typ"
+#include "060_numericalintegration.typ"
+#include "070_linear_solvers.typ"
+#include "080_explicit_time_integration.typ"
+#include "090_implicit_time_integration.typ"
+#include "100_constraints.typ"
+#include "110_mapping.typ"
+#include "120_differentiable_simulation.typ"
+#include "130_continuum_mechanics.typ"
+#include "150_fem.typ"
+
+== Lagrangian Mechanics
+
+The section @section_lagrangian_mechanics discusses Lagrangian mechanics, a fundamental aspect of classical mechanics that allows the analysis of motion without explicitly considering forces or constraints. It emphasizes generalized coordinates and velocities, which are used to describe a system's state, including its position, velocity, and other measurable properties.
+
+The kinetic energy of a deformable body is defined as half the integral over its volume of the square of the norm of its velocity vector multiplied by its mass density. The Lagrangian of a system is defined as the difference between its kinetic and potential energy, providing a scalar measure that encapsulates the system's dynamics.
+
+The action principle states that the true path of a system is a stationary point of the accumulated Lagrangian over time, known as the action. The Euler-Lagrange equation, derived from the action principle, provides a means to find the motion of a physical system. This equation involves calculating the partial derivatives of the Lagrangian with respect to the generalized coordinates and velocities.
+
+In summary, this section delves into the fundamentals of Lagrangian mechanics, exploring concepts such as states, generalized coordinates and velocities, kinetic energy, the Lagrangian, action, and the Euler-Lagrange equation, laying the groundwork for understanding and analyzing complex physical systems.
+
+== Newton's Second Law of Motion
+
+The section @section_newtons_second_law describes deriving an equation of motion from the Lagrangian using Euler-Lagrange equations. A Coriolis Matrix is defined to represent the force terms in the equation. This matrix includes the effects of the system's mass and its time derivative as well as a term dependent on the rate at which the mass changes with position.
+
+The derived equation can be represented as a first-order ordinary differential equation (ODE) for both position and velocity variables. The ODE also includes Rayleigh damping, which is a combination of two terms: one proportional to the mass matrix and another proportional to the stiffness matrix.
+
+This ODE describes the motion of a physical system in terms of its position and velocity, taking into account various forces and damping effects.
+
+== Static Equilibrium
+
+In the section @section_static_equilibrium, the focus is on static equilibrium, where the physical system does not undergo any acceleration. This state is defined as having zero acceleration.
+
+When considering static equilibrium, the second Newton's law states that the force acting on an object is equal to zero. To solve this non-linear equation, we use the Newton-Raphson method by finding the change in position and solving a linear system of equations. The stiffness at each position represents the derivative of force with respect to position. With this information, we can calculate the new position as the sum of the old position and the change in position.
+
+== Spring
+
+The section @section_spring explains how springs behave under different stretching conditions. For a linear spring, the force it exerts is directly proportional to how much it's stretched from its natural length. When you pull one end of the spring away from its relaxed state, the force acts along the direction of that pull, and the spring pushes back with equal strength at the opposite end. 
+
+In contrast, a nonlinear spring (like a quadratic spring) follows a different rule: the force depends on the square of how much it's stretched. This means the force grows much faster as the spring gets longer. Both types of springs always exert forces that are equal in strength but opposite in direction at their two ends.
+
+== Numerical Integration
+
+The section @section_numerical_integration explains how numerical methods approximate solutions to problems where a function's rate of change depends on time and its current state, starting from an initial condition. These methods step through time, tracking the function's values at regular intervals. A key technique involves using multiple past values to predict the next value: if the next value depends only on past values and known function behavior, the method is explicit; if it requires knowing the next value itself, it is implicit. Backward Differentiation Formulas (BDF) are a type of such method, with the simplest version (BDF1) using the previous value and current function rate to predict the next step, and the next version (BDF2) using three values and adjusting the prediction accordingly. These methods solve real-world problems like modeling physical motion (where forces change position and velocity) and heat flow (where temperature spreads through space). For complex equations that cannot be solved directly, the Newton-Raphson method provides an iterative approach. It begins with an initial guess and refines it by adjusting based on how close it is to the solution, repeating until the desired accuracy is achieved. This method also applies to optimization problems, finding points of maximum or minimum values by iteratively adjusting the guess until the slope is zero.
+
+== Linear Solvers
+
+The section @section_linear_solvers explains practical ways to solve linear equations that arise during iterative calculations, like those used in optimization or physics simulations. It focuses on methods that break down the problem into simpler steps to find a solution without directly computing complex matrix operations. 
+
+The core idea involves splitting the problem into two parts: one part that uses the most recent updates to the solution and another that uses the previous guess. Starting with a simple guess for the solution, each method updates this guess step by step. 
+
+The standard Jacobi method updates every variable using only the values from the previous step. The Gauss-Seidel method improves this by updating variables one at a time and using the new values immediately as they become available. 
+
+To make these methods faster and more stable, a relaxation factor is introduced. This factor blends the old guess with the new guess in each step. The Weighted Jacobi method applies this blending to the standard Jacobi approach. Similarly, the Successive Over-Relaxation (SOR) method uses the same blending technique but applies it to the Gauss-Seidel updates, often leading to faster convergence. 
+
+In essence, these methods provide efficient, step-by-step strategies for solving large systems of equations by carefully balancing how much weight to give the latest updates versus the previous guesses, without requiring complex mathematical computations at each step.
+
+== Explicit Time Integration
+
+The section @section_explicit_time_integration introduces two simple ways to numerically solve how physical systems change over time. The first method, called the Forward Euler approach, works by looking at the difference between a system's state at the next tiny time step and its current state. For motion, it uses the current velocity to predict the next position and then updates the velocity based on forces acting at that moment. For heat spread, it updates temperature at the next step using the current temperature distribution and how heat diffuses.
+
+The second method, Semi-implicit Euler, improves stability by handling position and velocity differently. It uses the new velocity (calculated from the next step) to update position while still relying on the current velocity to compute forces. This balanced approach makes it more reliable for systems that might become unstable with the simpler method, especially when dealing with oscillations or rapid changes. Both methods break time into small steps to track how systems evolve without needing complex mathematical expressions.
+
+== Implicit Time Integration
+
+The @section_implicit_time_integration explains how to numerically solve time-dependent physical problems using implicit integration methods. These techniques calculate the next state of a system by using information from both the current state and the next state itself, which provides better stability than explicit methods for stiff problems—situations where the system has components that change rapidly.
+
+The simplest example is the backward Euler method, where the next position and velocity are found by solving a single equation that relates the current state to the next state. This creates a nonlinear system that requires iterative refinement, typically using Newton-Raphson steps to quickly converge to a solution. For systems with damping forces (like Rayleigh damping), the method adjusts the damping term to match the physics while maintaining computational efficiency through linearization.
+
+Advanced methods like the Crank-Nicolson approach average the forward and backward Euler steps for improved accuracy, while higher-order methods such as the two-step BDF use multiple past states to achieve greater precision. All these techniques share a common pattern: they solve for the next state by balancing the system's current behavior with future predictions, using iterative updates to handle nonlinear forces and damping without requiring unstable time steps. This framework allows accurate simulations of complex physical systems across a range of time scales.
+
+== Constraints
+
+The @section_constraints explains how constraints—rules that limit the possible motions of physical systems—are handled in mechanics. Constraints can be of two types: holonomic constraints, which describe positions of objects at a specific time (like a pendulum fixed at a point), and non-holonomic constraints, which involve velocities or higher rates of change (like a wheel rolling without slipping). When constraints exist, the system's motion must satisfy both the physical laws of motion and these limiting rules.  
+
+To solve for motion under constraints, mechanics uses an extended version of the Lagrangian method. This adds "constraint multipliers" that account for the constraints without altering the core equations of motion. For static situations (where objects aren't moving), the solution involves finding positions and forces that satisfy both the constraints and equilibrium conditions through iterative methods like Newton-Raphson. For dynamic motion, the same approach modifies the equations of motion to ensure constraints are continuously followed during movement.  
+
+Simple examples include fixing an object at a specific location (a "fixation" constraint) or maintaining a constant relative distance between two objects (a "bilateral" constraint). These constraints affect how forces and motions interact, but the overall approach—using multipliers to enforce rules while solving for motion—remains consistent across different scenarios. The key idea is that constraints are handled through adjustments to the system's equations, ensuring physical feasibility without introducing new complexity.
+
+== Mapping
+
+@section_mapping explains how coordinate transformations—smooth, differentiable mappings between input and output positions—preserve physical consistency during system analysis. Velocities in the transformed system scale with local spatial deformation caused by the mapping. Forces remain consistent across systems because work done by forces is invariant, requiring forces to adjust through the transformation’s spatial scaling. Stiffness splits into two components: one reflecting how local stretching alters forces, and another that projects the system’s resistance from the new coordinate space back to the original. Mass updates via the same spatial scaling mechanism, ensuring kinetic energy remains unchanged. Momentum transforms identically through this scaling. Crucially, Newton’s second law holds consistently because acceleration terms and forces adjust in precise ways that maintain the law’s integrity. This framework enables accurate physical modeling in any coordinate system—such as mapping a mechanical system’s local geometry to a global reference frame—without altering the fundamental physics, making it essential for advanced mechanics applications in engineering and computational science.
+
+== Differentiable Simulation
+
+In @section_differentiable_simulation, differentiable simulation lets you adjust parameters in physics-based models by measuring how small changes in those parameters affect the model's results. When the model's behavior depends indirectly on parameters—like finding stable positions or solving time-evolving dynamics—the system needs a way to calculate this impact efficiently. 
+
+Because the model's solution isn't directly tied to parameters, you can't easily see how parameter changes will affect the outcome. Instead, the system computes a practical sensitivity measure that shows exactly how the model reacts to parameter adjustments. This measure lets you determine the direction and size of each parameter change needed to reduce the gap between the simulation and your desired target.
+
+This approach works for common scenarios like optimizing material properties in structural simulations, adjusting time-step methods for dynamics, or refining parameters in numerical solutions. It avoids tracking every intermediate step, making optimization faster and more practical while ensuring the model moves toward the target result. The key is that this sensitivity measure gives you immediate guidance for improvement without complex calculations.
+
+== Continuum Mechanics
+
+@section_continuum_mechanics explains how materials change shape and respond to forces in a fundamental way. It starts by describing how a small piece of material (a particle) moves through different configurations over time. The initial shape of the material defines a reference state, and as the material deforms, each particle shifts to a new position. The key concept is how the material stretches and twists during this change—this is captured by a measure of local deformation. 
+
+When a material deforms, it may change its volume (like getting larger or smaller) or its shape (like stretching unevenly). The amount of volume change is described by a simple factor that must stay positive to prevent the material from overlapping itself. The way the material stretches and twists is further broken down into two parts: one part affects how much the material grows or shrinks uniformly, while the other part describes how its shape changes without altering volume. 
+
+For materials that respond elastically (like springs or solid objects), the force they exert depends on how they've been stretched or twisted. This relationship is defined by material properties that link the deformation to the resulting force. Some materials, particularly soft ones like biological tissues or rubber, behave differently because they store energy internally when deformed. The force they produce comes from this stored energy, which depends solely on their current shape—without needing to remember how they got there. 
+
+This framework helps model how materials react to forces in a way that works for both small and large deformations, providing a clear foundation for understanding complex behaviors like stretching, compression, and internal rearrangements in real-world materials.
+
+== Finite Element Method
+
+@section_finite_element_method explains how the finite element method works for modeling structures using simple building blocks. The method divides a physical structure into small, manageable pieces called elements. Each element is defined by a reference shape (like a tetrahedron) that maps to the actual physical space where the structure exists. The position of any point inside an element is calculated based on this mapping.
+
+For a linear tetrahedron element with four corner points, the displacement at any location within the element is a weighted average of the displacements at those four corners. The weights are determined by specific mathematical functions that change smoothly across the element. These functions are designed so that the element behaves linearly—meaning small deformations are accurately represented without complex calculations.
+
+The method calculates how the structure deforms by examining how displacements change across the element. This involves determining the local stretching and shearing effects within the element. The internal forces generated by this deformation are then computed. These forces arise naturally from the material's response to the deformation and are distributed throughout the element.
+
+Finally, the method determines how the structure will respond to applied loads by calculating the relationship between small changes in displacements and the resulting changes in internal forces. This relationship forms the basis for predicting how the entire structure behaves under different loading conditions, using simple mathematical approximations that become increasingly accurate as the element size decreases.
+

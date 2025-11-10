@@ -54,12 +54,14 @@
   #author
 
   DEFROST/SED #image("img/inr_logo_rouge.svg", height: 1.5em)
-  
 
-  This cookbook provides a curated collection of fundamental equations essential for simulating solid bodies.
-
-  The sources of this book are available at https://github.com/alxbilger/physx_book
 ]
+
+#pagebreak()
+#include "000_intro.typ"
+
+The sources of this book are available at https://github.com/alxbilger/physx_book
+
 #include "details.typ"
 
 #pagebreak()
