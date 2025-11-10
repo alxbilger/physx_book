@@ -21,7 +21,7 @@ jobs:
         - name: Build PDF
           run: |
             cd src
-            typst compile main.typ github-pages-temp/physx_book.pdf
+            typst compile main.typ ../github-pages-temp/physx_book.pdf
         
         - name: Upload site files as artifact
           id: deployment
