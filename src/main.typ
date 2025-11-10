@@ -84,7 +84,7 @@
 #include "ExplicitTimeIntegration/explicitTimeIntegration.typ"
 #include "090_implicittimeintegration.typ"
 #include "100_constraints.typ"
-#include "mapping.typ"
+#include "110_mapping.typ"
 #include "differentiable_simu.typ"
 #include "continuum_mechanics.typ"
 #include "constitutive_equations.typ"

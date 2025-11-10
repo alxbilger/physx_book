@@ -1,7 +1,7 @@
 #import "variables.typ": *
 #import "box.typ": *
 
-= Mapping
+= Mapping <section_mapping>
 
 #definition(title: "Mapping")[
 A mapping is defined as a differentiable coordinate transformation function $mapping$ that satisfies the following condition:
