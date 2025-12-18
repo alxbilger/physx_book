@@ -771,9 +771,9 @@ $
   (partial pk2^((mu_01))_(i j))/(partial rightcauchygreen_(k l))
   &= (partial deformationjacobian^(-4/dimension))/(partial rightcauchygreen_(k l))(invariant1 delta_(i j) - rightcauchygreen_(i j) - 2/dimension rightcauchygreen^(-1)_(i j) invariant2)
   + deformationjacobian^(-4/dimension) (partial)/(partial rightcauchygreen_(k l))(invariant1 delta_(i j) - rightcauchygreen_(i j) - 2/dimension rightcauchygreen^(-1)_(i j) invariant2) \
-  &= -2/dimension deformationjacobian^(-4/dimension) rightcauchygreen^(k l) (invariant1 delta_(i j) - rightcauchygreen_(i j) - 2/dimension rightcauchygreen^(-1)_(i j) invariant2)
-  + deformationjacobian^(-4/dimension) ( delta_(i j) - delta_(i k) delta_(j l) - 2/dimension ((partial rightcauchygreen^(-1)_(i j))/(partial rightcauchygreen_(k l)) invariant2 + rightcauchygreen^(-1)_(i j) (partial invariant2)/(partial rightcauchygreen_(k l))) \
-  &= deformationjacobian^(-4/dimension)(-2/dimension  rightcauchygreen^(k l) (invariant1 delta_(i j) - rightcauchygreen_(i j) - 2/dimension rightcauchygreen^(-1)_(i j) invariant2) +  delta_(i j) - delta_(i k) delta_(j l) \ &- 2/dimension (-1/2 (rightcauchygreen^(-1)_(i k) rightcauchygreen^(-1)_(l j) + rightcauchygreen^(-1)_(i l) rightcauchygreen^(-1)_(k j)) invariant2 + rightcauchygreen^(-1)_(i j) (invariant1 delta_(k l) - rightcauchygreen_(k l))))
+  &= -2/dimension deformationjacobian^(-4/dimension) rightcauchygreen^(-1)_(k l) (invariant1 delta_(i j) - rightcauchygreen_(i j) - 2/dimension rightcauchygreen^(-1)_(i j) invariant2)
+  + deformationjacobian^(-4/dimension) ( delta_(i j) delta_(k l) - delta_(i k) delta_(j l) - 2/dimension ((partial rightcauchygreen^(-1)_(i j))/(partial rightcauchygreen_(k l)) invariant2 + rightcauchygreen^(-1)_(i j) (partial invariant2)/(partial rightcauchygreen_(k l)))) \
+  &= deformationjacobian^(-4/dimension)(-2/dimension  rightcauchygreen^(-1)_(k l) (invariant1 delta_(i j) - rightcauchygreen_(i j) - 2/dimension rightcauchygreen^(-1)_(i j) invariant2) +  delta_(i j) delta_(k l) - delta_(i k) delta_(j l) \ &- 2/dimension (-1/2 (rightcauchygreen^(-1)_(i k) rightcauchygreen^(-1)_(l j) + rightcauchygreen^(-1)_(i l) rightcauchygreen^(-1)_(k j)) invariant2 + rightcauchygreen^(-1)_(i j) (invariant1 delta_(k l) - rightcauchygreen_(k l))))
 $
 
 Finally, the differentiation of $pk2^((bulkmodulus))$:
