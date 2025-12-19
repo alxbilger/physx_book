@@ -25,13 +25,28 @@
   keywords: ("Physics simulation", )
 )
 
-// reset counter at each chapter
-// if you want to change the number of displayed 
-// section numbers, change the level there
+
 #show heading.where(level:1): it => {
+  // reset counter at each chapter
   counter(math.equation).update(0)
-  it
+
+  block(
+    below: 2.5em,
+    breakable: false,
+    {
+      v(-1em)
+      line(length: 100%, stroke: maincolor)
+      if counter(heading).get().first() > 0 {
+        v(30pt)
+        text("Chapter " + str(counter(heading).get().at(0)), size: 2em)
+      }
+      v(30pt - 1em)
+      text(upper(it.body), size:1.2em)
+      v(30pt - 1em)
+      line(length: 100%, stroke: maincolor)
+    })
 }
+
 #set math.equation(numbering: n => {
   strong(text(fill:maincolor, numbering("(1.1)",
     counter(heading).get().first(), 
@@ -41,8 +56,17 @@
 #show outline.entry.where(
   level: 1
 ): it => {
-  v(12pt, weak: true)
-  strong(it)
+  v(2em, weak: true)
+  block(
+    below: 2.5em,
+    breakable: false,
+    {
+      grid(columns:(50%, 50%), align: (left, right), 
+        text("Chapter " + it.prefix(), fill: maincolor), 
+        text(upper(it.body()), fill: maincolor)
+      )
+      line(length: 100%, stroke: maincolor)
+    })
 }
 
 #align(center, text(65pt)[
