@@ -25,7 +25,10 @@ This sequence $y_n$ represents an approximation to the solution of the ODE at th
 Numerical methods for ordinary ordinary differential equation approximate solutions to initial value problems (IVP) of the form:
 
 $
-y'=f(t,y), quad y(t_0) = y_0
+cases(
+y'     &=f(t,y),
+y(t_0) &= y_0
+)
 $ <initial_value_problem>
 
 where:
@@ -182,7 +185,7 @@ $
 
 The previous sections established methods for solving IVPs (@initial_value_problem), applicable to any function $y$ and $f$. This section now demonstrates how these methods are applied to specific physical systems, where $y$ and $f$ are explicitly defined by the system's governing dynamics.
 
-=== Newton's Second Law of Motion
+=== Newton's Second Law of Motion <section_newton_second_law_as_ODE>
 
 The second Newton's law (@ODE) is a first-order ordinary differential equation of the form of @initial_value_problem ($y'=f(t,y), quad y(t_0) = y_0$) where:
 
@@ -200,7 +203,7 @@ $
 f(t,y) = mat( velocity(t); massmatrix^(-1) (force(position, velocity) - coriolismatrix velocity + (-alpha massmatrix + beta stiffness(position, velocity)) velocity))
 $
 
-=== Heat Equation
+=== Heat Equation <section_heat_equation_as_ODE>
 
 @heat_equation is of the form of @initial_value_problem where:
 

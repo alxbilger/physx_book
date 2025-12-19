@@ -3,85 +3,65 @@
 
 == Forward Euler Method
 
-The time derivative in @states_ode can be approximated using a forward first-order finite difference:
+Considering an IVP (@initial_value_problem) of the form $y'=f(t,y)$ with $y(t_0) = y_0$, the time derivative can be approximated using a forward first-order finite difference:
 
 $
 y'(t) approx 1/stepsize (y(t+stepsize)-y(t))
 $
 
+Substituting this approximation into the IVP yields:
+
+$
+  cases(
+    1/stepsize (y(t+stepsize)-y(t)) &=f(t,y),
+    y(t_0) = y_0
+  )
+$
+
+Under the discrete sequence notation from @sequence, we write:
+
+$
+  1/stepsize (y_(n+1)-y_n)=f(t,y_n)
+$
+where $y_0$ is known.
+
+Rearranging for $y_(n+1)$:
+
+#result(title: "Forward Euler Method")[
+$
+  y_(n+1) = stepsize thick f(t,y_n) + y_n
+$ <eq_generic_explicit_euler>
+
+This is the *Explicit Euler method*. It provides a direct, computationally simple way to advance the solution from $y_n$ to $y_(n+1)$.
+]
+
 === Mechanics
 
-In mechanics,
-$
-y'(t) approx 1/stepsize (y(t+stepsize)-y(t)) <=> d/(d t) mat( position (t); velocity (t)) approx  1/stepsize (mat( position (t+ Delta t); velocity (t + stepsize)) - mat( position (t); velocity (t)) )
-$
-
-Substituting this approximation into @ODE:
-
-$
-1/stepsize
-mat(
-position(t+stepsize)-position(t);
-massmatrix(position) thick (velocity(t+stepsize)-velocity(t)) 
-)
-=
-mat(
-velocity(t);
-force(position,velocity) - coriolismatrix(position, velocity) velocity(t)
-)
-$
-
-From @sequence, we can also write:
-
-$
-1/stepsize
-mat(
-position_(n+1)-position_n;
-massmatrix(velocity_(n+1)-velocity_n)
-)
-=
-mat(
-velocity_n;
-force(position_n,velocity_n) - coriolismatrix(position_n, velocity_n) velocity_n
-)
-$ <forward_euler>
-
-Grouping the terms in $n+1$ on the left-hand side:
+The @section_newton_second_law_as_ODE, introduces the definition of $y$ and $f$ for mechanics problems. Substituting $y$ and $f$ in @eq_generic_explicit_euler:
 
 #result[
 $
-mat( #position _(n+1); #velocity _(n+1))=
-mat( #position _n& + Delta t thick #velocity _n; #velocity _n& + Delta t thick massmatrix^(-1)(force(position _n, velocity _n) - coriolismatrix(position_n, velocity_n) velocity_n))
-$
+mat(
+position_(n+1);
+velocity_(n+1)
+)
+=
+mat(
+position_n + stepsize thick velocity_n;
+velocity_n + stepsize thick massmatrix(position_n)^(-1) (force(position_n,velocity_n) - coriolismatrix(position_n, velocity_n) velocity_n)
+)
+$ <forward_euler>
 
 This is the time-discrete version of the Newton's second law of motion when the forward Euler method is applied.
 ]
 
 === Heat Equation
 
-For the heat equation @heat_equation,
-
-$
-y'(t) approx 1/stepsize (y(t+stepsize)-y(t)) <=> u'(t) approx 1/stepsize (u(t+stepsize)-u(t))
-$
-
-Substituting this approximation into @heat_equation:
-
-$
-  1/stepsize (u(t+stepsize)-u(t)) = diffusivity laplace u(t)
-$
-
-From @sequence, we can also write:
-
-$
-  1/stepsize (u_(n+1)-u_n)  = diffusivity laplace u_n
-$
-
-Grouping the terms in $n+1$ on the left-hand side:
+The @section_heat_equation_as_ODE, introduces the definition of $y$ and $f$ for mechanics problems. Substituting $y$ and $f$ in @eq_generic_explicit_euler:
 
 #result[
 $
-u_(n+1) = diffusivity stepsize laplace u_n + u_n
+u_(n+1) = diffusivity thick stepsize thick laplace u_n + u_n
 $
 
 This is the time-discrete version of the heat equation when the forward Euler method is applied.
