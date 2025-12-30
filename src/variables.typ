@@ -5,6 +5,8 @@
 
 #let dimension = "dim"
 #let stepsize = $Delta t$
+#let odemassmatrix = $MM$
+#let odeenergy = $bold(epsilon)$
 #let position = $bold(q)$
 #let velocity = $bold(dot(#position))$
 #let acceleration = $bold(dot.double(#position))$

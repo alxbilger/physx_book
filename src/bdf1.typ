@@ -3,20 +3,29 @@
 
 == 1-step BDF (Backward Euler) <section_backward_euler>
 
-In @initial_value_problem, the time derivative can be approximated using the backward first-order finite differences:
+Considering an IVP (@eq_mass_matrix_ode) of the form $odemassmatrix(t,y) thick y'=f(t,y)$ with $y(t_0) = y_0$, the time derivative can be approximated using a backward first-order finite differences:
 
 $
-y'_(n+1) approx (y_(n+1)-y_n)/stepsize <=> 
-d/(d t) mat( position(t+stepsize); velocity(t+stepsize)) approx  1/stepsize (mat( position (t+ Delta t); velocity (t + stepsize)) - mat( position (t); velocity (t)) )
+  y'(t+stepsize) approx 1/stepsize (y(t+stepsize) - y(t))
 $
 
-@initial_value_problem becomes:
+Substituting this approximation into the IVP yields:
 
 $
-&(y_(n+1)-y_n)/stepsize &&= f(t+stepsize,y_(n+1)) \
-<=>& y_(n+1)-y_n &&= stepsize thick f(t+stepsize,y_(n+1))
+  mat(delim: #("{", none),
+    1/stepsize odemassmatrix(t + stepsize,y) thick [y(t+stepsize) - y(t)] &= f(t + stepsize, y(t+stepsize));
+    y(t_0) &= y_0
+  )
 $
 
+Under the discrete sequence notation from @sequence, we write:
+
+$
+  1/stepsize odemassmatrix(t_(n+1),y_(n+1)) thick [y_(n+1)-y_n]=f(t_(n+1),y_(n+1))
+$
+where $y_0$ is known.
+
+#todo[
 We observe that the method enters into the category of linear multistep methods (@linear_multistep_method) with:
 
 $
@@ -27,6 +36,59 @@ b_1 &= 1,
 b_0 &= 0
 )
 $
+]
+
+This is a non-linear set of equations that can be solved with the Newton-Raphson algorithm (@section_newton_raphson).
+
+#mybox(title: "Residual Function")[
+Let's define the residual function $r$ such that:
+
+$
+r_(n+1)(z) = 1/stepsize odemassmatrix(t_(n+1),z) thick [z-y_n] - f(t_(n+1),z)
+$
+
+With this definition, $y_(n+1)$ is the solution of $r_(n+1)(z)=0$.
+]
+
+The application of the Newton-Raphson algorithm requires the computation of the Jacobian of the residual function (@linear_system_in_newton_raphson):
+
+$
+  (partial r_(n+1))/(partial z) = 
+  identity - (partial f)/(partial z)
+$
+
+Substituting this Jacobian into @linear_system_in_newton_raphson, we obtain:
+
+$
+  (identity - lr((partial f)/(partial x)|)_(x^i)) (x^(i+1)-x^i) = -r_(n+1)(x^i)
+$
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 We apply this equation on $y$ from @definition_y and $f$ from @definition_f:
 
