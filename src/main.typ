@@ -103,7 +103,7 @@ The sources of this book are available at https://github.com/alxbilger/physx_boo
 #include "010_lagrangianmechanics.typ"
 #include "NewtonSecondLaw/newtonsecondlaw.typ"
 #include "030_static.typ"
-#include "heat.typ"
+#include "050_heat.typ"
 #include "050_spring.typ"
 #include "060_numericalintegration.typ"
 #include "070_linear_solvers.typ"

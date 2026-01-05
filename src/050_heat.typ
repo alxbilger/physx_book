@@ -3,6 +3,8 @@
 
 = Heat Equation
 
+== Definition
+
 #definition(title: "Heat Equation")[
 
   The heat equation describes how heat (temperature) spreads through a material over time. It's the mathematical model for diffusion—how anything (heat, ideas, pollutants) spreads from areas of high concentration to low concentration.
@@ -27,4 +29,12 @@ No variation with respect to time: $(partial u)/(partial t) = 0$. The heat equat
 $
   laplace u = 0
 $
+]
+
+== Coupling with the equation of motion
+
+#definition(title: "Thermomechanics")[
+  Thermomechanics is the branch of physics that studies how heat (energy) and mechanical motion interact in materials.
+
+  It describes how temperature changes cause motion, and how motion changes heat distribution — all in one system.
 ]
