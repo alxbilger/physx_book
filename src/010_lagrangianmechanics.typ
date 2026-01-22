@@ -240,6 +240,6 @@ $ <euler_lagrange_equation>
 
 #result(title:"General Euler-Lagrange Equation")[
   $
-    (partial lagrangian)/(partial phi) - "Div" dot ((partial lagrangiandensity)/(partial nabla lagrangiandensity)) = 0
+    (partial lagrangian)/(partial phi) - "Div" dot ((partial lagrangiandensity)/(partial nabla phi)) = 0
   $
 ]
