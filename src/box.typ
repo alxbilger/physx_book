@@ -63,3 +63,7 @@
 #let examplebox(body, title: none, color: gray) = {
   prefixedbox(body, prefix: "Example", title: title, color: color)
 }
+
+#let warning(body, title: none, color: orange) = {
+  prefixedbox(body, prefix: "Warning", title: title, color: color)
+}

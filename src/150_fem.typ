@@ -6,68 +6,156 @@
 
 = Finite Element Method <section_finite_element_method>
 
+== Definitions
 
-$p$ dimension of the physical space
+#definition(title:"Finite Element Method")[
+  The finite element method (FEM) is a numerical technique for solving complex physical problems governed by partial differential equations. It achieves this by decomposing the problem domain into small, manageable subregions called elements, where simplified mathematical models can be constructed. These models collectively approximate the full solution with controlled accuracy and computational efficiency.
+]
 
-$r$ dimension of the reference space
+#definition(title: "Element")[
+  In the FEM, an element is a small, well-defined subregion of the physical domain where the governing equations are approximated using a simplified mathematical model. Each element represents a localized portion of the solution space that, when combined with neighboring elements, collectively reconstructs the full physical behavior of the system.
+]
 
-$n_e$ number of nodes in the element
+#examplebox()[
+  For two-dimensional problems, triangles are frequently used because they efficiently represent flat surfaces with minimal computational effort. In three-dimensional problems, tetrahedrons (four-sided polyhedrons) are common for modeling solid volumes, while quadrilaterals and hexahedrons (six-sided polyhedrons) offer higher accuracy for more complex regions like curved surfaces or intricate structures. Crucially, all these elements—whether triangular, tetrahedral, quadrilateral, or hexahedral—share the same foundational structure: each is a well-defined subregion.
+]
 
-== Space Transformation
+#definition(title:"Node")[
+  Each element is defined by a set of points called nodes, which connect to form the element's geometry and define its behavior during simulation. For a given type of element, the number of nodes in such an element is denoted $n_e$. 
 
-Reference coordinates: $referenceposition in bb(R)^r$
+  Continuous fields (e.g., temperature, displacement) cannot be stored as it would require infinite memory. In the FEM, physical values are stored at the node locations.
+]
 
-Physical coordinates: $position = position(referenceposition) in bb(R)^p$
+#examplebox()[
+  - A triangular element has 3 nodes,
+  - A tetrahedral element has 4 nodes,
+  - A quadrilateral element has 4 nodes.
+]
 
-The Jacobian matrix:
-$
-  tensor2(bold(J)) = (partial position)/(partial referenceposition) in bb(R)^(p times r)
-$
+#definition(title:"Mesh")[
+  A mesh is a discrete collection of elements that together form a complete representation of the physical domain. In practical applications, meshes can be uniform (using only one type of element throughout the domain) or mixed (combining different element types in a single model).
+]
+
+#definition(title:"Level of discretization")[
+  The level of discretization describes how finely a physical domain is divided into elements to model a system. It is determined by the number of elements used in the mesh: a coarse discretization uses fewer elements (e.g., 50 elements for a simple structure), while a fine discretization uses more elements (e.g., 50.000 elements for the same structure). This level directly impacts both accuracy and computational effort—fewer elements yield faster calculations but may miss critical details, while more elements produce more accurate results at greater computational cost. Crucially, the same mesh can be refined (increasing the number of elements) or coarsened (reducing the number) to balance precision and efficiency during simulation. In practice, engineers select the optimal level based on the problem’s needs, ensuring the model captures essential physics without unnecessary complexity.
+]
+
+#definition(title:"Dimension of the physical domain")[
+  $p$ denotes the dimension of the physical domain (e.g., $p=2$ for planar problems or $p=3$ for 3D problems).
+]
+
+#definition(title:"Reference element")[
+  The reference element is a standardized geometric template (e.g., a unit triangle or unit cube) used to define the shape and behavior of every element in a mesh. It is not the physical domain—it is a simplified, dimensionless model that ensures all elements of the same type (e.g., all triangles) follow identical mathematical rules.
+]
+
+#warning()[
+  In practical applications, the physical space (where the real-world system exists) and the reference space (the simplified template used for each element) may have different dimensions. For example, when modeling a three-dimensional bridge, the physical space has three dimensions (length, width, and height), but each triangular element in the mesh uses only two reference coordinates to define its shape.
+]
+
+#definition(title:"Dimension of the reference space")[
+  $r$ denotes the dimension of the reference space (e.g., $r=2$ for a triangle or $r=3$ for a tetrahedron).
+]
+
+#definition(title:"Reference coordinates")[
+  Reference coordinates $referenceposition$ are the standardized positions in $RR^r$ within a reference element that define each node’s location. For example, in a triangular element, the three corners of the reference triangle are labeled with reference coordinates—these positions are fixed and identical for all triangular elements in the mesh.
+]
+
+#definition(title:"Mapping between reference and physical coordinates")[
+
+  Given a reference position $referenceposition in RR^r$, the physical position is defined as $position = position(referenceposition) in RR^p$.
+
+  This can be viewed as a mapping that transforms a reference coordinate (a position in the reference space) into the corresponding physical coordinate (a position in the actual system being modeled).
+
+  The Jacobian matrix of this mapping is:
+  $
+    tensor2(bold(J)) = (partial position)/(partial referenceposition) in bb(R)^(p times r)
+  $ <eq_mapping_reference_physical>
+]
 
 == Shape functions
 
-$
-  N(referenceposition) = mat(N_1 (referenceposition), ..., N_n_e (referenceposition))^T
-$
+#definition(title:"Shape functions")[
+  The FEM stores solution values at nodes. However, to evaluate the solution at points between nodes (where no node exists), interpolation is required. This is where shape functions come in: they are interpolation functions that use the values at all nodes within an element to compute an approximate solution at any target point.
 
-$
-position^text("element") = mat(position^text("element")_1, ..., position^text("element")_N)^T
-$
+  Shape functions can be defined in the physical element or the reference element. Definition in the reference element to keep them constant over time, in case of deformation of the physical element. It also allows code reuse.
 
-$
-  position(referenceposition) = sum_i^(n_e) N_i (referenceposition) position^text("element")_i
-$
+  If shape functions are defined in the physical element, they are denoted:
+  $
+    shapefunction(position) = mat(shapefunction_0 (position), ..., shapefunction_(n_e-1) (position))^T
+  $
+
+  If shape functions are defined in the reference element, they are denoted:
+  $
+    referenceshapefunction(referenceposition) = mat(referenceshapefunction_0 (referenceposition), ..., referenceshapefunction_(n_e-1) (referenceposition))^T
+  $
+]
+
+#property(title:"Shape functions properties")[
+  Shape functions are designed to match the exact node values at the nodes. If a node $i$ has a known physical value $u_i$, the interpolated value at that node must be $u_i$. This is denoted with the Kronecker delta (@kronecker_delta), for all nodes $0 <= i < n_e$:
+
+  $
+    referenceshapefunction_i (referenceposition_j) = delta_(i j)
+  $
+
+  or,
+
+  $
+    shapefunction_i (position_j) = delta_(i j)
+  $
+
+  Such a property leads to the following equations, for all nodes $0 <= i < n_e$:
+
+  $
+    sum_(i=0)^(n_e - 1) referenceshapefunction_i (referenceposition_j) u_i = u_j
+  $
+
+  or,
+
+  $
+    sum_(i=0)^(n_e - 1) shapefunction_i (position_j) u_i = u_j
+  $
+]
+
+#property(title:"Shape functions applied on the geometry")[
+  For all nodes $0 <= i < n_e$:
+  $
+    position(referenceposition_i) = position_i
+  $
+
+  and,
+
+  $
+    position (referenceposition) = sum_(i=0)^(n_e - 1) referenceshapefunction_i (referenceposition) position_i
+  $
+]
+
+Based on the previous equation and the definition of the mapping between reference and physical coordinates (@eq_mapping_reference_physical):
 
 $
 tensor2(bold(J)) 
 = (partial position)/(partial referenceposition) 
-= (partial  sum_i N_i (referenceposition) position^text("element")_i)/(partial referenceposition)
-= sum_i (partial  N_i (referenceposition) position^text("element")_i)/(partial referenceposition)
+= (partial  sum_i referenceshapefunction_i (referenceposition) position_i)/(partial referenceposition)
+= sum_i (partial  referenceshapefunction_i (referenceposition) position_i)/(partial referenceposition)
 $
+
+Entries of this Jacobian matrix are, for $0 <= alpha < p$ and $0 <= beta < r$ :
 
 $
   J_(alpha beta) = (partial position_alpha)/(partial referenceposition_beta)
-  = (partial sum_i N_i (referenceposition) position^text("element")_i_alpha)/(partial referenceposition_beta)
-  = sum_i (partial N_i (referenceposition))/(partial referenceposition_beta) position^text("element")_i_alpha
+  = (partial sum_i referenceshapefunction_i (referenceposition) position_i_alpha)/(partial referenceposition_beta)
+  = sum_i (partial referenceshapefunction_i (referenceposition))/(partial referenceposition_beta) position_i_alpha
 $
 
+Previous equations requires derivatives of the shape functions $(partial referenceshapefunction_i)/(partial referenceposition) in bb(R)^r$:
 
 $
-  (partial N_i)/(partial position) in bb(R)^p
-$
-
-$
-  (partial N_i)/(partial referenceposition) in bb(R)^r
-$
-
-$
-  (partial N_i)/(partial position_j) = sum_k^r (partial N_i)/(partial referenceposition_k) (partial referenceposition_k)/(partial position_j)
+  (partial referenceshapefunction_i)/(partial position_j) = sum_k^r (partial referenceshapefunction_i)/(partial referenceposition_k) (partial referenceposition_k)/(partial position_j)
 $
 
 In matrix form:
 
 $
-  (partial N_i)/(partial position) = ((partial referenceposition)/(partial position))^T (partial N_i)/(partial referenceposition) 
+  (partial referenceshapefunction_i)/(partial position) = ((partial referenceposition)/(partial position))^T (partial referenceshapefunction_i)/(partial referenceposition) 
 $
 
 $
