@@ -3,7 +3,7 @@
 
 == Deduction from the Lagrangian <law_motion_deduced_from_lagrangian>
 
-We apply the Euler-Lagrange equation on the Lagrangian defined in @the_lagrangian. It requires to compute $(partial lagrangian)/(partial position)$ and $d/(d t)((partial lagrangian)/(partial velocity))$.
+For a system or particles, we apply the Euler-Lagrange equation on the Lagrangian defined in @the_lagrangian. It requires to compute $(partial lagrangian)/(partial position)$ and $d/(d t)((partial lagrangian)/(partial velocity))$.
 
 #mybox(title: "Computation of " + $(partial lagrangian)/(partial position)$)[
 First, let's compute the term $(partial lagrangian)/(partial position)$:
@@ -63,3 +63,4 @@ $
 massmatrix acceleration(t) = force(position, velocity)
 $
 ]
+

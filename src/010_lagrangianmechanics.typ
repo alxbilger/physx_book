@@ -107,7 +107,7 @@ where:
   The Lagrangian density $lagrangian$ of a vector field $phi$ is defined as:
   $
     lagrangiandensity(phi, dot(phi), nabla phi) = kineticenergy - potentialenergy
-  $
+  $ <eq_lagrangian_density>
 
   Then, the Lagrangian is defined as:
   $
@@ -176,7 +176,7 @@ For a vector field $phi$,
 
 $
   S = integral_(t_1)^(t_2) integral_Omega lagrangiandensity thick dif V dif t
-$
+$ <eq_action_field>
 
 More generally, we can write:
 $

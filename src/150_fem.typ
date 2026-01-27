@@ -162,6 +162,23 @@ $
   ((partial referenceposition)/(partial position))^T in bb(R)^(p times r)
 $
 
+== Variational Formulation
+
+$
+  cal(L)(u) = f
+$
+
+$
+  v cal(L)(u) = v f
+$
+
+$
+  integral_Omega v cal(L)(u) thick dif Omega= integral_Omega v f thick dif Omega
+$
+
+Integration by parts:
+
+
 == Linear Tetrahedron
 
 For a linear tetrahedron:
