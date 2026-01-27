@@ -56,3 +56,15 @@ $
 
   This is Newton's second law for a continuum. It can also be called balance of linear momentum.
 ]
+
+#result()[
+  In @section_continuum_mechanics and @section_finite_element_method, we will see that the blance of linear momentum after space discretization using the finite element method leads to the following equation:
+
+  $
+    massmatrix dot.double(displacement)(t) = force_"int" + force_"ext"
+  $
+
+  This is very similar to the set of ODEs for a particles system (@second_newton_law). FEM turns a continuum into a finite-dimensional Lagrangian mechanical system. The resulting equations are indistinguishable in structure from particle dynamics.
+
+  The difference is on the unknown function ($position$ for the particles system, $displacement$ for the continuum). However, the Lagrangian framework is applied on generalized coordinates. Generalized coordinates are used in both cases. This allows coupling of particles and continuum under the same framework.
+]
