@@ -8,12 +8,33 @@
 
 == Definitions
 
+#definition(title:"Physical domain")[
+  The physical domain $domain$ is the subset of physical space $RR^p$
+  where the physical problem is defined. It is the region in $RR^p$ satisfying all boundary conditions and governing equations. $p$ denotes the dimension of the physical domain (e.g., $p=2$ for planar problems or $p=3$ for 3D problems).
+]
+
+#definition(title:"Boundary of the physical domain")[
+  The boundary of the physical domain is denoted $boundary$ and is the subset of the physical space $RR^p$ containing points where the physical domain $domain$ meets its "edge". Crucially, $boundary subset RR^p$ and is the location where boundary conditions (e.g., fixed displacements, prescribed forces) are applied.
+]
+
+#definition(title:"Boundary conditions")[
+  Boundary conditions are physical constraints applied to the boundary of the physical domain $boundary subset RR^p$. They specify the behavior of the solution (e.g., displacement, temperature, pressure) at $boundary$.
+]
+
+#definition(title:"Dirichlet boundary conditions")[
+  Dirichlet boundary conditions specify fixed values of the solution (e.g., displacement) at the boundary of the physical domain $boundary$. 
+]
+
+#definition(title:"Neumann boundary conditions")[
+  Neumann boundary conditions specify applied surface forces (e.g., pressure) at the boundary of the physical domain $boundary$.
+]
+
 #definition(title:"Finite Element Method")[
-  The finite element method (FEM) is a numerical technique for solving complex physical problems governed by partial differential equations. It achieves this by decomposing the problem domain into small, manageable subregions called elements, where simplified mathematical models can be constructed. These models collectively approximate the full solution with controlled accuracy and computational efficiency.
+  The finite element method (FEM) is a numerical technique for solving complex physical problems governed by partial differential equations. It achieves this by decomposing the problem domain $domain$ into small, manageable subregions called elements, where simplified mathematical models can be constructed. These models collectively approximate the full solution with controlled accuracy and computational efficiency.
 ]
 
 #definition(title: "Element")[
-  In the FEM, an element is a small, well-defined subregion of the physical domain where the governing equations are approximated using a simplified mathematical model. Each element represents a localized portion of the solution space that, when combined with neighboring elements, collectively reconstructs the full physical behavior of the system.
+  In the FEM, an element is a small, well-defined subregion, denoted $domain_e$, of the physical domain $domain$ where the governing equations are approximated using a simplified mathematical model. Each element represents a localized portion of the solution space that, when combined with neighboring elements, collectively reconstructs the full physical behavior of the system:
 ]
 
 #examplebox()[
@@ -33,15 +54,22 @@
 ]
 
 #definition(title:"Mesh")[
-  A mesh is a discrete collection of elements that together form a complete representation of the physical domain. In practical applications, meshes can be uniform (using only one type of element throughout the domain) or mixed (combining different element types in a single model).
+  A mesh is a discrete collection of elements $domain_e$ that together form a complete representation of the physical domain $domain$. Let's denote $nummeshelements$ the number of elements in the mesh, then we have:
+
+  $
+    domain approx union.big_(e=0)^(nummeshelements-1) domain_e
+  $
+
+  The elements cannot overlap, i.e. for all $e != e'$:
+  $
+    domain_e inter domain_e' = emptyset
+  $
+  
+  In practical applications, meshes can be uniform (using only one type of element throughout the domain) or mixed (combining different element types in a single model).
 ]
 
 #definition(title:"Level of discretization")[
   The level of discretization describes how finely a physical domain is divided into elements to model a system. It is determined by the number of elements used in the mesh: a coarse discretization uses fewer elements (e.g., 50 elements for a simple structure), while a fine discretization uses more elements (e.g., 50.000 elements for the same structure). This level directly impacts both accuracy and computational effort—fewer elements yield faster calculations but may miss critical details, while more elements produce more accurate results at greater computational cost. Crucially, the same mesh can be refined (increasing the number of elements) or coarsened (reducing the number) to balance precision and efficiency during simulation. In practice, engineers select the optimal level based on the problem’s needs, ensuring the model captures essential physics without unnecessary complexity.
-]
-
-#definition(title:"Dimension of the physical domain")[
-  $p$ denotes the dimension of the physical domain (e.g., $p=2$ for planar problems or $p=3$ for 3D problems).
 ]
 
 #definition(title:"Reference element")[
@@ -177,6 +205,118 @@ $
 $
 
 Integration by parts:
+
+== Weak form
+
+#definition(title:"Strong form")[
+  The strong form of a physical law (e.g., balance of linear momentum) is the original partial differential equation (PDE) expressed in physical space $RR^p$
+]
+
+#definition(title:"Weak form")[
+  The weak form is derived by:
+  1. Multiplying the strong form by a test function $v$
+  2. Integrating over the physical domain $domain$
+]
+
+To get the weak form of the balance of linear momentum (@eq_balance_linear_momentum), let's multiply by a test function $v$ and integrate over $domain$:
+
+Multiplication by $v$:
+$
+  v dot density dot.double(displacement) = v dot (nabla dot cauchystress) + v dot density bodyforce
+$
+
+Integration over $domain$:
+
+$
+  integral_domain v dot density dot.double(displacement) dif domain = 
+  integral_domain v dot (nabla dot cauchystress) dif domain
+  + integral_domain v dot density bodyforce dif domain
+$
+
+Using the divergence theorem:
+
+$
+  integral_domain v dot (nabla dot cauchystress) dif domain =
+  integral_boundary v dot (cauchystress bold(n)) dif boundary -
+  integral_domain nabla v : cauchystress dif domain
+$
+
+#todo()[
+  Give more details. Introduce $bold(n)$.
+]
+
+Substituting:
+
+$
+  integral_domain v dot density dot.double(displacement) dif domain = 
+  integral_boundary v dot (cauchystress bold(n)) dif boundary -
+  integral_domain nabla v : cauchystress dif domain
+  + integral_domain v dot density bodyforce dif domain
+$
+
+Reducing the boundary integral:
+
+$
+  integral_boundary v dot (cauchystress bold(n)) dif boundary =
+  integral_boundary_t v dot overline(bold(t)) dif boundary
+$
+
+#todo()[
+  Give more details.
+]
+
+
+
+#result(title: "Weak form of the balance of linear momentum")[
+  Substituting:
+
+  $
+    integral_domain v dot density dot.double(displacement) dif domain = 
+    integral_boundary_t v dot overline(bold(t)) dif boundary -
+    integral_domain nabla v : cauchystress dif domain
+    + integral_domain v dot density bodyforce dif domain
+  $ <eq_weak_balance_linear_momentum>
+]
+
+#definition(title:"Galerkin method")[
+  $v = delta displacement$
+
+  $
+    integral_domain delta displacement dot density dot.double(displacement) dif domain = 
+    integral_boundary_t delta displacement dot overline(bold(t)) dif boundary -
+    integral_domain nabla delta displacement : cauchystress dif domain
+    + integral_domain delta displacement dot density bodyforce dif domain
+  $
+]
+
+#property(title:"Integral approximation")[
+  $
+    integral_domain (dot) dif domain 
+    approx
+    sum_(e = 0)^(nummeshelements-1) integral_domain_e (dot) dif domain_e
+  $
+]
+
+== Mass
+
+#definition(title:"Density field")[
+  Density field is a scalar function $density : domain subset RR^p -> RR$ such that:
+  - $density(position)$ represent the mass density at position $position in domain$
+  - $density$ is continuous and well-defined across elements (ensuring no abrupt jumps at nodes)
+]
+
+#property(title:"Density field in an element")[
+  $
+    density(position) = sum_(i=0)^(n_e - 1) shapefunction_i (position) dot density_i
+  $
+
+  where $density_i$ are the nodal density values for $0 <= i < n_e$.
+]
+
+In @eq_balance_linear_momentum, the density is involved in two terms $density dot.double(displacement)$ and $density bodyforce$, and they are found later in the weak form with the terms $integral_domain v dot density dot.double(displacement) dif domain$ and $integral_domain v dot density bodyforce dif domain$.
+
+Let's focus on $integral_domain v dot density dot.double(displacement) dif domain$:
+
 
 
 == Linear Tetrahedron

@@ -8,8 +8,12 @@ Let's define the Lagrangian density (@eq_lagrangian_density) for an elastodynami
 $
   lagrangiandensity &= 
   kineticenergy - potentialenergy \
-  &= 1/2 thick density(position) ||velocity(t)||^2 - strainenergydensity + density bold(b) dot velocity(t)
+  &= 1/2 thick density(position) ||velocity(t)||^2 - strainenergydensity + density bodyforce dot velocity(t)
 $
+
+#definition(title:"Body force")[
+  Body forces $bodyforce(position, t)$ are distributed volumetric forces. The most common body force is gravity: $bodyforce = gravity$.
+]
 
 The strain energy density function $strainenergydensity$ is introduced in details in @section_continuum_mechanics.
 
@@ -23,8 +27,8 @@ It requires to compute $delta lagrangiandensity$ and integrate it.
 
 $
   delta lagrangiandensity 
-  &= delta (1/2 thick density(position) ||velocity(t)||^2 - strainenergydensity + density bold(b) dot velocity(t)) \
-  &= delta(1/2 thick density(position) ||velocity(t)||^2) - delta strainenergydensity + delta(density bold(b) dot velocity(t))
+  &= delta (1/2 thick density(position) ||velocity(t)||^2 - strainenergydensity + density bodyforce dot velocity(t)) \
+  &= delta(1/2 thick density(position) ||velocity(t)||^2) - delta strainenergydensity + delta(density bodyforce dot velocity(t))
 $
 
 The kinematic energy term:
@@ -51,10 +55,16 @@ $
 
 #result()[
   $
-    density_0 acceleration = "Div" pk1 + density_0 bold(b)
+    density dot.double(displacement) = nabla dot cauchystress + density bodyforce
+  $ <eq_balance_linear_momentum>
+
   $
+    density dot.double(displacement) = "Div" pk1 + density bodyforce
+  $ <eq_balance_linear_momentum_pk1>
 
   This is Newton's second law for a continuum. It can also be called balance of linear momentum.
+
+  $bodyforce$
 ]
 
 #result()[
