@@ -1,5 +1,5 @@
-#import "variables.typ": * 
-#import "box.typ": *
+#import "../variables.typ": * 
+#import "../box.typ": *
 
 == 2-step BDF <section_bdf2>
 

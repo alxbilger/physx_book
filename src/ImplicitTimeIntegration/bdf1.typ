@@ -1,5 +1,5 @@
-#import "variables.typ": *
-#import "box.typ": *
+#import "../variables.typ": *
+#import "../box.typ": *
 
 == 1-step BDF (Backward Euler) <section_backward_euler>
 
