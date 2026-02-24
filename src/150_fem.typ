@@ -1,6 +1,6 @@
 #import "variables.typ": *
 #import "box.typ": *
-
+#import "@preview/mannot:0.3.1": *
 
 
 
@@ -74,6 +74,8 @@
 
 #definition(title:"Reference element")[
   The reference element is a standardized geometric template (e.g., a unit triangle or unit cube) used to define the shape and behavior of every element in a mesh. It is not the physical domain—it is a simplified, dimensionless model that ensures all elements of the same type (e.g., all triangles) follow identical mathematical rules.
+
+  The domain of the reference element is denoted $referencedomain_e$.
 ]
 
 #warning()[
@@ -290,11 +292,12 @@ $
 ]
 
 #property(title:"Integral approximation")[
+  An integral over the physical domain $domain$ can be approximated using integral over all the elements:
   $
     integral_domain (dot) dif domain 
     approx
     sum_(e = 0)^(nummeshelements-1) integral_domain_e (dot) dif domain_e
-  $
+  $ <eq_fem_integral_approx>
 ]
 
 == Mass
@@ -313,10 +316,57 @@ $
   where $density_i$ are the nodal density values for $0 <= i < n_e$.
 ]
 
-In @eq_balance_linear_momentum, the density is involved in two terms $density dot.double(displacement)$ and $density bodyforce$, and they are found later in the weak form with the terms $integral_domain v dot density dot.double(displacement) dif domain$ and $integral_domain v dot density bodyforce dif domain$.
+In @eq_balance_linear_momentum, the density is involved in two terms $density dot.double(displacement)$ and $density bodyforce$:
 
-Let's focus on $integral_domain v dot density dot.double(displacement) dif domain$:
+#v(2em)
+$
+  markhl(density dot.double(displacement), tag: #<1>)
+  = nabla dot cauchystress 
+  + markhl(density bodyforce, tag: #<2>)
 
+  #annot((<1>, <2>), dy: -1em, pos:top + right)[Density term]
+$
+
+And they are found later in the weak form with the terms $integral_domain delta displacement dot density dot.double(displacement) dif domain$ and $integral_domain delta displacement dot density bodyforce dif domain$.
+
+Let's focus on $integral_domain delta displacement dot density dot.double(displacement) dif domain$:
+
+According to @eq_fem_integral_approx, the integral can be approximated by a sum of integrals over the elements:
+$
+integral_domain delta displacement dot density dot.double(displacement) dif domain
+=
+sum_(e=0)^(nummeshelements-1) integral_domain_e delta displacement dot density dot.double(displacement) dif domain_e
+$
+
+$density$, $delta displacement$ and $dot.double(displacement)$ can be approximated using shape functions:
+
+$
+  integral_domain_e delta displacement dot density dot.double(displacement) dif domain_e
+  &=
+  integral_domain_e 
+  (sum_(i=0)^(n_e - 1) shapefunction_i (position) dot delta displacement_i) dot 
+  (sum_(j=0)^(n_e - 1) shapefunction_j (position) dot density_j) 
+  (sum_(k=0)^(n_e - 1) shapefunction_k (position) dot dot.double(displacement)_k) dif domain_e \
+  &= sum_(0 <= i,j,k < n_e) delta displacement_i dot density_j dot.double(displacement)_k integral_domain_e shapefunction_i (position) shapefunction_j (position) shapefunction_j (position) dif domain_e
+$
+
+The integral can be evaluated in the reference element:
+
+$
+  integral_domain_e shapefunction_i (position) shapefunction_j (position) shapefunction_j (position) dif domain_e
+  =
+  integral_referencedomain_e shapefunction_i (position) shapefunction_j (position) shapefunction_j (position) det(bold(J)(referenceposition)) dif referencedomain_e
+$
+
+#todo()[
+  Introduce Gauss quadrature somewhere
+]
+
+Using Gauss quadrature:
+
+$
+  
+$
 
 
 == Linear Tetrahedron

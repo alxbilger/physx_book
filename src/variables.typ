@@ -61,6 +61,7 @@
 #let undefstrainenergydensity = $Psi$
 #let domain = $Omega$
 #let boundary = $partial domain$
+#let referencedomain = $hat(domain)$
 #let pk1 = $tensor2(P)$
 #let pk2 = $tensor2(S)$
 #let invariant1 = $I_rightcauchygreen$
