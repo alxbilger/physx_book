@@ -3,28 +3,15 @@
 
 == 1-step BDF (Backward Euler) <section_backward_euler>
 
-Considering a mass matrix ODE (@eq_mass_matrix_ode) of the form $odemassmatrix(t,y) thick y'=f(t,y)$ with $y(t_0) = y_0$, the time derivative can be approximated using a backward first-order finite differences:
+Let's consider a mass matrix ODE (@eq_mass_matrix_ode) of the form $odemassmatrix(t,y) thick y'=f(t,y)$ with $y(t_0) = y_0$.
+
+The Backward Euler method approximates the integral in @eq_integrated_ode and @eq_integrated_mass_ode by the rectangle rule evaluated at the end of the interval:
 
 $
-  y'(t+stepsize) approx 1/stepsize (y(t+stepsize) - y(t))
+  integral_(t_n)^(t_(n+1)) f(t,y) dif t approx stepsize thick f(t_(n+1), y_(n+1))
 $
 
-Substituting this approximation into the IVP yields:
-
-$
-  mat(delim: #("{", none),
-    1/stepsize odemassmatrix(t + stepsize,y) thick [y(t+stepsize) - y(t)] &= f(t + stepsize, y(t+stepsize));
-    y(t_0) &= y_0
-  )
-$
-
-Under the discrete sequence notation from @sequence, we write:
-
-$
-  1/stepsize odemassmatrix(t_(n+1),y_(n+1)) thick [y_(n+1)-y_n]=f(t_(n+1),y_(n+1))
-$
-
-Multiplying by $stepsize$:
+Substituting this approximation into @eq_integrated_mass_ode yields:
 
 $
   odemassmatrix(t_(n+1),y_(n+1)) thick [y_(n+1)-y_n] = stepsize thick f(t_(n+1),y_(n+1))

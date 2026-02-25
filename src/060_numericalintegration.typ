@@ -17,7 +17,7 @@
   An explicit first-order ordinary differential equation (ODE) is a first-order ODE in the form 
   $
     y' = f(t,y)
-  $
+  $ <eq_explicit_first_order_ode>
 $f(t,y)$ is a function of the independent variable $t$
 and the dependent variable $y$.
 ]
@@ -26,7 +26,7 @@ and the dependent variable $y$.
   An implicit first-order ordinary differential equation (ODE) is a first-order ODE in the form 
   $
     f(t, y, y') = 0
-  $
+  $ <eq_implicit_first_order_ode>
   where $f$ is a function that cannot be explicitly solved for $y'$ (i.e., rearranging to isolate $y'$ is impossible or impractical).
 ]
 
@@ -116,6 +116,36 @@ y_n=y(t_n)
 $ <sequence>
 
 This sequence $y_n$ represents an approximation to the solution of the ODE at the discrete time points $t_n$. 
+]
+
+#property(title:"Integration of ODEs")[
+  To turn an ODE into a discrete-time scheme, it is integrated over a single time-step.
+
+  For an explicit first-order ODE:
+
+  $
+    y' = f(t,y) =>
+    integral_(t_n)^(t_(n+1)) y' dif t = integral_(t_n)^(t_(n+1)) f(t,y) dif t
+  $
+
+  $
+    y_(n+1) - y_n = integral_(t_n)^(t_(n+1)) f(t,y) dif t
+  $ <eq_integrated_ode>
+
+  For a mass matrix ODE (@eq_mass_matrix_ode):
+
+  $
+    odemassmatrix(t,y) thick y' = f(t,y) =>
+    integral_(t_n)^(t_(n+1)) odemassmatrix(t,y) thick y' dif t = integral_(t_n)^(t_(n+1)) f(t,y) dif t
+  $
+
+  If $odemassmatrix$ is constant, we can pull it out of the integral on the left:
+
+  $
+    odemassmatrix (y_(n+1) - y_n) = integral_(t_n)^(t_(n+1)) f(t,y) dif t
+  $ <eq_integrated_mass_ode>
+
+  In @eq_integrated_ode and @eq_integrated_mass_ode, the integral can be approximated by a quadrature rule.
 ]
 
 == Linear Multistep Method
