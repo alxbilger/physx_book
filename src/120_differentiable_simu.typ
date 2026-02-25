@@ -191,81 +191,81 @@ $
 $
 ]
 
-=== Gradient-based Optimization for Implicit Methods
+// === Gradient-based Optimization for Implicit Methods
 
-#todo[Verifier si c'est plus simple en intégration explicite]
+// #todo[Verifier si c'est plus simple en intégration explicite]
 
-Suppose we simulate a dynamical system with an implicit method, that relies on an implicit time-step equation:
+// Suppose we simulate a dynamical system with an implicit method, that relies on an implicit time-step equation:
 
-$
-f(state_(n+1), state_n, theta) = 0  
-$
+// $
+// f(state_(n+1), state_n, theta) = 0  
+// $
 
-#mybox(title:"Example")[
-An example of such a function is the backward Euler residual function (@h_backward_euler):
+// #mybox(title:"Example")[
+// An example of such a function is the backward Euler residual function (@h_backward_euler):
 
-$
-  mat( position_(n+1) - position _n - stepsize thick velocity_(n+1) ; massmatrix(velocity_(n+1) -velocity _n) - stepsize thick force(state_(n+1))) = 0
-$
-]
+// $
+//   mat( position_(n+1) - position _n - stepsize thick velocity_(n+1) ; massmatrix(velocity_(n+1) -velocity _n) - stepsize thick force(state_(n+1))) = 0
+// $
+// ]
 
-The goal is to compute $(d loss)/(d theta)$ where $loss=loss(state_N, theta)$, a scalar loss function depending on the final state (after $N$ time steps) and parameter $theta$.
+// The goal is to compute $(d loss)/(d theta)$ where $loss=loss(state_N, theta)$, a scalar loss function depending on the final state (after $N$ time steps) and parameter $theta$.
 
-$
-(d loss)/(d theta) = (partial loss)/(partial state_N) (d state_N)/(d theta) + (partial loss)/(partial theta)
-$
+// $
+// (d loss)/(d theta) = (partial loss)/(partial state_N) (d state_N)/(d theta) + (partial loss)/(partial theta)
+// $
 
-$(d state_N)/(d theta)$ is not known. Let's compute it.
+// $(d state_N)/(d theta)$ is not known. Let's compute it.
 
-By differentiation of $f$:
+// By differentiation of $f$:
 
-$
-  f(state_(n+1), state_n, theta) = 0  
-  <=>& d/(d theta) f(state_(n+1), state_n, theta) = 0 \
-  <=>& (partial f)/(partial state_(n+1)) (d state_(n+1))/(d theta) 
-    + (partial f)/(partial state_n) (d state_n)/(d theta)
-    + (partial f)/(partial theta) = 0
-$
+// $
+//   f(state_(n+1), state_n, theta) = 0  
+//   <=>& d/(d theta) f(state_(n+1), state_n, theta) = 0 \
+//   <=>& (partial f)/(partial state_(n+1)) (d state_(n+1))/(d theta) 
+//     + (partial f)/(partial state_n) (d state_n)/(d theta)
+//     + (partial f)/(partial theta) = 0
+// $
 
-Since $(partial f)/(partial state_(n+1))$ is invertible:
+// Since $(partial f)/(partial state_(n+1))$ is invertible:
 
-$
- (d state_(n+1))/(d theta) = - ((partial f)/(partial state_(n+1)))^(-1)
-    ((partial f)/(partial state_n) (d state_n)/(d theta)
-    + (partial f)/(partial theta))
-$
+// $
+//  (d state_(n+1))/(d theta) = - ((partial f)/(partial state_(n+1)))^(-1)
+//     ((partial f)/(partial state_n) (d state_n)/(d theta)
+//     + (partial f)/(partial theta))
+// $
 
-We can deduce:
+// We can deduce:
 
-$
- (d state_N)/(d theta) = - (lr((partial f)/(partial state_(n+1))|)_(state_N, theta))^(-1)
-    lr((partial f)/(partial state_n)|)_(state_N, theta) (d state_(N-1))/(d theta)
-    + (partial f)/(partial theta))
-$
+// $
+//  (d state_N)/(d theta) = - (lr((partial f)/(partial state_(n+1))|)_(state_N, theta))^(-1)
+//     lr((partial f)/(partial state_n)|)_(state_N, theta) (d state_(N-1))/(d theta)
+//     + (partial f)/(partial theta))
+// $
 
-#algorithm(inset: 0.5em, {
-  import algorithmic: *
-  let Solve = Call.with("Solve")
-  let Compute = Call.with("Compute")
-  Procedure(
-    "Forward-mode propagation",
-    ($theta_0$, $loss$, $f$, $gamma$),
-    {
-      Assign[$state_0$][$text("initial_state")(theta)$]
-      Assign[$(d state)/(d theta)$][$(d text("initial_state"))/(d theta)$]
-      Assign[$t$][$0$]
-      For($t < N$, {
-        LineComment(Assign[$state_(t+1)$][Solve $f(state_(t+1), state_t, theta)=0$], "Newton-Raphson method can be used for example")
+// #algorithm(inset: 0.5em, {
+//   import algorithmic: *
+//   let Solve = Call.with("Solve")
+//   let Compute = Call.with("Compute")
+//   Procedure(
+//     "Forward-mode propagation",
+//     ($theta_0$, $loss$, $f$, $gamma$),
+//     {
+//       Assign[$state_0$][$text("initial_state")(theta)$]
+//       Assign[$(d state)/(d theta)$][$(d text("initial_state"))/(d theta)$]
+//       Assign[$t$][$0$]
+//       For($t < N$, {
+//         LineComment(Assign[$state_(t+1)$][Solve $f(state_(t+1), state_t, theta)=0$], "Newton-Raphson method can be used for example")
 
-        Compute($(partial f)/(partial state_(n+1))$ + " evaluated at " + $state_(t+1),theta$)
+//         Compute($(partial f)/(partial state_(n+1))$ + " evaluated at " + $state_(t+1),theta$)
 
-        Compute($(partial f)/(partial state_(n))$ + " evaluated at " + $state_(t+1),theta$)
+//         Compute($(partial f)/(partial state_(n))$ + " evaluated at " + $state_(t+1),theta$)
 
-        Assign[$(d state)/(d theta)$][$- ((partial f)/(partial state_(n+1)))^(-1) ((partial f)/(partial state_n) (d state)/(d theta)
-    + (partial f)/(partial theta))$]
-      })
+//         Assign[$(d state)/(d theta)$][$- ((partial f)/(partial state_(n+1)))^(-1) ((partial f)/(partial state_n) (d state)/(d theta)
+//     + (partial f)/(partial theta))$]
+//       })
 
-      Assign($(d loss)/(d theta)$, $(partial loss)/(partial state_N) (d state_N)/(d theta) + (partial loss)/(partial theta)$)
-    }
-  )
-})
+//       Assign($(d loss)/(d theta)$, $(partial loss)/(partial state_N) (d state_N)/(d theta) + (partial loss)/(partial theta)$)
+//     }
+//   )
+// })

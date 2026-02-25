@@ -557,71 +557,71 @@ cases(
 )
 $
 
-== Constraint Linearization
+// == Constraint Linearization
 
 
-From @backward_euler_linearized_dv and @holonomic_definition:
+// From @backward_euler_linearized_dv and @holonomic_definition:
 
-$
-cases(
-  A thick Delta velocity = b + stepsize constraintmatrix(position_n)^T lambda,
-  constraint(position_(n+1)) = 0
-)
-$ 
+// $
+// cases(
+//   A thick Delta velocity = b + stepsize constraintmatrix(position_n)^T lambda,
+//   constraint(position_(n+1)) = 0
+// )
+// $ 
 
-Taylor series expansion of $constraint$ around $position_n$:
+// Taylor series expansion of $constraint$ around $position_n$:
 
-$
-constraint(position_(n+1)) = constraint(position_n + Delta position) = constraint(position_n) + constraintmatrix(position_n) Delta position + o(||Delta position||^2)
-$
+// $
+// constraint(position_(n+1)) = constraint(position_n + Delta position) = constraint(position_n) + constraintmatrix(position_n) Delta position + o(||Delta position||^2)
+// $
 
-$constraint$ is approximated:
+// $constraint$ is approximated:
 
-$
-constraint(position_n + Delta position) approx constraint(position_n) + constraintmatrix(position_n) Delta position
-$
+// $
+// constraint(position_n + Delta position) approx constraint(position_n) + constraintmatrix(position_n) Delta position
+// $
 
-Replacing $Delta position$ by @backwardeuler_deltax:
+// Replacing $Delta position$ by @backwardeuler_deltax:
 
-$
-constraint(position_n + Delta position) &approx constraint(position_n) + constraintmatrix(position_n) stepsize (Delta velocity + velocity_n) \
-& approx constraint(position_n) + stepsize constraintmatrix(position_n)  Delta velocity + stepsize constraintmatrix(position_n) velocity_n
-$
+// $
+// constraint(position_n + Delta position) &approx constraint(position_n) + constraintmatrix(position_n) stepsize (Delta velocity + velocity_n) \
+// & approx constraint(position_n) + stepsize constraintmatrix(position_n)  Delta velocity + stepsize constraintmatrix(position_n) velocity_n
+// $
 
-Then,
-$
-cases(
-  A thick Delta velocity = b + stepsize constraintmatrix(position_n)^T lambda,
-  constraint(position_n) + stepsize constraintmatrix(position_n)  Delta velocity + stepsize constraintmatrix(position_n) velocity_n = 0
-)
-$ <position_level_constraint_equation>
+// Then,
+// $
+// cases(
+//   A thick Delta velocity = b + stepsize constraintmatrix(position_n)^T lambda,
+//   constraint(position_n) + stepsize constraintmatrix(position_n)  Delta velocity + stepsize constraintmatrix(position_n) velocity_n = 0
+// )
+// $ <position_level_constraint_equation>
 
-In matrix format:
+// In matrix format:
 
-$
-mat(
-A, -stepsize constraintmatrix(position_n)^T;
-stepsize constraintmatrix(position_n), 0
-)
-mat( Delta velocity; lambda) =
-mat( b; -constraint(position_n) - stepsize constraintmatrix(position_n)velocity_n)
-$
+// $
+// mat(
+// A, -stepsize constraintmatrix(position_n)^T;
+// stepsize constraintmatrix(position_n), 0
+// )
+// mat( Delta velocity; lambda) =
+// mat( b; -constraint(position_n) - stepsize constraintmatrix(position_n)velocity_n)
+// $
 
-Using the Schur complement (@schur_complement_linear_system_y):
+// Using the Schur complement (@schur_complement_linear_system_y):
 
-$
-stepsize^2 constraintmatrix(position_n) A^(-1) constraintmatrix(position_n)^T lambda &= -constraint(position_n) - stepsize constraintmatrix(position_n) velocity_n - stepsize constraintmatrix(position_n) A^(-1) b \
-&= -constraint(position_n) - stepsize constraintmatrix(position_n) (velocity_n + Delta velocity_"free") \
-&approx -constraint(position_n + Delta position_"free") = -constraint(position_"free")
-$
+// $
+// stepsize^2 constraintmatrix(position_n) A^(-1) constraintmatrix(position_n)^T lambda &= -constraint(position_n) - stepsize constraintmatrix(position_n) velocity_n - stepsize constraintmatrix(position_n) A^(-1) b \
+// &= -constraint(position_n) - stepsize constraintmatrix(position_n) (velocity_n + Delta velocity_"free") \
+// &approx -constraint(position_n + Delta position_"free") = -constraint(position_"free")
+// $
 
-Then,
+// Then,
 
-$
-Delta velocity = A^(-1)(b + stepsize constraintmatrix(position_n)^T lambda)
-$
+// $
+// Delta velocity = A^(-1)(b + stepsize constraintmatrix(position_n)^T lambda)
+// $
 
-Force and constraint linearization method is equivalent to a single Newton step, $state^0 = state_n$, $lambda^0 = 0$, and with a backward Euler.
+// Force and constraint linearization method is equivalent to a single Newton step, $state^0 = state_n$, $lambda^0 = 0$, and with a backward Euler.
 
 
 === Multiple Interacting Objects
@@ -703,35 +703,35 @@ $
 
 
 
-=== Relaxation
+// === Relaxation
 
-$relaxation lambda = -constraint$
+// $relaxation lambda = -constraint$
 
-@position_level_constraint_equation becomes:
+// @position_level_constraint_equation becomes:
 
-$
-cases(
-  A thick Delta velocity = b + stepsize constraintmatrix(position_n)^T lambda,
-  constraint(position_n) + stepsize constraintmatrix(position_n)  Delta velocity + stepsize constraintmatrix(position_n) velocity_n = -relaxation lambda
-)
-$
+// $
+// cases(
+//   A thick Delta velocity = b + stepsize constraintmatrix(position_n)^T lambda,
+//   constraint(position_n) + stepsize constraintmatrix(position_n)  Delta velocity + stepsize constraintmatrix(position_n) velocity_n = -relaxation lambda
+// )
+// $
 
-$
-mat(
-A, -stepsize constraintmatrix(position_n)^T;
-stepsize constraintmatrix(position_n), relaxation
-)
-mat( Delta velocity; lambda) =
-mat( b; -constraint(position_n) - stepsize constraintmatrix(position_n)velocity_n)
-$
+// $
+// mat(
+// A, -stepsize constraintmatrix(position_n)^T;
+// stepsize constraintmatrix(position_n), relaxation
+// )
+// mat( Delta velocity; lambda) =
+// mat( b; -constraint(position_n) - stepsize constraintmatrix(position_n)velocity_n)
+// $
 
-Using the Schur complement (@schur_complement_linear_system_y):
+// Using the Schur complement (@schur_complement_linear_system_y):
 
-$
-(relaxation +stepsize^2 constraintmatrix(position_n) A^(-1) constraintmatrix(position_n)^T) lambda &= -constraint(position_n) - stepsize constraintmatrix(position_n) velocity_n - stepsize constraintmatrix(position_n) A^(-1) b \
-&= -constraint(position_n) - stepsize constraintmatrix(position_n) (velocity_n + Delta velocity_"free") \
-&approx -constraint(position_n + Delta position_"free") = -constraint(position_"free")
-$
+// $
+// (relaxation +stepsize^2 constraintmatrix(position_n) A^(-1) constraintmatrix(position_n)^T) lambda &= -constraint(position_n) - stepsize constraintmatrix(position_n) velocity_n - stepsize constraintmatrix(position_n) A^(-1) b \
+// &= -constraint(position_n) - stepsize constraintmatrix(position_n) (velocity_n + Delta velocity_"free") \
+// &approx -constraint(position_n + Delta position_"free") = -constraint(position_"free")
+// $
 
 
 == Models

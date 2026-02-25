@@ -2,4 +2,5 @@
 
 #include "deduction.typ"
 #include "ode.typ"
+#include "rayleighdamping.typ"
 #include "continuum.typ"

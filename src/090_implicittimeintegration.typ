@@ -33,10 +33,11 @@ Coefficients @suli2003introduction:
 
 
 
-#include "bdf1.typ"
-#include "trapezoidal.typ"
-#include "bdf2.typ"
-#include "newmark.typ"
+#include "ImplicitTimeIntegration/bdf1.typ"
+// #include "ImplicitTimeIntegration/trapezoidal.typ"
+#include "ImplicitTimeIntegration/implicitmidpointmethod.typ"
+#include "ImplicitTimeIntegration/bdf2.typ"
+#include "ImplicitTimeIntegration/newmark.typ"
 
 == Implicit Linear Multistep Methods <linear_multistep_method_section>
 

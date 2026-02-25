@@ -106,8 +106,8 @@ As defined in the previous section, the numerical solution at step $n$ is $y_n =
   The continuous time domain is discretized into a sequence of equally spaced points. For a given function $y(t)$ with initial condition $y(t_0) = y_0$, we define:
 
 $
-t_n = t_0 + n thick Delta t, wide n = 0, 1, 2, dots
-$
+t_n = t_0 + n thick stepsize, wide n = 0, 1, 2, dots
+$ <eq_time_sequence>
 
 where $Delta t > 0$ is the time step size. At these discrete points, we compute the function values:
 
@@ -285,7 +285,7 @@ $
     identity,0;
     0, massmatrix
   )
-$
+$ <definition_M>
 
 All together, we obtain the following initial value problem:
 
