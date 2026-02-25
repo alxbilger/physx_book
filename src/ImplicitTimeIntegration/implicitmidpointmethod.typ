@@ -14,25 +14,21 @@ $
   y_(n+1/2) = y(t_(n+1/2))
 $
 
-The mass matri ODE @eq_mass_matrix_ode expresed at the midpoint $t_n + stepsize / 2$ becomes:
+Let's consider a mass matrix ODE (@eq_mass_matrix_ode) of the form $odemassmatrix(t,y) thick y'=f(t,y)$ with $y(t_0) = y_0$.
+
+The implicit midpoint method approximates the integral in @eq_integrated_ode and @eq_integrated_mass_ode by the rectangle rule evaluated at the midpoint of a time step:
 
 $
-  odemassmatrix thick y'_(n+1/2) = f(t_(n+1/2), y_(n+1/2))
+  integral_(t_n)^(t_(n+1)) f(t,y) dif t approx stepsize thick f(t_(n+1/2), y_(n+1/2))
 $
 
-The time derivative can be approximated such as:
+Substituting this approximation into @eq_integrated_mass_ode yields:
 
 $
-  y'_(n+1/2) approx (y_(n+1) - y_n) / stepsize
+  odemassmatrix(t_(n+1),y_(n+1)) thick [y_(n+1)-y_n] = stepsize thick f(t_(n+1/2), y_(n+1/2))
 $
 
-Substituting in the initial value problem:
-
-$
-  odemassmatrix thick (y_(n+1) - y_n) / stepsize = f(t_(n+1/2), y_(n+1/2))
-$
-
-$y_(n+1/2)$ is still unknown. We approximate it as:
+$y_(n+1/2)$ is still unknown. We approximate it as the midpoint of the segment from $y_n$ to $y_(n+1)$:
 
 $
   y_(n+1/2) approx (y_(n+1) + y_n)/2
@@ -71,7 +67,7 @@ $
 Let's define the residual function $r$ such that:
 
 $
-r_(n+1)(z) := 1/stepsize odemassmatrix thick [z-y_n] - f(t_(n+1/2), (z+y_n)/2)
+r_(n+1)(z) := odemassmatrix thick [z-y_n] - stepsize thick f(t_(n+1/2), (z+y_n)/2)
 $
 
 With this definition, $y_(n+1)$ is the solution of $r_(n+1)(z)=0$.
@@ -81,14 +77,119 @@ The application of the Newton-Raphson algorithm requires the computation of the 
 
 $
   (partial r_(n+1))/(partial z) = 
-  1/stepsize odemassmatrix - 1/2 lr((partial f)/(partial z)|)_(t_(n+1/2),(z+y_n)/2)
+  odemassmatrix - stepsize/2 thick lr((partial f)/(partial z)|)_(t_(n+1/2),(z+y_n)/2)
 $
 
 Substituting this Jacobian into @linear_system_in_newton_raphson, we obtain:
 
 $
-  (1/stepsize odemassmatrix - 1/2 lr((partial f)/(partial z)|)_(t_(n+1/2),(z+y_n)/2)) (z^(i+1)-z^i) = -r_(n+1)(z^i)
-$
+  (odemassmatrix - stepsize/2 lr((partial f)/(partial z)|)_(t_(n+1/2),(z+y_n)/2)) (z^(i+1)-z^i) = -r_(n+1)(z^i)
+$ <eq_implicit_midpoint_newton_raphson>
 
 #property(title: "Newton's Second Law of Motion ")[
+  In Newton's second law of motion (@definition_y, @definition_f, @definition_M):
+  $
+    y(t) = mat( position(t); velocity(t))
+    , wide
+    f(t,y) = mat(
+      velocity(t);
+      force(position(t), velocity(t))
+    )
+    , wide
+    odemassmatrix = mat(
+      identity,0;
+      0, massmatrix
+    )
+  $
+
+  In @eq_implicit_midpoint_newton_raphson, we need the derivative of $f$:
+
+  $
+    (partial f(t_(n+1), y))/(partial y) =
+    mat(
+      (partial velocity)/(partial position), (partial velocity)/(partial velocity);
+      (partial force)/(partial position), (partial force)/(partial velocity)
+    ) =
+    mat(
+      0, identity;
+      (partial force)/(partial position), (partial force)/(partial velocity)
+    ) =
+    mat(
+      0, identity;
+      stiffness, damping
+    )
+  $
+
+  We also express the residual for the law of motion:
+  $
+    r_(n+1)(state^i) &= mat(
+      identity,0;
+      0, massmatrix
+    ) mat(position^(i) - position_n; velocity^(i) - velocity_n)
+    - stepsize mat(
+      (velocity^i + velocity_n)/2;
+      force((state^i + state_n)/2)
+    ) \
+    &=
+    mat(
+      position^(i) - position_n - stepsize thick (velocity^i + velocity_n)/2;
+      massmatrix (velocity^(i) - velocity_n) - stepsize thick force((state^i + state_n)/2)
+    )
+
+  $
+
+  Substituting the derivative of $f$ in @eq_implicit_midpoint_newton_raphson:
+
+  $
+    &
+    (mat(
+      identity,0;
+      0, massmatrix
+    ) - 
+    stepsize/2 mat(
+      0, identity;
+      stiffness((state^i + state_n)/2), damping((state^i + state_n)/2)
+    )
+    ) 
+    mat(position^(i+1) - position^i; velocity^(i+1) - velocity^i) = -r_(n+1)(state^i)
+    \
+    <=> &
+    mat(
+      identity, - stepsize/2 identity;
+      - stepsize/2 thick stiffness((state^i + state_n)/2), massmatrix - stepsize/2 thick damping((state^i + state_n)/2)
+    )
+    mat(position^(i+1) - position^i; velocity^(i+1) - velocity^i) = -r_(n+1)(state^i)
+  $ <eq_implicit_midpoint_newton_raphson_motion>
+]
+
+=== Solve for $velocity$
+
+Using the Schur complement (see @schur_complement_linear_system_y) in @eq_implicit_midpoint_newton_raphson_motion, we obtain the reduced equation in $velocity ^(i+1) - velocity ^i$:
+
+#result()[
+$
+  (massmatrix - stepsize/2 damping((state^i + state_n)/2) - stepsize^2/4 stiffness((state^i + state_n)/2))
+  (velocity^(i+1) - velocity^i) = \
+
+  -massmatrix (velocity^i - velocity_n) 
+  + stepsize thick force((state^i + state_n)/2)
+  - stepsize/2 stiffness((state^i + state_n)/2) (position^i - position_n - stepsize velocity_(n+1/2)) 
+$
+]
+
+From @block_elimination_x, we can deduce $position^(i+1) - position^i$:
+
+$
+  position^(i+1) - position^i 
+  &= -(position^(i) - position_n - stepsize thick (velocity^i + velocity_n)/2) + stepsize/2 (velocity^(i+1) - velocity^i) \
+  &= position_n - position^i + stepsize/2 (velocity^i + velocity_n + velocity^(i+1) - velocity^i )\
+  &= position_n - position^i + stepsize/2 (velocity_n + velocity^(i+1))
+$
+
+Then
+
+#result()[
+$
+position^(i+1) = position_n + stepsize thick (velocity^(i+1) + velocity_n)/2 
+$
 ]
