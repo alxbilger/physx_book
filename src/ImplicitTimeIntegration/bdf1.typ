@@ -11,11 +11,37 @@ $
   integral_(t_n)^(t_(n+1)) f(t,y) dif t approx stepsize thick f(t_(n+1), y_(n+1))
 $
 
+#figure(
+  image("../img/integral_backward_euler.svg", width: 30%),
+  caption: [
+    Example of the approximation of the integral of a function using the rectangle rule.
+  ],
+)
+
 Substituting this approximation into @eq_integrated_mass_ode yields:
 
 $
   odemassmatrix(t_(n+1),y_(n+1)) thick [y_(n+1)-y_n] = stepsize thick f(t_(n+1),y_(n+1))
 $
+
+#property(title:"Comparison with Foward Euler method")[
+  The Forward Euler method is introduced in @section_forward_euler.
+
+  #table(
+    columns:(50%, 49%),
+    align: center,
+    stroke: none,
+    table.header(
+      [*Forward Euler*], [*Backward Euler*]
+    ),
+    math.equation(block: true, numbering: none, $ integral_(t_text(fill: green,n))^(t_text(fill: red,n+1)) f(t,y) dif t approx stepsize thick f(t_text(fill: green,n), y_text(fill: green,n)) $),
+    math.equation(block: true, numbering: none, $ integral_(t_text(fill: green,n))^(t_text(fill: red,n+1)) f(t,y) dif t approx stepsize thick f(t_text(fill: red,n+1), y_text(fill: red,n+1)) $),
+      image("../img/integral_forward_euler.svg", width: 20%),
+    image("../img/integral_backward_euler.svg", width: 20%),
+    math.equation(block: true, numbering: none, $ odemassmatrix thick [y_text(fill: red,n+1)-y_text(fill: green,n)] = stepsize thick f(t_text(fill: green,n), y_text(fill: green,n)) $),
+    math.equation(block: true, numbering: none, $ odemassmatrix thick [y_text(fill: red,n+1)-y_text(fill: green,n)] = stepsize thick f(t_text(fill: red,n+1), y_text(fill: red,n+1)) $),
+  )
+]
 
 #todo[
 We observe that the method enters into the category of linear multistep methods (@linear_multistep_method) with:
