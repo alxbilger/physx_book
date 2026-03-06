@@ -34,7 +34,8 @@ Coefficients @suli2003introduction:
 
 
 #include "ImplicitTimeIntegration/bdf1.typ"
-// #include "ImplicitTimeIntegration/trapezoidal.typ"
+// #include "ImplicitTimeIntegration/cranknicolson.typ"
+#include "ImplicitTimeIntegration/trapezoidal.typ"
 #include "ImplicitTimeIntegration/implicitmidpointmethod.typ"
 #include "ImplicitTimeIntegration/bdf2.typ"
 #include "ImplicitTimeIntegration/newmark.typ"
