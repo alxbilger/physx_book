@@ -105,6 +105,7 @@ The sources of this book are available at https://github.com/alxbilger/physx_boo
 #include "030_static.typ"
 #include "050_heat.typ"
 #include "050_spring.typ"
+#include "055_numerical_integration.typ"
 #include "060_numericalintegration.typ"
 #include "070_linear_solvers.typ"
 #include "ExplicitTimeIntegration/explicitTimeIntegration.typ"

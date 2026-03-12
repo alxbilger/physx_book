@@ -1,7 +1,7 @@
 #import "variables.typ": *
 #import "box.typ": *
 
-= Numerical Integration <section_numerical_integration>
+= Numerical Integration of Ordinary Differential Equation <section_numerical_integration>
 
 == Ordinary Differential Equation
 

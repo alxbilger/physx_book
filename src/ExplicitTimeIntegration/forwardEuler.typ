@@ -5,7 +5,7 @@
 
 Let's consider a mass matrix ODE (@eq_mass_matrix_ode) of the form $odemassmatrix(t,y) thick y'=f(t,y)$ with $y(t_0) = y_0$.
 
-The *Forward Euler method* approximates the integral in @eq_integrated_ode and @eq_integrated_mass_ode by the rectangle rule evaluated at the start of the interval:
+The *Forward Euler method* approximates the integral in @eq_integrated_ode and @eq_integrated_mass_ode by the rectangle rule evaluated at the start of the interval (@eq_numerical_integration_rectangle_start):
 
 $
   integral_(t_n)^(t_(n+1)) f(t,y) dif t approx stepsize thick f(t_n, y_n)
