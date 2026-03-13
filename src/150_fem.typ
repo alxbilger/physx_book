@@ -121,7 +121,7 @@
 ]
 
 #property(title:"Shape functions properties")[
-  Shape functions are designed to match the exact node values at the nodes. If a node $i$ has a known physical value $u_i$, the interpolated value at that node must be $u_i$. This is denoted with the Kronecker delta (@kronecker_delta), for all nodes $0 <= i < n_e$:
+  Shape functions are designed to match the exact node values at the nodes. If a node $0<=i<n_e$ has a known physical value $u_i$, the interpolated value at that node must be $u_i$. This is denoted with the Kronecker delta (@kronecker_delta), for all nodes $0 <= i < n_e$:
 
   $
     referenceshapefunction_i (referenceposition_j) = delta_(i j)
@@ -368,6 +368,49 @@ $
   
 $
 
+== Elasticity
+
+#mybox(title:"Linear strain tensor")[
+  In @linear_strain_tensor:
+
+  $
+    linearstraintensor = 1/2 ( ((partial displacement)/(partial undefposition)) + ((partial displacement)/(partial undefposition))^T)
+  $
+
+  We have
+  $
+    displacement(undefposition) = sum_(i=0)^(n_e - 1) shapefunction_i (undefposition) displacement_i
+  $
+
+  By derivation:
+
+  $
+    (partial displacement)/(partial undefposition) = sum_(i=0)^(n_e - 1) (partial shapefunction_i)/(partial undefposition) displacement_i^T
+  $
+
+  and
+
+  $
+    linearstraintensor 
+    &= 1/2 (sum_(i=0)^(n_e - 1) (partial shapefunction_i)/(partial undefposition) displacement_i^T + (sum_(i=0)^(n_e - 1) (partial shapefunction_i)/(partial undefposition) displacement_i^T)^T) \
+    &= 1/2 (sum_(i=0)^(n_e - 1) (partial shapefunction_i)/(partial undefposition) displacement_i^T + sum_(i=0)^(n_e - 1) ((partial shapefunction_i)/(partial undefposition) displacement_i^T)^T) \
+    &= 1/2 sum_(i=0)^(n_e - 1)( (partial shapefunction_i)/(partial undefposition) displacement_i^T + displacement_i ((partial shapefunction_i)/(partial undefposition))^T) \
+  $
+
+  For $0<=alpha, beta<p$:
+
+  $
+    linearstraintensorcomponent_(alpha,beta) =
+    1/2 sum_(i=0)^(n_e - 1)( (partial shapefunction_i)/(partial undefposition_alpha) displacement_i_beta + displacement_i_alpha (partial shapefunction_i)/(partial undefposition_beta))
+  $
+
+  When $alpha = beta$:
+
+  $
+    linearstraintensorcomponent_(alpha,alpha) =
+    1/2 sum_(i=0)^(n_e - 1)( (partial shapefunction_i)/(partial undefposition_alpha) displacement_i_alpha + displacement_i_alpha (partial shapefunction_i)/(partial undefposition_alpha)) = sum_(i=0)^(n_e - 1) (partial shapefunction_i)/(partial undefposition_alpha) displacement_i_alpha
+  $
+]
 
 == Linear Tetrahedron
 
