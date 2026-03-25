@@ -288,7 +288,7 @@ $
     integral_boundary_t delta displacement dot overline(bold(t)) dif boundary -
     integral_domain nabla delta displacement : cauchystress dif domain
     + integral_domain delta displacement dot density bodyforce dif domain
-  $
+  $ <eq_weak_balance_linear_momentum_galerkin>
 ]
 
 #property(title:"Integral approximation")[
@@ -311,7 +311,7 @@ $
 #property(title:"Density field in an element")[
   $
     density(position) = sum_(i=0)^(n_e - 1) shapefunction_i (position) dot density_i
-  $
+  $ <eq_nodal_density>
 
   where $density_i$ are the nodal density values for $0 <= i < n_e$.
 ]
@@ -329,44 +329,242 @@ $
 
 And they are found later in the weak form with the terms $integral_domain delta displacement dot density dot.double(displacement) dif domain$ and $integral_domain delta displacement dot density bodyforce dif domain$.
 
-Let's focus on $integral_domain delta displacement dot density dot.double(displacement) dif domain$:
+Let's focus on the inertial term $integral_domain delta displacement dot density dot.double(displacement) dif domain$ first.
 
-According to @eq_fem_integral_approx, the integral can be approximated by a sum of integrals over the elements:
+=== Inertial Term
+
+#definition(title:"Inertial Term")[
+  The term $integral_domain delta displacement dot density dot.double(displacement) dif domain$ is called inertial term.
+]
+
+According to @eq_fem_integral_approx, the integral in the inertial term can be approximated by a sum of integrals over the elements:
 $
-integral_domain delta displacement dot density dot.double(displacement) dif domain
+integral_domain delta displacement dot density(position) thick dot.double(displacement) dif domain
 =
-sum_(e=0)^(nummeshelements-1) integral_domain_e delta displacement dot density dot.double(displacement) dif domain_e
-$
+sum_(e=0)^(nummeshelements-1) integral_domain_e delta displacement dot density(position) thick dot.double(displacement) dif domain_e
+$ <eq_integral_approx_mass_elements>
 
-$density$, $delta displacement$ and $dot.double(displacement)$ can be approximated using shape functions:
+$delta displacement$ and $dot.double(displacement)$ can be approximated using shape functions:
 
 $
   integral_domain_e delta displacement dot density dot.double(displacement) dif domain_e
   &=
   integral_domain_e 
-  (sum_(i=0)^(n_e - 1) shapefunction_i (position) dot delta displacement_i) dot 
-  (sum_(j=0)^(n_e - 1) shapefunction_j (position) dot density_j) 
-  (sum_(k=0)^(n_e - 1) shapefunction_k (position) dot dot.double(displacement)_k) dif domain_e \
-  &= sum_(0 <= i,j,k < n_e) delta displacement_i dot density_j dot.double(displacement)_k integral_domain_e shapefunction_i (position) shapefunction_j (position) shapefunction_j (position) dif domain_e
+  (sum_(i=0)^(n_e - 1) shapefunction_i (position) dot delta displacement_e_i) dot 
+  density(position)
+  (sum_(j=0)^(n_e - 1) shapefunction_j (position) dot dot.double(displacement_e)_j) dif domain_e \
+  &= sum_(0 <= i < n_e) delta displacement_e_i (sum_(0 <= j < n_e) dot.double(displacement)_e_j integral_domain_e density(position) shapefunction_i (position) shapefunction_j (position) dif domain_e)
 $
 
-The integral can be evaluated in the reference element:
+#result(title:"Element mass matrix")[
+  Let's introduce $massmatrix^e$, the mass matrix of the element $e$ such that:
+  $
+    massmatrix_(i j)^e = integral_domain_e density(position) shapefunction_i (position) shapefunction_j (position) dif domain_e
+  $
 
-$
-  integral_domain_e shapefunction_i (position) shapefunction_j (position) shapefunction_j (position) dif domain_e
-  =
-  integral_referencedomain_e shapefunction_i (position) shapefunction_j (position) shapefunction_j (position) det(bold(J)(referenceposition)) dif referencedomain_e
-$
+  In compact form with $bold(shapefunction) = [shapefunction_0 shapefunction_1 ... shapefunction_(n_e-1)]$:
+  $
+    massmatrix^e = integral_domain_e density(position) bold(shapefunction)^T (position) bold(shapefunction)(position) dif domain_e
+  $ <eq_element_mass_matrix>
 
-#todo()[
-  Introduce Gauss quadrature somewhere
+  Then,
+
+  $
+    integral_domain_e delta displacement dot density dot.double(displacement) dif domain_e
+    &= sum_(0 <= i < n_e) delta displacement_e_i (sum_(0 <= j < n_e) massmatrix_(i j)^e dot.double(displacement)_e_j dif domain_e) \
+    &= sum_(0 <= i < n_e) delta displacement_e_i (massmatrix^e dot.double(displacement_e))_i
+  $
+
+  In compact form:
+  $
+    integral_domain_e delta displacement_e dot density dot.double(displacement) dif domain_e = bold(delta displacement_e)^T dot massmatrix^e dot.double(displacement_e)
+  $
 ]
 
-Using Gauss quadrature:
+#property(title:"Mass matrix assembly")[
+  The @eq_integral_approx_mass_elements can now be written:
+
+  $
+  integral_domain delta displacement dot density(position) thick dot.double(displacement) dif domain
+  =
+  sum_(e=0)^(nummeshelements-1) bold(delta displacement_e)^T dot massmatrix^e dot.double(displacement_e)
+  $
+
+  It's a sum over the elements. By mapping the elements, we can write this sum as matrix-vector operations:
+
+  $
+  integral_domain delta displacement dot density(position) thick dot.double(displacement) dif domain
+  = bold(delta displacement) dot massmatrix dot.double(displacement)
+  $
+]
+
+#property(title:"Evaluation of the element mass matrix")[
+The integral in @eq_element_mass_matrix can be evaluated in the reference element:
 
 $
-  
+  massmatrix^e
+  =
+  integral_referencedomain_e density(referenceposition) bold(referenceshapefunction)^T (referenceposition) bold(referenceshapefunction)(referenceposition) det(bold(J)(referenceposition)) dif referencedomain_e
 $
+]
+
+#property(title:"Constant density")[
+  If $density$ is constant, $density(position) = density(referenceposition) = Rho$,
+
+  $
+    massmatrix^e =
+    Rho integral_referencedomain_e bold(referenceshapefunction)^T (referenceposition) bold(referenceshapefunction)(referenceposition) det(bold(J)(referenceposition)) dif referencedomain_e
+  $
+
+  Using a Gauss-Legendre quadrature rule (@eq_gauss_legendre_quadrature_rule):
+
+  $
+    massmatrix^e = Rho sum_i omega_i bold(referenceshapefunction_i)^T (referenceposition) bold(referenceshapefunction)(referenceposition_i) det(bold(J)(referenceposition_i))
+  $
+]
+
+#property(title:"Spatially varying density")[
+  With a nodal density (@eq_nodal_density), the density cannot be extracted from the integral:
+
+  $
+    massmatrix^e
+    &=
+    integral_referencedomain_e density(referenceposition) bold(referenceshapefunction)^T (referenceposition) bold(referenceshapefunction)(referenceposition) det(bold(J)(referenceposition)) dif referencedomain_e \
+    &= integral_referencedomain_e (sum_(i=0)^(n_e - 1) referenceshapefunction_i (referenceposition) dot density_i) bold(referenceshapefunction)^T (referenceposition) bold(referenceshapefunction)(referenceposition) det(bold(J)(referenceposition)) dif referencedomain_e
+  $
+]
+
+=== Body Force Term
+
+#definition(title:"Body Force Term")[
+  $integral_domain delta displacement dot density bodyforce dif domain$ in @eq_weak_balance_linear_momentum_galerkin is called body force.
+]
+
+According to @eq_fem_integral_approx, the integral in the body force term can be approximated by a sum of integrals over the elements:
+$
+integral_domain delta displacement dot density(position) thick bodyforce dif domain
+=
+sum_(e=0)^(nummeshelements-1) integral_domain_e delta displacement dot density(position) thick bodyforce dif domain_e
+$ <eq_integral_approx_body_force_element>
+
+$delta displacement$ and $dot.double(displacement)$ can be approximated using shape functions:
+
+$
+  integral_domain_e delta displacement dot density(position) thick bodyforce dif domain_e
+  &=
+  integral_domain_e 
+  (sum_(i=0)^(n_e - 1) shapefunction_i (position) dot delta displacement_e_i) dot 
+  density(position) thick bodyforce dif domain_e \
+  &= sum_(i=0)^(n_e - 1) delta displacement_e_i integral_domain_e 
+  shapefunction_i (position) dot 
+  density(position) thick bodyforce dif domain_e
+$
+
+#definition(title:"Body force vector")[
+  Let's introduce the body force vector $force_bodyforce^e$ in the element such that:
+
+  $
+    force^e_bodyforce_i = integral_domain_e shapefunction_i (position) dot density(position) thick bodyforce dif domain_e
+  $
+
+  In compact form:
+
+  $
+    force^e_bodyforce = integral_domain_e shapefunction (position) dot density(position) thick bodyforce dif domain_e
+  $
+
+  and 
+  $
+    integral_domain_e delta displacement dot density(position) thick bodyforce dif domain_e
+    &= delta displacement_e^T dot force^e_bodyforce
+  $
+]
+
+#property(title:"Body force vector assembly")[
+
+  The equation @eq_integral_approx_body_force_element can now be written:
+
+  $
+    integral_domain delta displacement dot density(position) thick bodyforce dif domain
+    =
+    sum_(e=0)^(nummeshelements-1) delta displacement_e^T dot force^e_bodyforce
+  $
+
+  It's a sum over the elements. By mapping the elements, we can write this sum as global force vector:
+
+  $
+    integral_domain delta displacement dot density(position) thick bodyforce dif domain
+    = delta displacement dot force_bodyforce
+  $
+]
+
+#property(title:"Constant body force")[
+  If $bodyforce$ is constant, it can be extracted from the integral:
+
+  $
+    force^e_bodyforce_i 
+    &= integral_domain_e shapefunction_i (position) dot density(position) thick bodyforce dif domain_e\
+    &= bodyforce integral_domain_e shapefunction_i (position) dot density(position) dif domain_e
+  $
+]
+
+#property(title:"Constant density")[
+  We still consider the body force constant.
+  If $density$ is constant, $density(position) = density(referenceposition) = Rho$,
+
+
+  $
+    force^e_bodyforce_i 
+    &= integral_domain_e shapefunction_i (position) dot density(position) thick bodyforce dif domain_e\
+    &= bodyforce Rho integral_domain_e shapefunction_i (position) dif domain_e
+  $
+
+  In compact form:
+
+  $
+    force^e_bodyforce
+    &= bodyforce Rho integral_domain_e shapefunction (position) dif domain_e
+  $
+
+  The integral can be evaluated in the reference element:
+
+  $
+  integral_domain_e 
+    shapefunction (position) dif domain_e =
+    integral_referencedomain 
+    referenceshapefunction (referenceposition) det(bold(J)(referenceposition)) dif referencedomain_e
+  $
+
+  And  finally, it can be evaluated using Gauss-Legendre quadrature rule:
+
+  $
+    integral_domain_e shapefunction (position) dif domain_e approx
+    sum_k omega_k referenceshapefunction (referenceposition_k) det(bold(J)(referenceposition_k))
+  $
+
+  Putting all together:
+
+  $
+    force_bodyforce approx bodyforce Rho sum_k omega_k referenceshapefunction(referenceposition_k) det(bold(J)(referenceposition_k))
+  $
+]
+
+#property(title:"Spatially varying density")[
+  With a nodal density (@eq_nodal_density), the density cannot be extracted from the integral:
+
+  $
+    force^e_bodyforce_i 
+    &= bodyforce integral_domain_e shapefunction_i (position) dot density(position) dif domain_e \
+    &= bodyforce integral_domain_e shapefunction_i (position) dot (sum_(j=0)^(n_e - 1) shapefunction_j (position) dot density_j) dif domain_e \
+    &= bodyforce sum_(j=0)^(n_e - 1) density_j integral_domain_e shapefunction_i (position)  shapefunction_j (position) dif domain_e
+  $
+
+  In compact form:
+
+  $
+    force^e = bodyforce integral_domain_e shapefunction^T (position) (shapefunction(position) density^e) dif domain_e
+  $
+]
 
 == Elasticity
 
@@ -395,7 +593,7 @@ $
     &= 1/2 (sum_(i=0)^(n_e - 1) (partial shapefunction_i)/(partial undefposition) displacement_i^T + (sum_(i=0)^(n_e - 1) (partial shapefunction_i)/(partial undefposition) displacement_i^T)^T) \
     &= 1/2 (sum_(i=0)^(n_e - 1) (partial shapefunction_i)/(partial undefposition) displacement_i^T + sum_(i=0)^(n_e - 1) ((partial shapefunction_i)/(partial undefposition) displacement_i^T)^T) \
     &= 1/2 sum_(i=0)^(n_e - 1)( (partial shapefunction_i)/(partial undefposition) displacement_i^T + displacement_i ((partial shapefunction_i)/(partial undefposition))^T) \
-  $
+  $ <eq_strain_from_shape_function_and_displacement>
 
   For $0<=alpha, beta<p$:
 
@@ -409,6 +607,14 @@ $
   $
     linearstraintensorcomponent_(alpha,alpha) =
     1/2 sum_(i=0)^(n_e - 1)( (partial shapefunction_i)/(partial undefposition_alpha) displacement_i_alpha + displacement_i_alpha (partial shapefunction_i)/(partial undefposition_alpha)) = sum_(i=0)^(n_e - 1) (partial shapefunction_i)/(partial undefposition_alpha) displacement_i_alpha
+  $
+]
+
+#mybox(title:"Strain-displacement tensor")[
+  Based on @eq_strain_from_shape_function_and_displacement, we can build a matrix $B$, such that:
+
+  $
+    linearstraintensorcomponent = B displacement
   $
 ]
 

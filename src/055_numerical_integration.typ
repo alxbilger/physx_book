@@ -113,7 +113,7 @@ It is convenient to transform the interval $[a,b]$ to $[-1,1]$.
 #mybox(title:"Gauss-Legendre quadrature rule")[
   $
     integral_(-1)^1 g(t) dif t approx sum_(i=0)^(n-1) omega_i g(t_i) dif t
-  $
+  $ <eq_gauss_legendre_quadrature_rule>
 
   where:
   - $t_i$ are the roots of $P_n(t)$, the Legendre polynomial.
