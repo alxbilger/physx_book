@@ -192,6 +192,137 @@ $
   ((partial referenceposition)/(partial position))^T in bb(R)^(p times r)
 $
 
+== Some Elements
+
+=== Linear Edge
+
+#definition(title:"Reference element")[
+  $
+    referenceposition_0 &= mat(-1)\
+    referenceposition_1 &= mat(1)
+  $ <eq_linear_edge_reference_element>
+]
+
+#property(title:"Derivation of shape functions")[
+  The shape functions are assumed linear:
+  $
+    referenceshapefunction(referenceposition) =
+    mat(referenceshapefunction_0(referenceposition); referenceshapefunction_1(referenceposition)) =
+    mat(
+      a + b referenceposition;
+      c + d referenceposition
+    )
+  $
+
+  For $referenceshapefunction_0$:
+
+  $
+    mat(delim: #("{", none),
+      referenceshapefunction_0(referenceposition_0) = 1;
+      referenceshapefunction_0(referenceposition_1) = 0;
+    ) 
+    <=>
+    mat(delim: #("{", none),
+      a + b referenceposition_0 = 1;
+      a + b referenceposition_1 = 0;
+    )
+    <=>
+      mat(1, referenceposition_0; 1, referenceposition_1)
+      mat(a;b)=mat(1;0)
+    <=>
+    mat(delim: #("{", none),
+      a = referenceposition_1 / (referenceposition_1 - referenceposition_0);
+      b = - 1 / (referenceposition_1 - referenceposition_0);
+    )
+  $
+
+  For $referenceshapefunction_1$:
+  
+  $
+    mat(delim: #("{", none),
+      referenceshapefunction_1(referenceposition_0) = 0;
+      referenceshapefunction_1(referenceposition_1) = 1;
+    ) 
+    <=>
+    mat(delim: #("{", none),
+      c + d referenceposition_0 = 0;
+      c + d referenceposition_1 = 1;
+    )
+    <=>
+      mat(1, referenceposition_0; 1, referenceposition_1)
+      mat(c;d)=mat(0;1)
+    <=>
+    mat(delim: #("{", none),
+      c = -referenceposition_0 / (referenceposition_1 - referenceposition_0);
+      d = 1 / (referenceposition_1 - referenceposition_0);
+    )
+  $
+
+  Based on @eq_linear_edge_reference_element,
+
+  $
+    mat(delim: #("{", none),
+      a = 1 / 2;
+      b = -1 / 2;
+      c = 1 / 2;
+      d = 1 / 2;
+    )
+  $
+
+  and
+
+  $
+    referenceshapefunction(referenceposition) =
+    mat(referenceshapefunction_0(referenceposition); referenceshapefunction_1(referenceposition)) =
+    mat(
+      1/2 - 1/2 referenceposition;
+      1/2 + 1/2 referenceposition
+    )
+  $
+]
+
+=== Linear Triangle
+
+#definition(title:"Reference element")[
+  $
+    referenceposition_0 &= mat(0;0),
+    referenceposition_1 &= mat(1;0),
+    referenceposition_2 &= mat(0;1)
+  $ <eq_linear_triangle_reference_element>
+]
+
+#property(title:"Derivation of shape functions")[
+  The shape functions are assumed bilinear. For $referenceposition = (x, y)$
+  $
+    referenceshapefunction(referenceposition) =
+    mat(referenceshapefunction_0(referenceposition); referenceshapefunction_1(referenceposition)) =
+    mat(
+      a_0 x + b_0 y + c_0;
+      a_1 x + b_1 y + c_1;
+      a_2 x + b_2 y + c_2
+    )
+  $
+
+  For $referenceshapefunction_0$, we have:
+
+  $
+    mat(delim: #("{", none),
+      referenceshapefunction_0(referenceposition_0) = 1;
+      referenceshapefunction_0(referenceposition_1) = 0;
+      referenceshapefunction_0(referenceposition_2) = 0;
+    )
+    <=>
+    mat(delim: #("{", none),
+      a_0 referenceposition_0_x + b_0 referenceposition_0_y + c_0 = 1;
+      a_0 referenceposition_1_x + b_0 referenceposition_1_y + c_0 = 0;
+      a_0 referenceposition_2_x + b_0 referenceposition_2_y + c_0 = 0;
+    )
+    <=>
+    
+  $
+
+]
+
 == Variational Formulation
 
 $
