@@ -88,6 +88,8 @@
 
 #definition(title:"Reference coordinates")[
   Reference coordinates $referenceposition$ are the standardized positions in $RR^r$ within a reference element that define each node’s location. For example, in a triangular element, the three corners of the reference triangle are labeled with reference coordinates—these positions are fixed and identical for all triangular elements in the mesh.
+
+  A reference element has $n_e$ nodes denoted $referenceposition^((i))$ for $0<=i<n_e$.
 ]
 
 #definition(title:"Mapping between reference and physical coordinates")[
@@ -125,7 +127,7 @@
 
   $
     referenceshapefunction_i (referenceposition_j) = delta_(i j)
-  $
+  $ <eq_shape_function_property_kronecker>
 
   or,
 
@@ -192,84 +194,130 @@ $
   ((partial referenceposition)/(partial position))^T in bb(R)^(p times r)
 $
 
-== Some Elements
+== Shape functions for some elements
 
 === Linear Edge
 
-#definition(title:"Reference element")[
-  $
-    referenceposition_0 &= mat(-1)\
-    referenceposition_1 &= mat(1)
-  $ <eq_linear_edge_reference_element>
-]
+The shape functions are assumed linear:
+$
+  referenceshapefunction(referenceposition) =
+  mat(referenceshapefunction_0(referenceposition); referenceshapefunction_1(referenceposition)) =
+  mat(
+    a_0 + b_0 referenceposition;
+    a_1 + b_1 referenceposition
+  )
+$
 
-#property(title:"Derivation of shape functions")[
-  The shape functions are assumed linear:
+The reference elements has 2 nodes: $referenceposition^((0))$ and $referenceposition^((1))$.
+
+For $referenceshapefunction_0$:
+
+$
+  mat(delim: #("{", none),
+    referenceshapefunction_0(referenceposition^((0))) = 1;
+    referenceshapefunction_0(referenceposition^((1))) = 0;
+  ) 
+  <=>
+  mat(delim: #("{", none),
+    a_0 + b_0 referenceposition^((0)) = 1;
+    a_0 + b_0 referenceposition^((1)) = 0;
+  )
+  <=>
+  mat(delim: #("{", none),
+    a_0 &= referenceposition^((1)) / (referenceposition^((1)) - referenceposition^((0)));
+    b_0 &= - 1 / (referenceposition^((1)) - referenceposition^((0)));
+  )
+$
+
+For $referenceshapefunction_1$:
+
+$
+  mat(delim: #("{", none),
+    referenceshapefunction_1(referenceposition^((0))) = 0;
+    referenceshapefunction_1(referenceposition^((1))) = 1;
+  ) 
+  <=>
+  mat(delim: #("{", none),
+    a_1 + b_1 referenceposition^((0)) = 0;
+    a_1 + b_1 referenceposition^((1)) = 1;
+  )
+  <=>
+  mat(delim: #("{", none),
+    a_1 &= referenceposition^((0)) / (referenceposition^((1)) - referenceposition^((0)));
+    b_1 &= 1 / (referenceposition^((1)) - referenceposition^((0)));
+  )
+$
+
+Finally:
+
+$
+  referenceshapefunction(referenceposition) =
+  mat(referenceshapefunction_0(referenceposition); referenceshapefunction_1(referenceposition)) =
+  mat(
+    (xi - referenceposition^((1)))/(referenceposition^((0)) - referenceposition^((1)));
+    (-xi + referenceposition^((0)))/(referenceposition^((0)) - referenceposition^((1)))
+  )
+$
+
+We can also compute the gradient of the shape functions:
+
+$
+  gradient referenceshapefunction = (partial referenceshapefunction)/(partial referenceposition) =
+  mat(
+    (partial referenceshapefunction_0)/(partial referenceposition);
+    (partial referenceshapefunction_1)/(partial referenceposition);
+  ) =
+  mat(
+    1/(referenceposition^((0)) - referenceposition^((1)));
+    -1/(referenceposition^((0)) - referenceposition^((1)))
+  )
+$
+
+
+#examplebox(title:"Unit interval")[
+
+  In this example, we consider the 2-nodes reference element is defined as:
+
+  $
+    cases(
+      referenceposition^((0))=mat(0),
+      referenceposition^((1))=mat(1),
+    )
+  $
+
+  The resulting shape functions in the reference element are:
+
   $
     referenceshapefunction(referenceposition) =
     mat(referenceshapefunction_0(referenceposition); referenceshapefunction_1(referenceposition)) =
     mat(
-      a + b referenceposition;
-      c + d referenceposition
+      1 - referenceposition;
+      referenceposition
     )
   $
 
-  For $referenceshapefunction_0$:
+  and the gradient:
 
   $
-    mat(delim: #("{", none),
-      referenceshapefunction_0(referenceposition_0) = 1;
-      referenceshapefunction_0(referenceposition_1) = 0;
-    ) 
-    <=>
-    mat(delim: #("{", none),
-      a + b referenceposition_0 = 1;
-      a + b referenceposition_1 = 0;
-    )
-    <=>
-      mat(1, referenceposition_0; 1, referenceposition_1)
-      mat(a;b)=mat(1;0)
-    <=>
-    mat(delim: #("{", none),
-      a = referenceposition_1 / (referenceposition_1 - referenceposition_0);
-      b = - 1 / (referenceposition_1 - referenceposition_0);
+    gradient referenceshapefunction (referenceposition) = 
+    mat(
+      -1;1
     )
   $
+]
 
-  For $referenceshapefunction_1$:
-  
+#examplebox()[
+
+  In this example, we consider the 2-nodes reference element is defined as:
+
   $
-    mat(delim: #("{", none),
-      referenceshapefunction_1(referenceposition_0) = 0;
-      referenceshapefunction_1(referenceposition_1) = 1;
-    ) 
-    <=>
-    mat(delim: #("{", none),
-      c + d referenceposition_0 = 0;
-      c + d referenceposition_1 = 1;
-    )
-    <=>
-      mat(1, referenceposition_0; 1, referenceposition_1)
-      mat(c;d)=mat(0;1)
-    <=>
-    mat(delim: #("{", none),
-      c = -referenceposition_0 / (referenceposition_1 - referenceposition_0);
-      d = 1 / (referenceposition_1 - referenceposition_0);
+    cases(
+      referenceposition^((0))=mat(-1),
+      referenceposition^((1))=mat(1),
     )
   $
 
-  Based on @eq_linear_edge_reference_element,
-
-  $
-    mat(delim: #("{", none),
-      a = 1 / 2;
-      b = -1 / 2;
-      c = 1 / 2;
-      d = 1 / 2;
-    )
-  $
-
-  and
+  The resulting shape functions in the reference element are:
 
   $
     referenceshapefunction(referenceposition) =
@@ -279,48 +327,473 @@ $
       1/2 + 1/2 referenceposition
     )
   $
+
+  and the gradient:
+
+  $
+    gradient referenceshapefunction (referenceposition) = 
+    mat(
+      -1/2;1/2
+    )
+  $
 ]
 
 === Linear Triangle
 
-#definition(title:"Reference element")[
-  $
-    referenceposition_0 &= mat(0;0),
-    referenceposition_1 &= mat(1;0),
-    referenceposition_2 &= mat(0;1)
-  $ <eq_linear_triangle_reference_element>
-]
+The shape functions are assumed linear. For $referenceposition = mat(referenceposition_x, referenceposition_y)$:
+$
+  referenceshapefunction(referenceposition) =
+  mat(referenceshapefunction_0(referenceposition); referenceshapefunction_1(referenceposition); referenceshapefunction_2(referenceposition)) =
+  mat(
+    a_0 referenceposition_x + b_0 referenceposition_y + c_0;
+    a_1 referenceposition_x + b_1 referenceposition_y + c_1;
+    a_2 referenceposition_x + b_2 referenceposition_y + c_2
+  )
+$
 
-#property(title:"Derivation of shape functions")[
-  The shape functions are assumed bilinear. For $referenceposition = (x, y)$
+For $referenceshapefunction_0$, we have:
+
+$
+  mat(delim: #("{", none),
+    referenceshapefunction_0(referenceposition^((0))) = 1;
+    referenceshapefunction_0(referenceposition^((1))) = 0;
+    referenceshapefunction_0(referenceposition^((2))) = 0;
+  )
+  &<=>
+  mat(delim: #("{", none),
+    a_0 referenceposition^((0))_x + b_0 referenceposition^((0))_y + c_0 = 1;
+    a_0 referenceposition^((1))_x + b_0 referenceposition^((1))_y + c_0 = 0;
+    a_0 referenceposition^((2))_x + b_0 referenceposition^((2))_y + c_0 = 0;
+  )
+  \ &<=>
+  mat(delim: #("{", none),
+    a_0=(referenceposition^((1))_y - referenceposition^((2))_y)/(referenceposition^((0))_x referenceposition^((1))_y - referenceposition^((0))_x referenceposition^((2))_y - referenceposition^((0))_y referenceposition^((1))_x + referenceposition^((0))_y referenceposition^((2))_x + referenceposition^((1))_x referenceposition^((2))_y - referenceposition^((1))_y referenceposition^((2))_x);
+    b_0=(-referenceposition^((1))_x + referenceposition^((2))_x)/(referenceposition^((0))_x referenceposition^((1))_y - referenceposition^((0))_x referenceposition^((2))_y - referenceposition^((0))_y referenceposition^((1))_x + referenceposition^((0))_y referenceposition^((2))_x + referenceposition^((1))_x referenceposition^((2))_y - referenceposition^((1))_y referenceposition^((2))_x);
+    c_0=(referenceposition^((1))_x referenceposition^((2))_y - referenceposition^((1))_y referenceposition^((2))_x)/(referenceposition^((0))_x referenceposition^((1))_y - referenceposition^((0))_x referenceposition^((2))_y - referenceposition^((0))_y referenceposition^((1))_x + referenceposition^((0))_y referenceposition^((2))_x + referenceposition^((1))_x referenceposition^((2))_y - referenceposition^((1))_y referenceposition^((2))_x)
+  )
+
+$
+
+For $referenceshapefunction_1$, we have:
+
+$
+  mat(delim: #("{", none),
+    referenceshapefunction_0(referenceposition^((0))) = 0;
+    referenceshapefunction_0(referenceposition^((1))) = 1;
+    referenceshapefunction_0(referenceposition^((2))) = 0;
+  )
+  &<=>
+  mat(delim: #("{", none),
+    a_0 referenceposition^((0))_x + b_0 referenceposition^((0))_y + c_0 = 0;
+    a_0 referenceposition^((1))_x + b_0 referenceposition^((1))_y + c_0 = 1;
+    a_0 referenceposition^((2))_x + b_0 referenceposition^((2))_y + c_0 = 0;
+  )
+  \ &<=>
+  mat(delim: #("{", none),
+    a_1=(-referenceposition^((0))_y + referenceposition^((2))_y)/(referenceposition^((0))_x referenceposition^((1))_y - referenceposition^((0))_x referenceposition^((2))_y - referenceposition^((0))_y referenceposition^((1))_x + referenceposition^((0))_y referenceposition^((2))_x + referenceposition^((1))_x referenceposition^((2))_y - referenceposition^((1))_y referenceposition^((2))_x);
+    b_1=(referenceposition^((0))_x - referenceposition^((2))_x)/(referenceposition^((0))_x referenceposition^((1))_y - referenceposition^((0))_x referenceposition^((2))_y - referenceposition^((0))_y referenceposition^((1))_x + referenceposition^((0))_y referenceposition^((2))_x + referenceposition^((1))_x referenceposition^((2))_y - referenceposition^((1))_y referenceposition^((2))_x);
+    c_1=(-referenceposition^((0))_x referenceposition^((2))_y + referenceposition^((0))_y referenceposition^((2))_x)/(referenceposition^((0))_x referenceposition^((1))_y - referenceposition^((0))_x referenceposition^((2))_y - referenceposition^((0))_y referenceposition^((1))_x + referenceposition^((0))_y referenceposition^((2))_x + referenceposition^((1))_x referenceposition^((2))_y - referenceposition^((1))_y referenceposition^((2))_x)
+
+  )
+
+$
+
+For $referenceshapefunction_2$, we have:
+
+$
+  mat(delim: #("{", none),
+    referenceshapefunction_0(referenceposition^((0))) = 0;
+    referenceshapefunction_0(referenceposition^((1))) = 0;
+    referenceshapefunction_0(referenceposition^((2))) = 1;
+  )
+  &<=>
+  mat(delim: #("{", none),
+    a_0 referenceposition^((0))_x + b_0 referenceposition^((0))_y + c_0 = 0;
+    a_0 referenceposition^((1))_x + b_0 referenceposition^((1))_y + c_0 = 0;
+    a_0 referenceposition^((2))_x + b_0 referenceposition^((2))_y + c_0 = 1;
+  )
+  \ &<=>
+  mat(delim: #("{", none),
+    a_2=(referenceposition^((0))_y - referenceposition^((1))_y)/(referenceposition^((0))_x referenceposition^((1))_y - referenceposition^((0))_x referenceposition^((2))_y - referenceposition^((0))_y referenceposition^((1))_x + referenceposition^((0))_y referenceposition^((2))_x + referenceposition^((1))_x referenceposition^((2))_y - referenceposition^((1))_y referenceposition^((2))_x);
+    b_2=(-referenceposition^((0))_x + referenceposition^((1))_x)/(referenceposition^((0))_x referenceposition^((1))_y - referenceposition^((0))_x referenceposition^((2))_y - referenceposition^((0))_y referenceposition^((1))_x + referenceposition^((0))_y referenceposition^((2))_x + referenceposition^((1))_x referenceposition^((2))_y - referenceposition^((1))_y referenceposition^((2))_x);
+    c_2=(referenceposition^((0))_x referenceposition^((1))_y - referenceposition^((0))_y referenceposition^((1))_x)/(referenceposition^((0))_x referenceposition^((1))_y - referenceposition^((0))_x referenceposition^((2))_y - referenceposition^((0))_y referenceposition^((1))_x + referenceposition^((0))_y referenceposition^((2))_x + referenceposition^((1))_x referenceposition^((2))_y - referenceposition^((1))_y referenceposition^((2))_x)
+  )
+$
+
+Finally:
+
+$
+  referenceshapefunction(referenceposition) =
+  mat(referenceshapefunction_0(referenceposition); referenceshapefunction_1(referenceposition); referenceshapefunction_2(referenceposition)) =
+  mat(
+    (-(referenceposition^((1))_x - referenceposition^((2))_x) referenceposition_y + (referenceposition^((1))_y - referenceposition^((2))_y) referenceposition_x + referenceposition^((1))_x referenceposition^((2))_y - referenceposition^((1))_y referenceposition^((2))_x)/(referenceposition^((0))_x referenceposition^((1))_y - referenceposition^((0))_x referenceposition^((2))_y - referenceposition^((0))_y referenceposition^((1))_x + referenceposition^((0))_y referenceposition^((2))_x + referenceposition^((1))_x referenceposition^((2))_y - referenceposition^((1))_y referenceposition^((2))_x);
+
+    ((referenceposition^((0))_x - referenceposition^((2))_x) referenceposition_y - (referenceposition^((0))_y - referenceposition^((2))_y) referenceposition_x - referenceposition^((0))_x referenceposition^((2))_y + referenceposition^((0))_y referenceposition^((2))_x)/(referenceposition^((0))_x referenceposition^((1))_y - referenceposition^((0))_x referenceposition^((2))_y - referenceposition^((0))_y referenceposition^((1))_x + referenceposition^((0))_y referenceposition^((2))_x + referenceposition^((1))_x referenceposition^((2))_y - referenceposition^((1))_y referenceposition^((2))_x);
+
+    (-(referenceposition^((0))_x - referenceposition^((1))_x) referenceposition_y + (referenceposition^((0))_y - referenceposition^((1))_y) referenceposition_x + referenceposition^((0))_x referenceposition^((1))_y - referenceposition^((0))_y referenceposition^((1))_x)/(referenceposition^((0))_x referenceposition^((1))_y - referenceposition^((0))_x referenceposition^((2))_y - referenceposition^((0))_y referenceposition^((1))_x + referenceposition^((0))_y referenceposition^((2))_x + referenceposition^((1))_x referenceposition^((2))_y - referenceposition^((1))_y referenceposition^((2))_x)
+
+
+  )
+$
+
+
+
+#examplebox()[
+  In this example, we consider the 3-nodes reference element is defined as:
+
+  $
+    cases(
+      referenceposition^((0))=mat(0,0),
+      referenceposition^((1))=mat(1,0),
+      referenceposition^((2))=mat(0,1),
+    )
+  $
+
+  The resulting shape functions in the reference element are:
+
   $
     referenceshapefunction(referenceposition) =
-    mat(referenceshapefunction_0(referenceposition); referenceshapefunction_1(referenceposition)) =
     mat(
-      a_0 x + b_0 y + c_0;
-      a_1 x + b_1 y + c_1;
-      a_2 x + b_2 y + c_2
+      referenceshapefunction_0(referenceposition);
+      referenceshapefunction_1(referenceposition);
+      referenceshapefunction_2(referenceposition)
+    ) =
+    mat(
+      1 -referenceposition_x - referenceposition_y;
+      referenceposition_x;
+      referenceposition_y
     )
   $
 
-  For $referenceshapefunction_0$, we have:
+  and the gradient:
 
   $
-    mat(delim: #("{", none),
-      referenceshapefunction_0(referenceposition_0) = 1;
-      referenceshapefunction_0(referenceposition_1) = 0;
-      referenceshapefunction_0(referenceposition_2) = 0;
+    gradient referenceshapefunction (referenceposition) = 
+    mat(
+      -1,-1;
+      1,0;
+      0,1;
     )
-    <=>
-    mat(delim: #("{", none),
-      a_0 referenceposition_0_x + b_0 referenceposition_0_y + c_0 = 1;
-      a_0 referenceposition_1_x + b_0 referenceposition_1_y + c_0 = 0;
-      a_0 referenceposition_2_x + b_0 referenceposition_2_y + c_0 = 0;
+  $
+]
+
+=== Linear Quadrilateral
+
+The shape functions are assumed bilinear. For $referenceposition = mat(referenceposition_x, referenceposition_y)$:
+$
+  referenceshapefunction(referenceposition) =
+  mat(referenceshapefunction_0(referenceposition); referenceshapefunction_1(referenceposition); referenceshapefunction_2(referenceposition); referenceshapefunction_3(referenceposition)) =
+  mat(
+    a_0 referenceposition_x referenceposition_y + b_0 referenceposition_x + c_0 referenceposition_y + d_0;
+    a_1 referenceposition_x referenceposition_y + b_1 referenceposition_x + c_1 referenceposition_y + d_1;
+    a_2 referenceposition_x referenceposition_y + b_2 referenceposition_x + c_2 referenceposition_y + d_2;
+    a_3 referenceposition_x referenceposition_y + b_3 referenceposition_x + c_3 referenceposition_y + d_3
+  )
+$ <eq_shape_function_linear_quad_bilinear>
+
+Based on the property of @eq_shape_function_property_kronecker, we must solve the 4 following systems to get $a_i$, $b_i$, $c_i$ and $d_i$ for $0<=i<4$:
+$
+  mat(delim: #("{", none),
+    referenceshapefunction_0(referenceposition^((0))) = 1;
+    referenceshapefunction_0(referenceposition^((1))) = 0;
+    referenceshapefunction_0(referenceposition^((2))) = 0;
+    referenceshapefunction_0(referenceposition^((3))) = 0;
+  )
+  wide
+  mat(delim: #("{", none),
+    referenceshapefunction_1(referenceposition^((0))) = 0;
+    referenceshapefunction_1(referenceposition^((1))) = 1;
+    referenceshapefunction_1(referenceposition^((2))) = 0;
+    referenceshapefunction_1(referenceposition^((3))) = 0;
+  )
+  wide
+  mat(delim: #("{", none),
+    referenceshapefunction_2(referenceposition^((0))) = 0;
+    referenceshapefunction_2(referenceposition^((1))) = 0;
+    referenceshapefunction_2(referenceposition^((2))) = 1;
+    referenceshapefunction_2(referenceposition^((3))) = 0;
+  )
+  wide
+  mat(delim: #("{", none),
+    referenceshapefunction_3(referenceposition^((0))) = 0;
+    referenceshapefunction_3(referenceposition^((1))) = 0;
+    referenceshapefunction_3(referenceposition^((2))) = 0;
+    referenceshapefunction_3(referenceposition^((3))) = 1;
+  )
+$
+
+Once $a_i$, $b_i$, $c_i$ and $d_i$ are computed, they can be substituted in @eq_shape_function_linear_quad_bilinear.
+
+The generic expression for any reference element is too long to show in this book. It is preferable to work directly with numerical values for the reference nodes.
+
+#examplebox()[
+  In this example, we consider the 4-nodes reference element is defined as:
+
+  $
+    cases(
+      referenceposition^((0))=mat(-1,-1),
+      referenceposition^((1))=mat(1,-1),
+      referenceposition^((2))=mat(1,1),
+      referenceposition^((3))=mat(-1,1)
     )
-    <=>
-    
   $
 
+  The resulting shape functions in the reference element are:
+
+  $
+    referenceshapefunction(referenceposition) =
+    mat(
+      referenceshapefunction_0(referenceposition);
+      referenceshapefunction_1(referenceposition);
+      referenceshapefunction_2(referenceposition);
+      referenceshapefunction_3(referenceposition)
+    ) =
+    1/4 mat(
+      (referenceposition_x - 1) (referenceposition_y - 1);
+      -(referenceposition_x + 1) (referenceposition_y - 1);
+      (referenceposition_x + 1) (referenceposition_y + 1);
+      -(referenceposition_x - 1) (referenceposition_y + 1)
+    )
+  $
+
+  and the gradient:
+
+  $
+    gradient referenceshapefunction (referenceposition) =
+    1/4
+    mat(
+      referenceposition_y - 1,
+      referenceposition_x - 1;
+
+      1 - referenceposition_y,
+      -referenceposition_x - 1;
+
+      referenceposition_y + 1,
+      referenceposition_x + 1;
+
+      -referenceposition_y - 1,
+      1 - referenceposition_x;
+    )
+  $
+]
+
+#examplebox()[
+  In this example, we consider the 4-nodes reference element is defined as:
+
+  $
+    cases(
+      referenceposition^((0))=mat(0,0),
+      referenceposition^((1))=mat(1,0),
+      referenceposition^((2))=mat(0,1),
+      referenceposition^((3))=mat(1,1)
+    )
+  $
+
+  The resulting shape functions in the reference element are:
+
+  $
+    referenceshapefunction(referenceposition) =
+    mat(
+      referenceshapefunction_0(referenceposition);
+      referenceshapefunction_1(referenceposition);
+      referenceshapefunction_2(referenceposition);
+      referenceshapefunction_3(referenceposition)
+    ) =
+    mat(
+      (referenceposition_x - 1) (referenceposition_y - 1);
+      -(referenceposition_y - 1) referenceposition_x;
+      -(referenceposition_x - 1) referenceposition_y;
+      referenceposition_x referenceposition_y
+    )
+  $
+
+    and the gradient:
+
+  $
+    gradient referenceshapefunction (referenceposition) =
+    mat(
+      referenceposition_y - 1,
+      referenceposition_x - 1;
+
+      1 - referenceposition_y,
+      -referenceposition_x;
+
+      -referenceposition_y,
+      1 - referenceposition_x;
+
+      referenceposition_y,
+      referenceposition_x;
+    )
+  $
+]
+
+=== Linear Tetrahedron
+
+The shape functions are assumed linear. For $referenceposition = mat(referenceposition_x, referenceposition_y, referenceposition_z)$:
+$
+  referenceshapefunction(referenceposition) =
+  mat(referenceshapefunction_0(referenceposition); referenceshapefunction_1(referenceposition); referenceshapefunction_2(referenceposition); referenceshapefunction_3(referenceposition)) =
+  mat(
+    a_0 referenceposition_x + b_0 referenceposition_y + c_0 referenceposition_z + d_0;
+    a_1 referenceposition_x + b_1 referenceposition_y + c_1 referenceposition_z + d_1;
+    a_2 referenceposition_x + b_2 referenceposition_y + c_2 referenceposition_z + d_2;
+    a_3 referenceposition_x + b_3 referenceposition_y + c_3 referenceposition_z + d_3
+  )
+$ <eq_shape_function_linear_tetra_bilinear>
+
+Based on the property of @eq_shape_function_property_kronecker, we must solve the 4 following systems to get $a_i$, $b_i$, $c_i$ and $d_i$ for $0<=i<4$:
+$
+  mat(delim: #("{", none),
+    referenceshapefunction_0(referenceposition^((0))) = 1;
+    referenceshapefunction_0(referenceposition^((1))) = 0;
+    referenceshapefunction_0(referenceposition^((2))) = 0;
+    referenceshapefunction_0(referenceposition^((3))) = 0;
+  )
+  wide
+  mat(delim: #("{", none),
+    referenceshapefunction_1(referenceposition^((0))) = 0;
+    referenceshapefunction_1(referenceposition^((1))) = 1;
+    referenceshapefunction_1(referenceposition^((2))) = 0;
+    referenceshapefunction_1(referenceposition^((3))) = 0;
+  )
+  wide
+  mat(delim: #("{", none),
+    referenceshapefunction_2(referenceposition^((0))) = 0;
+    referenceshapefunction_2(referenceposition^((1))) = 0;
+    referenceshapefunction_2(referenceposition^((2))) = 1;
+    referenceshapefunction_2(referenceposition^((3))) = 0;
+  )
+  wide
+  mat(delim: #("{", none),
+    referenceshapefunction_3(referenceposition^((0))) = 0;
+    referenceshapefunction_3(referenceposition^((1))) = 0;
+    referenceshapefunction_3(referenceposition^((2))) = 0;
+    referenceshapefunction_3(referenceposition^((3))) = 1;
+  )
+$
+
+Once $a_i$, $b_i$, $c_i$ and $d_i$ are computed, they can be substituted in @eq_shape_function_linear_tetra_bilinear.
+
+The generic expression for any reference element is too long to show in this book. It is preferable to work directly with numerical values for the reference nodes.
+
+
+#examplebox()[
+
+  In this example, we consider the 4-nodes reference element is defined as:
+
+  $
+    cases(
+      referenceposition^((0))=mat(0,0,0),
+      referenceposition^((1))=mat(1,0,0),
+      referenceposition^((2))=mat(0,1,0),
+      referenceposition^((3))=mat(0,0,1)
+    )
+  $
+
+  The resulting shape functions in the reference element are:
+
+  $
+    referenceshapefunction(referenceposition) =
+    mat(
+      referenceshapefunction_0(referenceposition);
+      referenceshapefunction_1(referenceposition);
+      referenceshapefunction_2(referenceposition);
+      referenceshapefunction_3(referenceposition)
+    ) =
+    mat(
+      1 - referenceposition_x - referenceposition_y - referenceposition_z;
+      referenceposition_x;
+      referenceposition_y;
+      referenceposition_z
+    )
+  $
+]
+
+=== Linear Hexahedron
+
+The shape functions are assumed trilinear. For $referenceposition = mat(referenceposition_x, referenceposition_y, referenceposition_z)$:
+$
+  referenceshapefunction(referenceposition) =
+  mat(
+    referenceshapefunction_0(referenceposition); 
+    referenceshapefunction_1(referenceposition);
+    referenceshapefunction_2(referenceposition);
+    referenceshapefunction_3(referenceposition);
+    referenceshapefunction_4(referenceposition); 
+    referenceshapefunction_5(referenceposition);
+    referenceshapefunction_6(referenceposition);
+    referenceshapefunction_7(referenceposition);
+  ) =
+  mat(
+    a_0 referenceposition_x referenceposition_y referenceposition_z + b_0 referenceposition_x referenceposition_y + c_0 referenceposition_y referenceposition_z + d_0 referenceposition_x referenceposition_z + e_0 referenceposition_x + f_0 referenceposition_y + g_0 referenceposition_z + h_0;
+    a_1 referenceposition_x referenceposition_y referenceposition_z + b_1 referenceposition_x referenceposition_y + c_1 referenceposition_y referenceposition_z + d_1 referenceposition_x referenceposition_z + e_1 referenceposition_x + f_1 referenceposition_y + g_1 referenceposition_z + h_1;
+    a_2 referenceposition_x referenceposition_y referenceposition_z + b_2 referenceposition_x referenceposition_y + c_2 referenceposition_y referenceposition_z + d_2 referenceposition_x referenceposition_z + e_2 referenceposition_x + f_2 referenceposition_y + g_2 referenceposition_z + h_2;
+    a_3 referenceposition_x referenceposition_y referenceposition_z + b_3 referenceposition_x referenceposition_y + c_3 referenceposition_y referenceposition_z + d_3 referenceposition_x referenceposition_z + e_3 referenceposition_x + f_3 referenceposition_y + g_3 referenceposition_z + h_3;
+    a_4 referenceposition_x referenceposition_y referenceposition_z + b_4 referenceposition_x referenceposition_y + c_4 referenceposition_y referenceposition_z + d_4 referenceposition_x referenceposition_z + e_4 referenceposition_x + f_4 referenceposition_y + g_4 referenceposition_z + h_4;
+    a_5 referenceposition_x referenceposition_y referenceposition_z + b_5 referenceposition_x referenceposition_y + c_5 referenceposition_y referenceposition_z + d_5 referenceposition_x referenceposition_z + e_5 referenceposition_x + f_5 referenceposition_y + g_5 referenceposition_z + h_5;
+    a_6 referenceposition_x referenceposition_y referenceposition_z + b_6 referenceposition_x referenceposition_y + c_6 referenceposition_y referenceposition_z + d_6 referenceposition_x referenceposition_z + e_6 referenceposition_x + f_6 referenceposition_y + g_6 referenceposition_z + h_6;
+    a_7 referenceposition_x referenceposition_y referenceposition_z + b_7 referenceposition_x referenceposition_y + c_7 referenceposition_y referenceposition_z + d_7 referenceposition_x referenceposition_z + e_7 referenceposition_x + f_7 referenceposition_y + g_7 referenceposition_z + h_7;
+  )
+$ <eq_shape_function_linear_hexa_bilinear>
+
+#examplebox()[
+
+  In this example, we consider the 8-nodes reference element is defined as:
+  $
+    cases(
+      referenceposition^((0))=mat(-1,-1,-1),
+      referenceposition^((1))=mat(+1,-1,-1),
+      referenceposition^((2))=mat(+1,+1,-1),
+      referenceposition^((3))=mat(-1,+1,-1),
+      referenceposition^((4))=mat(-1,-1,+1),
+      referenceposition^((5))=mat(+1,-1,+1),
+      referenceposition^((6))=mat(+1,+1,+1),
+      referenceposition^((7))=mat(-1,+1,+1),
+    )
+  $
+
+  The resulting shape functions in the reference element are:
+
+  $
+    referenceshapefunction(referenceposition) =
+    mat(
+      referenceshapefunction_0(referenceposition);
+      referenceshapefunction_1(referenceposition);
+      referenceshapefunction_2(referenceposition);
+      referenceshapefunction_3(referenceposition);
+      referenceshapefunction_4(referenceposition);
+      referenceshapefunction_5(referenceposition);
+      referenceshapefunction_6(referenceposition);
+      referenceshapefunction_7(referenceposition);
+    ) =
+    1/8
+    mat(
+      -(referenceposition_x - 1) (referenceposition_y - 1) (referenceposition_z - 1);
+      (referenceposition_x + 1) (referenceposition_y - 1) (referenceposition_z - 1);
+      -(referenceposition_x + 1) (referenceposition_y + 1) (referenceposition_z - 1);
+      (referenceposition_x - 1) (referenceposition_y + 1) (referenceposition_z - 1);
+      (referenceposition_x - 1) (referenceposition_y - 1) (referenceposition_z + 1);
+      -(referenceposition_x + 1) (referenceposition_y - 1) (referenceposition_z + 1);
+      (referenceposition_x + 1) (referenceposition_y + 1) (referenceposition_z + 1);
+      -(referenceposition_x - 1) (referenceposition_y + 1) (referenceposition_z + 1);
+    )
+  $
+
+  and the gradient:
+
+  $
+    gradient referenceshapefunction (referenceposition) = 1/8
+    mat(
+      -(referenceposition_y - 1) (referenceposition_z - 1), -(referenceposition_x - 1) (referenceposition_z - 1), -(referenceposition_x - 1) (referenceposition_y - 1);
+      (referenceposition_y - 1) (referenceposition_z - 1), (referenceposition_x + 1) (referenceposition_z - 1), (referenceposition_x + 1) (referenceposition_y - 1);
+      -(referenceposition_y + 1) (referenceposition_z - 1), -(referenceposition_x + 1) (referenceposition_z - 1), -(referenceposition_x + 1) (referenceposition_y + 1);
+      (referenceposition_y + 1) (referenceposition_z - 1), (referenceposition_x - 1) (referenceposition_z - 1), (referenceposition_x - 1) (referenceposition_y + 1);
+      (referenceposition_y - 1) (referenceposition_z + 1), (referenceposition_x - 1) (referenceposition_z + 1), (referenceposition_x - 1) (referenceposition_y - 1);
+      -(referenceposition_y - 1) (referenceposition_z + 1), -(referenceposition_x + 1) (referenceposition_z + 1), -(referenceposition_x + 1) (referenceposition_y - 1);
+      (referenceposition_y + 1) (referenceposition_z + 1), (referenceposition_x + 1) (referenceposition_z + 1), (referenceposition_x + 1) (referenceposition_y + 1);
+      -(referenceposition_y + 1) (referenceposition_z + 1), -(referenceposition_x - 1) (referenceposition_z + 1), -(referenceposition_x - 1) (referenceposition_y + 1);
+    )
+  $
 ]
 
 == Variational Formulation
