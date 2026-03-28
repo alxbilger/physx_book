@@ -194,6 +194,59 @@ $
   ((partial referenceposition)/(partial position))^T in bb(R)^(p times r)
 $
 
+#definition(title:"Shape function matrix")[
+
+  We introduce the shape function matrix $shapefunctionmatrix$:
+  $
+    shapefunctionmatrix =
+    mat(shapefunction_0 identity, shapefunction_1 identity, ...,shapefunction_(n_e - 1) identity)
+  $
+
+  In 2D with 2 shape functions (2-nodes element), $shapefunctionmatrix$ would look like:
+
+  $
+    shapefunctionmatrix = 
+    mat(
+      N_0, 0, N_1, 0;
+      0, N_0, 0, N_1
+    )
+  $
+
+  In 3D with 4 shape functions (4-nodes element), $shapefunctionmatrix$ would look like:
+
+  $
+    shapefunctionmatrix = 
+    mat(
+      N_0, 0, 0, N_1, 0, 0, N_2, 0, 0, N_3, 0, 0;
+      0, N_0, 0, 0, N_1, 0, 0, N_2, 0, 0, N_3, 0;
+      0, 0, N_0, 0, 0, N_1, 0, 0, N_2, 0, 0, N_3;
+    )
+  $
+]
+
+The physical values $u_i$ of each node in an element, for $0<=i<n_e$ are stacked in a vector $u^e$.
+
+In 2D, in a 2-nodes element, $u^e$ would look like:
+
+$
+  u^e =
+  mat(u_0_x; u_0_y; u_1_x; u_1_y)
+$
+
+In 3D, in a 4-nodes element, $u_e$ would look like:
+
+$
+  u^e =
+  mat(u_0_x; u_0_y; u_0_z; u_1_x; u_1_y; u_1_z; u_2_x; u_2_y; u_2_z; u_3_x; u_3_y; u_3_z;)
+$
+
+#result(title:"Compact form")[
+  $
+    u(referenceposition) = shapefunctionmatrix(referenceposition) u^e
+  $
+]
+
+
 == Shape functions for some elements
 
 === Linear Edge
@@ -957,18 +1010,18 @@ $
   (sum_(i=0)^(n_e - 1) shapefunction_i (position) dot delta displacement_e_i) dot 
   density(position)
   (sum_(j=0)^(n_e - 1) shapefunction_j (position) dot dot.double(displacement_e)_j) dif domain_e \
-  &= sum_(0 <= i < n_e) delta displacement_e_i (sum_(0 <= j < n_e) dot.double(displacement)_e_j integral_domain_e density(position) shapefunction_i (position) shapefunction_j (position) dif domain_e)
+  &= sum_(0 <= i < n_e) delta displacement_e_i (sum_(0 <= j < n_e) dot.double(displacement)_e_j integral_domain_e density(position) [shapefunction_i (position) identity] [shapefunction_j (position) identity] dif domain_e)
 $
 
 #result(title:"Element mass matrix")[
   Let's introduce $massmatrix^e$, the mass matrix of the element $e$ such that:
   $
-    massmatrix_(i j)^e = integral_domain_e density(position) shapefunction_i (position) shapefunction_j (position) dif domain_e
+    massmatrix_(i j)^e = integral_domain_e density(position) [shapefunction_i (position) identity] [shapefunction_j (position) identity] dif domain_e
   $
 
-  In compact form with $bold(shapefunction) = [shapefunction_0 shapefunction_1 ... shapefunction_(n_e-1)]$:
+  In compact form with $shapefunctionmatrix = mat(shapefunction_0 identity, shapefunction_1 identity, ..., shapefunction_(n_(e -1)) identity)$:
   $
-    massmatrix^e = integral_domain_e density(position) bold(shapefunction)^T (position) bold(shapefunction)(position) dif domain_e
+    massmatrix^e = integral_domain_e density(position) [shapefunctionmatrix(position)]^T shapefunctionmatrix (position) dif domain_e
   $ <eq_element_mass_matrix>
 
   Then,
@@ -1059,8 +1112,8 @@ $
   integral_domain_e 
   (sum_(i=0)^(n_e - 1) shapefunction_i (position) dot delta displacement_e_i) dot 
   density(position) thick bodyforce dif domain_e \
-  &= sum_(i=0)^(n_e - 1) delta displacement_e_i integral_domain_e 
-  shapefunction_i (position) dot 
+  &= sum_(i=0)^(n_e - 1) delta displacement_e_i dot integral_domain_e 
+  shapefunction_i (position) thick 
   density(position) thick bodyforce dif domain_e
 $
 
@@ -1071,10 +1124,18 @@ $
     force^e_bodyforce_i = integral_domain_e shapefunction_i (position) dot density(position) thick bodyforce dif domain_e
   $
 
-  In compact form:
+  With this definition we have: 
 
   $
-    force^e_bodyforce = integral_domain_e shapefunction (position) dot density(position) thick bodyforce dif domain_e
+    integral_domain_e delta displacement dot density(position) thick bodyforce dif domain_e
+    =
+    sum_(i=0)^(n_e - 1) delta displacement_e_i dot force^e_bodyforce_i
+  $
+
+  In compact form with $bold(shapefunction) = mat(shapefunction_0 identity, shapefunction_1 identity, ..., shapefunction_(n_(e -1)) identity)$:
+
+  $
+    force^e_bodyforce = integral_domain_e density(position) thick bold(shapefunction) (position)^T dot bodyforce thick dif domain_e
   $
 
   and 

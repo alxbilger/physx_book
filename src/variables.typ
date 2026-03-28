@@ -73,5 +73,6 @@
 #let elasticitytensor = $tensor4(CC)$
 #let bulkmodulus = $kappa$
 #let shapefunction = $N$
+#let shapefunctionmatrix = $cal(shapefunction)$
 #let referenceshapefunction = $hat(shapefunction)$
 #let nummeshelements = $n_"el"$
