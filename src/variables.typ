@@ -91,7 +91,7 @@
 }
 
 
-#let dimension = use-sym("dim")
+#let dimension = use-sym("dimension")
 #let stepsize = $#use-sym("stepsize")$
 #let odemassmatrix = $#use-sym("odemassmatrix")$
 #let odeenergy = $#use-sym("odeenergy")$
