@@ -1,4 +1,5 @@
 #import "mode.typ":*
+#import "variables.typ":*
 
 #set page(fill: pagecolor)
 #set text(fill: textcolor)
@@ -81,6 +82,8 @@
 
 ]
 
+#register-symbols
+
 #pagebreak()
 #include "000_intro.typ"
 
@@ -124,3 +127,7 @@ The sources of this book are available at https://github.com/alxbilger/physx_boo
 
 
 #bibliography("refs.bib")
+
+#pagebreak()
+
+#include "symbols.typ"
