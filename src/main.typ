@@ -54,6 +54,9 @@
     n)))})
 #set math.mat(delim:"[")
 
+#import "html.typ": html-export-template
+#show: html-export-template
+
 #show outline.entry.where(
   level: 1
 ): it => {
