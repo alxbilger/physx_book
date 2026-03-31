@@ -54,24 +54,11 @@
     n)))})
 #set math.mat(delim:"[")
 
+#import "page.typ": page-export-template
+#show: page-export-template
+
 #import "html.typ": html-export-template
 #show: html-export-template
-
-#show outline.entry.where(
-  level: 1
-): it => {
-  v(2em, weak: true)
-  block(
-    below: 2.5em,
-    breakable: false,
-    {
-      grid(columns:(50%, 50%), align: (left, right), 
-        text("Chapter " + it.prefix(), fill: maincolor), 
-        text(upper(it.body()), fill: maincolor)
-      )
-      line(length: 100%, stroke: maincolor)
-    })
-}
 
 #align(center, text(65pt)[
   #text(fill:maincolor, hyphenate: false, smallcaps(title))
