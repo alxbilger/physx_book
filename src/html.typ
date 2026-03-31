@@ -139,6 +139,12 @@
       attrs: (class: "chapter-heading"),
     )
   }
+  show align: it => {
+    let a = if it.alignment == center { "center" }
+            else if it.alignment == right { "right" }
+            else { "left" }
+    html.elem("div", it.body, attrs: (style: "text-align: " + a))
+  }
   doc
   // After the whole document, calculate the y-shift for every inline math.
   // This reduces the number of `query` calls, improving performance.
