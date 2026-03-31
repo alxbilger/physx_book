@@ -200,7 +200,7 @@ $
   $
     shapefunctionmatrix =
     mat(shapefunction_0 identity, shapefunction_1 identity, ...,shapefunction_(n_e - 1) identity)
-  $
+  $ <eq_shapefunction_matrix>
 
   In 2D with 2 shape functions (2-nodes element), $shapefunctionmatrix$ would look like:
 
@@ -868,36 +868,57 @@ Integration by parts:
 == Weak form
 
 #definition(title:"Strong form")[
-  The strong form of a physical law (e.g., balance of linear momentum) is the original partial differential equation (PDE) expressed in physical space $RR^p$
+  The strong form of a physical law is the original partial differential equation (PDE) expressed in physical space $RR^p$
+]
+
+#examplebox(title:"Strong form of the balance of linear momentum")[
+
+  The strong form of the balance of linear momentum (@eq_balance_linear_momentum) is:
+  $
+    density dot.double(displacement) = nabla dot cauchystress + density bodyforce
+  $
 ]
 
 #definition(title:"Weak form")[
   The weak form is derived by:
-  1. Multiplying the strong form by a test function $v$
+  1. Multiplying the strong form by a test function $testfunction$
   2. Integrating over the physical domain $domain$
 ]
 
-To get the weak form of the balance of linear momentum (@eq_balance_linear_momentum), let's multiply by a test function $v$ and integrate over $domain$:
+To get the weak form of the balance of linear momentum (@eq_balance_linear_momentum), let's multiply by a test function $testfunction$ and integrate over $domain$.
 
-Multiplication by $v$:
+Each component $i$ of the equation is multiplied by a test function $testfunction_i$:
+
 $
-  v dot density dot.double(displacement) = v dot (nabla dot cauchystress) + v dot density bodyforce
+  testfunction_i dot density dot.double(displacement_i) = testfunction_i dot sum_j (partial cauchystress_(j i))/(partial state_j) + testfunction_i dot density bodyforce_i
+$
+
+If we sum all the component, it is equivalent to a dot product:
+
+$
+  testfunctionvector dot density dot.double(displacement) = testfunctionvector dot (nabla dot cauchystress) + testfunctionvector dot density bodyforce
+$
+
+or, in vector notation:
+
+$
+  testfunctionvector^T density dot.double(displacement) = testfunctionvector^T dot (nabla dot cauchystress) + testfunctionvector^T dot density bodyforce
 $
 
 Integration over $domain$:
 
 $
-  integral_domain v dot density dot.double(displacement) dif domain = 
-  integral_domain v dot (nabla dot cauchystress) dif domain
-  + integral_domain v dot density bodyforce dif domain
+  integral_domain testfunctionvector dot density dot.double(displacement) dif domain = 
+  integral_domain testfunctionvector dot (nabla dot cauchystress) dif domain
+  + integral_domain testfunctionvector dot density bodyforce dif domain
 $
 
 Using the divergence theorem:
 
 $
-  integral_domain v dot (nabla dot cauchystress) dif domain =
-  integral_boundary v dot (cauchystress bold(n)) dif boundary -
-  integral_domain nabla v : cauchystress dif domain
+  integral_domain testfunctionvector dot (nabla dot cauchystress) dif domain =
+  integral_boundary testfunctionvector dot (cauchystress bold(n)) dif boundary -
+  integral_domain nabla testfunctionvector : cauchystress dif domain
 $
 
 #todo()[
@@ -907,17 +928,17 @@ $
 Substituting:
 
 $
-  integral_domain v dot density dot.double(displacement) dif domain = 
-  integral_boundary v dot (cauchystress bold(n)) dif boundary -
-  integral_domain nabla v : cauchystress dif domain
-  + integral_domain v dot density bodyforce dif domain
+  integral_domain testfunctionvector dot density dot.double(displacement) dif domain = 
+  integral_boundary testfunctionvector dot (cauchystress bold(n)) dif boundary -
+  integral_domain nabla testfunctionvector : cauchystress dif domain
+  + integral_domain testfunctionvector dot density bodyforce dif domain
 $
 
 Reducing the boundary integral:
 
 $
-  integral_boundary v dot (cauchystress bold(n)) dif boundary =
-  integral_boundary_t v dot overline(bold(t)) dif boundary
+  integral_boundary testfunctionvector dot (cauchystress bold(n)) dif boundary =
+  integral_boundary_t testfunctionvector dot overline(bold(t)) dif boundary
 $
 
 #todo()[
@@ -930,15 +951,15 @@ $
   Substituting:
 
   $
-    integral_domain v dot density dot.double(displacement) dif domain = 
-    integral_boundary_t v dot overline(bold(t)) dif boundary -
-    integral_domain nabla v : cauchystress dif domain
-    + integral_domain v dot density bodyforce dif domain
+    integral_domain testfunctionvector dot density dot.double(displacement) dif domain = 
+    integral_boundary_t testfunctionvector dot overline(bold(t)) dif boundary -
+    integral_domain nabla testfunctionvector : cauchystress dif domain
+    + integral_domain testfunctionvector dot density bodyforce dif domain
   $ <eq_weak_balance_linear_momentum>
 ]
 
 #definition(title:"Galerkin method")[
-  $v = delta displacement$
+  $testfunctionvector = delta displacement$
 
   $
     integral_domain delta displacement dot density dot.double(displacement) dif domain = 
@@ -1001,40 +1022,56 @@ integral_domain delta displacement dot density(position) thick dot.double(displa
 sum_(e=0)^(nummeshelements-1) integral_domain_e delta displacement dot density(position) thick dot.double(displacement) dif domain_e
 $ <eq_integral_approx_mass_elements>
 
-$delta displacement$ and $dot.double(displacement)$ can be approximated using shape functions:
+$delta displacement$ and $dot.double(displacement)$ can be approximated using shape functions (@eq_shapefunction_matrix):
+
+$
+  delta displacement(position) = shapefunctionmatrix(position) delta displacement^e
+$
+
+$
+  dot.double(displacement) = shapefunctionmatrix(position) dot.double(displacement)^e
+$
+
+Substituting:
 
 $
   integral_domain_e delta displacement dot density dot.double(displacement) dif domain_e
-  &=
-  integral_domain_e 
-  (sum_(i=0)^(n_e - 1) shapefunction_i (position) dot delta displacement_e_i) dot 
-  density(position)
-  (sum_(j=0)^(n_e - 1) shapefunction_j (position) dot dot.double(displacement_e)_j) dif domain_e \
-  &= sum_(0 <= i < n_e) delta displacement_e_i (sum_(0 <= j < n_e) dot.double(displacement)_e_j integral_domain_e density(position) [shapefunction_i (position) identity] [shapefunction_j (position) identity] dif domain_e)
+  &= 
+  integral_domain_e (shapefunctionmatrix(position) delta displacement^e) dot density(position) (shapefunctionmatrix(position) dot.double(displacement)^e) dif domain_e \
+  &= integral_domain_e (shapefunctionmatrix(position) delta displacement^e)^T density(position) (shapefunctionmatrix(position) dot.double(displacement)^e) dif domain_e \
+  &= (delta displacement^e)^T (integral_domain_e density(position) shapefunctionmatrix(position)^T shapefunctionmatrix(position)  dif domain_e) dot.double(displacement)^e
 $
 
 #result(title:"Element mass matrix")[
   Let's introduce $massmatrix^e$, the mass matrix of the element $e$ such that:
-  $
-    massmatrix_(i j)^e = integral_domain_e density(position) [shapefunction_i (position) identity] [shapefunction_j (position) identity] dif domain_e
-  $
-
-  In compact form with $shapefunctionmatrix = mat(shapefunction_0 identity, shapefunction_1 identity, ..., shapefunction_(n_(e -1)) identity)$:
+  
   $
     massmatrix^e = integral_domain_e density(position) [shapefunctionmatrix(position)]^T shapefunctionmatrix (position) dif domain_e
   $ <eq_element_mass_matrix>
 
-  Then,
-
-  $
-    integral_domain_e delta displacement dot density dot.double(displacement) dif domain_e
-    &= sum_(0 <= i < n_e) delta displacement_e_i (sum_(0 <= j < n_e) massmatrix_(i j)^e dot.double(displacement)_e_j dif domain_e) \
-    &= sum_(0 <= i < n_e) delta displacement_e_i (massmatrix^e dot.double(displacement_e))_i
-  $
-
-  In compact form:
+  Then:
   $
     integral_domain_e delta displacement_e dot density dot.double(displacement) dif domain_e = bold(delta displacement_e)^T dot massmatrix^e dot.double(displacement_e)
+  $
+]
+
+#examplebox()[
+  In 3D with 4 shape functions (4-nodes element), $shapefunctionmatrix$ would look like:
+  $
+    shapefunctionmatrix = 
+    mat(
+      N_0, 0, 0, N_1, 0, 0, N_2, 0, 0, N_3, 0, 0;
+      0, N_0, 0, 0, N_1, 0, 0, N_2, 0, 0, N_3, 0;
+      0, 0, N_0, 0, 0, N_1, 0, 0, N_2, 0, 0, N_3;
+    )
+  $
+
+  The product $shapefunctionmatrix^T shapefunctionmatrix$ will be:
+
+  $
+    mat(
+      N_0^2, 0, 0, N_0 N_1, 0, 0, N_0 N_2, 0, 0, N_0 N_3, 0, 0; 0, N_0^2, 0, 0, N_0 N_1, 0, 0, N_0 N_2, 0, 0, N_0 N_3, 0; 0, 0, N_0^2, 0, 0, N_0 N_1, 0, 0, N_0 N_2, 0, 0, N_0 N_3; N_0 N_1, 0, 0, N_1^2, 0, 0, N_1 N_2, 0, 0, N_1 N_3, 0, 0; 0, N_0 N_1, 0, 0, N_1^2, 0, 0, N_1 N_2, 0, 0, N_1 N_3, 0; 0, 0, N_0 N_1, 0, 0, N_1^2, 0, 0, N_1 N_2, 0, 0, N_1 N_3; N_0 N_2, 0, 0, N_1 N_2, 0, 0, N_2^2, 0, 0, N_2 N_3, 0, 0; 0, N_0 N_2, 0, 0, N_1 N_2, 0, 0, N_2^2, 0, 0, N_2 N_3, 0; 0, 0, N_0 N_2, 0, 0, N_1 N_2, 0, 0, N_2^2, 0, 0, N_2 N_3; N_0 N_3, 0, 0, N_1 N_3, 0, 0, N_2 N_3, 0, 0, N_3^2, 0, 0; 0, N_0 N_3, 0, 0, N_1 N_3, 0, 0, N_2 N_3, 0, 0, N_3^2, 0; 0, 0, N_0 N_3, 0, 0, N_1 N_3, 0, 0, N_2 N_3, 0, 0, N_3^2
+    )
   $
 ]
 

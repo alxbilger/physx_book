@@ -13,6 +13,7 @@
 #let domainsymbol = $Omega$
 #let rightcauchygreensymbol = $tensor2(C)$
 #let shapefunctionsymbol = $N$
+#let testfunctionsymbol = $v$
 
 #let register-symbols = {
   def-sym("dimension", "dim", [Dimension])
@@ -88,6 +89,8 @@
   def-sym("shapefunctionmatrix", $cal(shapefunctionsymbol)$, [Shape function matrix])
   def-sym("referenceshapefunction", $hat(shapefunctionsymbol)$, [Shape function in the reference element])
   def-sym("nummeshelements", $n_"el"$, [Number of elements in the mesh])
+  def-sym("testfunction", $testfunctionsymbol$, [Test function])
+  def-sym("testfunctionvector", $bold(testfunctionsymbol)$, [Test function vector])
 }
 
 
@@ -164,3 +167,5 @@
 #let shapefunctionmatrix = $#use-sym("shapefunctionmatrix")$
 #let referenceshapefunction = $#use-sym("referenceshapefunction")$
 #let nummeshelements = $#use-sym("nummeshelements")$
+#let testfunction = $#use-sym("testfunction")$
+#let testfunctionvector = $#use-sym("testfunctionvector")$
