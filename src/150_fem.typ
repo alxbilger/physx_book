@@ -100,8 +100,24 @@
 
   The Jacobian matrix of this mapping is:
   $
-    tensor2(bold(J)) = (partial position)/(partial referenceposition) in bb(R)^(p times r)
+    tensor2(bold(J))_position = (partial position)/(partial referenceposition) in bb(R)^(p times r)
   $ <eq_mapping_reference_physical>
+
+  The equivalent Jacobian matrix of the mapping for the rest position is:
+
+  $
+    tensor2(bold(J))_undefposition = (partial undefposition)/(partial referenceposition) in bb(R)^(p times r)
+  $
+]
+
+#property(title: "Deformation gradient")[
+  The deformation gradient (introduced in @deformation_gradient) can be expressed in terms of the Jacobian matrices:
+  $
+    deformationgradient 
+    &= (partial position)/(partial undefposition) \
+    &= (partial position)/(partial referenceposition) (partial referenceposition)/(partial undefposition) \
+    &= tensor2(bold(J))_position (tensor2(bold(J))_undefposition)^(-1)
+  $
 ]
 
 == Shape functions
