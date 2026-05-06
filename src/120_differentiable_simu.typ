@@ -5,8 +5,51 @@
 
 = Differentiable Simulation <section_differentiable_simulation>
 
+== Introduction
+
+// Many scientific and engineering challenges involve solving *inverse problems*—that is, we observe the outcome ($state_"desired"$) and must infer the underlying cause (the optimal parameter $theta$). This requires calculating how a small change in $theta$ affects $x$, which means computing derivatives: $(partial state)/(partial theta)$.
+
+// Differentiable simulation provides the mathematical framework and computational tools to overcome this black-box limitation. It transforms a standard, non-differentiable physical simulation into a *differentiable computation graph*. By doing so, we can propagate gradients backward through the entire system, allowing us to optimize parameters that govern the simulation model itself.
+
+#definition(title:"Forward problem")[
+  A Forward Problem is a predictive computational task that aims to determine the expected state or outcome of a physical system, given a complete set of known initial conditions, boundary conditions, and applied forcing functions.
+
+  In simple terms: If you know the cause (the inputs), the forward problem predicts the effect (the output).
+]
+
+#definition(title:"Inverse problem")[
+
+  An Inverse Problem is a computational task that aims to determine the unknown or underlying parameters, inputs, or forces required to produce an observed state, output, or measurement. It fundamentally reverses the process of modeling: rather than predicting an effect from known causes, it deduces the cause from the measured effect.
+
+  In simple terms: If you know the outcome (the measurements), the inverse problem tries to figure out what initial conditions or parameters must have been responsible for that outcome.
+]
+
+#mybox(title:"Inverse problem as an optimization")[
+  An inverse problem can be treated as an optimization where a parameter set $theta$ is optimized so it minimizes the difference between a model prediction and the actual measured data.
+]
+
+#definition(title:"Differentiable Simulation")[
+  A differentiable simulation is a computational model that allows its output state ($state$) to be treated as a continuous, differentiable function of its input parameters ($theta$). Its defining feature is the ability to compute the derivative $(partial state)/(partial theta)$
+  efficiently, enabling its use within optimization frameworks that rely on gradient information.
+]
+
+
+The capability to efficiently calculate $(partial state)/(partial theta)$ unlocks several crucial scientific domains:
+
+-  *Parameter Estimation (Inverse Problems):* This is perhaps the most common use case. Instead of guessing the optimal material property or boundary condition, we define a loss function $L(x) = ||x - x_"desired"||$. We then optimize $theta$ using gradient descent to find the set of parameters that make the simulation output match our measurements.
+- *Optimal Control:* Finding the control sequence (e.g., actuator forces over time) that minimizes a cost function while ensuring the simulated system dynamics are satisfied.
+- *Physics-Informed Machine Learning (PINNs):* Integrating physical laws directly into the loss function of an artificial neural network, allowing ML models to predict solutions that adhere to established physical constraints.
+- *Model Reduction and Sensitivity Analysis:* Quantifying how sensitive a simulation output is to variations in its input parameters, helping researchers identify which inputs are most critical for model stability or accuracy.
+
+#mybox(title:"Challenge")[
+  The core challenge in applying gradient descent to physical simulations stems from the fact that many physical laws and numerical schemes are defined implicitly. For instance, solving a system of differential equations at each time step often involves finding a state $state_{n+1}$ such that $f(state_(n+1), state_n, theta) = 0$. We cannot simply write $state_(n+1) = g(state_n, theta)$, as the relationship is implicit.
+
+  To handle this mathematically, we rely on the implicit function theorem.
+]
+
 == Implicit Function Theorem
 
+#property(title:"Implicit Function Theorem")[
 Let $f: RR^n times RR^m -> RR^n$ be continuously differentiable. Suppose there is a point $(x_0, theta_0) in RR^n times RR^m$ such that $f(x_0, theta_0) = 0$, and the Jacobian matrix of $f$ with respect to $x$, denoted $(d f)/(d x)(x_0, theta_0) in RR^n$, is invertible.
 
 There exists:
@@ -28,6 +71,7 @@ $
 $
 
 evaluated at $(x^*(theta), theta)$.
+]
 
 #proof()[
 $
@@ -49,7 +93,7 @@ $
 
 The objective is to optimize a parameter $theta$ of the simulation, such as the Young's modulus $E$, using a gradient-based optimization, so it minimizes a task-specific loss function $loss(position^*, theta)$, where $position^* = position^*(theta)$ is a solution of an implicit function $f(state, theta)=0$.
 
-An example of loss function can be $loss(position^*) = norm(position^* - position_d)$, where $position_t$ is a desired position.
+An example of loss function can be $loss(position^*) = norm(position^* - position_d)$, where $position_d$ is a desired position.
 
 The implicit function $f$ can be:
 - The variation of the action (@action_principle)
