@@ -117,7 +117,7 @@
     &= (partial position)/(partial undefposition) \
     &= (partial position)/(partial referenceposition) (partial referenceposition)/(partial undefposition) \
     &= tensor2(bold(J))_position (tensor2(bold(J))_undefposition)^(-1)
-  $
+  $ <eq_deformation_gradient_from_reference_element_mappings>
 ]
 
 == Shape functions
@@ -180,10 +180,18 @@
 Based on the previous equation and the definition of the mapping between reference and physical coordinates (@eq_mapping_reference_physical):
 
 $
-tensor2(bold(J)) 
-= (partial position)/(partial referenceposition) 
-= (partial  sum_i referenceshapefunction_i (referenceposition) position_i)/(partial referenceposition)
-= sum_i (partial  referenceshapefunction_i (referenceposition) position_i)/(partial referenceposition)
+tensor2(bold(J))_position 
+&= (partial position)/(partial referenceposition) \
+&= (partial  sum_i referenceshapefunction_i (referenceposition) position_i)/(partial referenceposition)\
+&= sum_i (partial  referenceshapefunction_i (referenceposition) position_i)/(partial referenceposition)\
+&= sum_(i=0)^(n_e-1) (partial referenceshapefunction_i)/(partial referenceposition) times.o position_i
+$
+
+Similarly,
+
+$
+tensor2(bold(J))_undefposition
+&= sum_(i=0)^(n_e-1) (partial referenceshapefunction_i)/(partial referenceposition) times.o undefposition_i
 $
 
 Entries of this Jacobian matrix are, for $0 <= alpha < p$ and $0 <= beta < r$ :
@@ -209,6 +217,16 @@ $
 $
   ((partial referenceposition)/(partial position))^T in bb(R)^(p times r)
 $
+
+#property(title:"Deformation Gradient")[
+  Starting from @eq_deformation_gradient_from_reference_element_mappings:
+
+  $
+    deformationgradient 
+    &= tensor2(bold(J))_position (tensor2(bold(J))_undefposition)^(-1)
+    &= (sum_(i=0)^(n_e-1) (partial referenceshapefunction_i)/(partial referenceposition) times.o position_i) (sum_(i=0)^(n_e-1) (partial referenceshapefunction_i)/(partial referenceposition) times.o undefposition_i)^(-1)
+  $
+]
 
 #definition(title:"Shape function matrix")[
 
@@ -262,6 +280,25 @@ $
   $
 ]
 
+#definition(title: "Deformation gradient")[
+  Recall the expression of the deformation gradient from the displacement @deformation_gradient_displacement:
+
+  $
+    deformationgradient = identity + (partial displacement)/(partial undefposition)
+  $
+
+  The displacement can be expressed using the shape functions:
+
+  $
+    displacement(referenceposition) = sum_(i=0)^(n_e - 1) referenceshapefunction_i (referenceposition) displacement_i
+  $
+
+  Then,
+
+  $
+    (partial displacement)/(partial undefposition) = sum_(i=0)^(n_e - 1) (partial referenceshapefunction_i)/(partial undefposition) displacement_i
+  $
+]
 
 == Shape functions for some elements
 
