@@ -91,6 +91,8 @@
   def-sym("nummeshelements", $n_"el"$, [Number of elements in the mesh])
   def-sym("testfunction", $testfunctionsymbol$, [Test function])
   def-sym("testfunctionvector", $bold(testfunctionsymbol)$, [Test function vector])
+  def-sym("quadratureoperator", $cal(Q)$, [Quadrature operator])
+  def-sym("residualode", $cal(R)$, [Residual function of an ODE])
 }
 
 
@@ -169,3 +171,5 @@
 #let nummeshelements = $#use-sym("nummeshelements")$
 #let testfunction = $#use-sym("testfunction")$
 #let testfunctionvector = $#use-sym("testfunctionvector")$
+#let quadratureoperator = $#use-sym("quadratureoperator")$
+#let residualode = $#use-sym("residualode")$

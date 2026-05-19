@@ -3,12 +3,12 @@
 
 == 1-step BDF (Backward Euler) <section_backward_euler>
 
-Let's consider a mass matrix ODE (@eq_mass_matrix_ode) of the form $odemassmatrix(t,y) thick y'=f(t,y)$ with $y(t_0) = y_0$.
+Let's consider an ODE (@sec_ode) and its residual function $residualode(t,y,y')$.
 
-The Backward Euler method approximates the integral in @eq_integrated_ode and @eq_integrated_mass_ode by the rectangle rule evaluated at the end of the interval (@eq_numerical_integration_rectangle_end):
+The *Backward Euler method* approximates the integral in @eq_integral_residual by the rectangle rule evaluated at the end of the interval (@eq_numerical_integration_rectangle_end):
 
 $
-  integral_(t_n)^(t_(n+1)) f(t,y) dif t approx stepsize thick f(t_(n+1), y_(n+1))
+  integral_(t_n)^(t_(n+1)) residualode(t,y,y') dif t approx stepsize thick residualode(t_(n+1), y_(n+1), y'_(n+1))
 $
 
 #figure(
@@ -18,13 +18,40 @@ $
   ],
 )
 
-Substituting this approximation into @eq_integrated_mass_ode yields:
+Substituting this approximation into @eq_integral_residual yields:
 
 $
-  odemassmatrix(t_(n+1),y_(n+1)) thick [y_(n+1)-y_n] = stepsize thick f(t_(n+1),y_(n+1))
+  stepsize thick residualode(t_(n+1), y_(n+1), y'_(n+1)) thick = 0
 $
 
-#property(title:"Comparison with Foward Euler method")[
+or, simply
+
+$
+  residualode(t_(n+1), y_(n+1), y'_(n+1)) thick = 0
+$
+
+For a mass matrix ODE (@eq_mass_matrix_ode), the residual is $residualode(t,y,y') = odemassmatrix(t,y) thick y' - f(t,y)$ (@eq_residual_mass_matrix_ode).
+
+Therefore:
+
+$
+  odemassmatrix(t_(n+1),y_(n+1)) thick y'_(n+1) - f(t_(n+1),y_(n+1)) = 0
+$
+
+First-order approximation of $y'_n$:
+$
+  y'_(n+1) approx (y_(n+1)-y_n)/stepsize
+$ <eq_backward_euler_approx_diff>
+
+By substitution:
+
+#result(title: "Backward Euler Method")[
+  $
+    odemassmatrix(t_(n+1),y_(n+1)) thick [y_(n+1)-y_n] = stepsize thick f(t_(n+1),y_(n+1)) = 0
+  $ <eq_generic_backward_euler>
+]
+
+#property(title:"Comparison with Forward Euler method")[
   The Forward Euler method is introduced in @section_forward_euler.
 
   #table(
@@ -34,12 +61,13 @@ $
     table.header(
       [*Forward Euler*], [*Backward Euler*]
     ),
-    math.equation(block: true, numbering: none, $ integral_(t_text(fill: green,n))^(t_text(fill: red,n+1)) f(t,y) dif t approx stepsize thick f(t_text(fill: green,n), y_text(fill: green,n)) $),
-    math.equation(block: true, numbering: none, $ integral_(t_text(fill: green,n))^(t_text(fill: red,n+1)) f(t,y) dif t approx stepsize thick f(t_text(fill: red,n+1), y_text(fill: red,n+1)) $),
-      image("../img/integral_forward_euler.svg", width: 20%),
+    math.equation(block: true, numbering: none, $ integral_(t_text(fill: green,n))^(t_text(fill: red,n+1)) residualode(t,y) dif t approx stepsize thick residualode(t_text(fill: green,n), y_text(fill: green,n)) $),
+    math.equation(block: true, numbering: none, $ integral_(t_text(fill: green,n))^(t_text(fill: red,n+1)) residualode(t,y) dif t approx stepsize thick residualode(t_text(fill: red,n+1), y_text(fill: red,n+1)) $),
+    image("../img/integral_forward_euler.svg", width: 20%),
     image("../img/integral_backward_euler.svg", width: 20%),
-    math.equation(block: true, numbering: none, $ odemassmatrix thick [y_text(fill: red,n+1)-y_text(fill: green,n)] = stepsize thick f(t_text(fill: green,n), y_text(fill: green,n)) $),
-    math.equation(block: true, numbering: none, $ odemassmatrix thick [y_text(fill: red,n+1)-y_text(fill: green,n)] = stepsize thick f(t_text(fill: red,n+1), y_text(fill: red,n+1)) $),
+    math.equation(block: true, numbering: none, $ odemassmatrix(t_text(fill: green,n),y_text(fill: green,n)) thick [y_text(fill: red,n+1)-y_text(fill: green,n)] = stepsize thick f(t_text(fill: green,n), y_text(fill: green,n)) $),
+    math.equation(block: true, numbering: none, $ odemassmatrix(t_text(fill: red,n+1),y_text(fill: red,n+1)) thick [y_text(fill: red,n+1)-y_text(fill: green,n)] = stepsize thick f(t_text(fill: red,n+1), y_text(fill: red,n+1)) $),
+    
   )
 ]
 
@@ -56,7 +84,7 @@ b_0 &= 0
 $
 ]
 
-This is a non-linear set of equations that can be solved with the Newton-Raphson algorithm (@section_newton_raphson).
+@eq_generic_backward_euler is a non-linear set of equations that can be solved with the Newton-Raphson algorithm (@section_newton_raphson).
 
 #mybox(title: "Residual Function")[
 Let's define the residual function $r$ such that:
