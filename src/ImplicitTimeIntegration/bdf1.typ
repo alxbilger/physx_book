@@ -100,24 +100,24 @@ The application of the Newton-Raphson algorithm requires the computation of the 
 
 $
   (partial r_(n+1))/(partial z) = 
-  (partial (odemassmatrix(t_(n+1),z) z))/(partial z) - stepsize thick (partial f(t_(n+1), z))/(partial z)
+  partial/(partial z)(odemassmatrix(t_(n+1),z) z) - stepsize thick (partial f(t_(n+1), z))/(partial z)
 $
 
-$odemassmatrix$ is considered constant:
+// $odemassmatrix$ is considered constant:
 
-$
-  (partial r_(n+1))/(partial z) = 
-  odemassmatrix - stepsize thick (partial f(t_(n+1), z))/(partial z)
-$
+// $
+//   (partial r_(n+1))/(partial z) = 
+//   odemassmatrix - stepsize thick (partial f(t_(n+1), z))/(partial z)
+// $
 
-#todo()[
-    Consider the mass matrix non-constant.
-  ]
+// #todo()[
+//     Consider the mass matrix non-constant.
+//   ]
 
 Substituting this Jacobian into an iteration of the Newton-Raphson method (@linear_system_in_newton_raphson), we obtain:
 
 $
-  (odemassmatrix - stepsize thick  lr((partial f(t_(n+1), z))/(partial z)|)_(z^i)) (z^(i+1)-z^i) = -r_(n+1)(z^i)
+  (partial/(partial z)(odemassmatrix(t_(n+1),z) z) - stepsize thick  lr((partial f(t_(n+1), z))/(partial z)|)_(z^i)) (z^(i+1)-z^i) = -r_(n+1)(z^i)
 $ <eq_backward_euler_newton_raphson>
 
 #property(title: "Newton's Second Law of Motion")[
@@ -135,9 +135,9 @@ $ <eq_backward_euler_newton_raphson>
       force(position(t), velocity(t))
     )
     , wide
-    odemassmatrix = mat(
+    odemassmatrix(t,y) = mat(
       identity,0;
-      0, massmatrix
+      0, massmatrix(position)
     )
   $
 
@@ -155,15 +155,39 @@ $ <eq_backward_euler_newton_raphson>
   ) =
   mat(
     0, identity;
-    stiffness^i, damping^i
+    stiffness, damping
   )
   $
+
+  We also need to differentiate the term with $odemassmatrix$:
+
+  $
+    partial/(partial y)(odemassmatrix(t_(n+1),y) y)
+    
+    &= partial/(partial y)(mat(
+      identity,0;
+      0, massmatrix(position)
+    )
+    mat( position(t); velocity(t)))\
+
+    &= mat(column-gap: #2em,
+      (partial position)/(partial position), 0;
+      partial/(partial position) (massmatrix(position) velocity), partial/(partial velocity) (massmatrix(position) velocity)
+    ) \
+
+    &= mat(column-gap: #2em,
+      identity, 0;
+      partial/(partial position) (massmatrix(position) velocity), massmatrix(position)
+    )
+  $
+
+
 
   We also express the residual for the law of motion:
   $
     r_(n+1)(state^i) &= mat(
       identity,0;
-      0, massmatrix
+      0, massmatrix(position^i)
     ) mat(position^(i) - position_n; velocity^(i) - velocity_n)
     - stepsize mat(
       velocity^i;
@@ -171,7 +195,7 @@ $ <eq_backward_euler_newton_raphson>
     )\ &= 
     mat(
       position^(i) - position_n - stepsize thick velocity^i;
-      massmatrix (velocity^i - velocity_n) - stepsize thick force(position^i, velocity^i)
+      massmatrix(position^i) (velocity^i - velocity_n) - stepsize thick force(position^i, velocity^i)
     )
   $
 
@@ -179,9 +203,9 @@ $ <eq_backward_euler_newton_raphson>
 
   $
     &
-    (mat(
+    (mat(column-gap: #2em,
       identity,0;
-      0, massmatrix
+      lr(partial/(partial position) (massmatrix(position) velocity)|)_(state^i), massmatrix(position^i)
     ) - 
     stepsize mat(
       0, identity;
@@ -190,9 +214,9 @@ $ <eq_backward_euler_newton_raphson>
     ) (z^(i+1)-z^i) = -r_(n+1)(z^i)
     \
     <=> &
-    mat(
-      identity, - stepsize identity;
-      - stepsize thick stiffness^i, massmatrix - stepsize thick damping^i
+    mat(column-gap: #2em,
+      identity, - stepsize thick identity;
+      lr(partial/(partial position) (massmatrix(position) velocity)|)_(state^i) - stepsize thick stiffness^i, massmatrix(position^i) - stepsize thick damping^i
     )
     (z^(i+1)-z^i) = -r_(n+1)(z^i)
   $
@@ -200,13 +224,13 @@ $ <eq_backward_euler_newton_raphson>
   The variable $z^i$ of iteration $i$ can be denoted $mat(position^i, velocity^i)^T$:
 
   $
-    mat(
-      identity, - stepsize identity;
-      - stepsize thick stiffness^i, massmatrix - stepsize thick damping^i
+    mat(column-gap: #2em,
+      identity, - stepsize thick identity;
+      lr(partial/(partial position) (massmatrix(position) velocity)|)_(state^i) - stepsize thick stiffness^i, massmatrix(position^i) - stepsize thick damping^i
     )
-    mat(position^(i+1) - position^i; velocity^(i+1) - velocity^i) = -mat(
+    mat(position^(i+1) - position^i; velocity^(i+1) - velocity^i) = \ -mat(
       position^(i) - position_n - stepsize thick velocity^i;
-      massmatrix (velocity^i - velocity_n) - stepsize thick force(position^i, velocity^i)
+      massmatrix(position^i) (velocity^i - velocity_n) - stepsize thick force(position^i, velocity^i)
     )
   $ <eq_backward_euler_newton_raphson_motion>
 ]
@@ -217,7 +241,7 @@ Using the Schur complement (see @schur_complement_linear_system_y) in @eq_backwa
 
 #result()[
 $
-(massmatrix - stepsize thick damping^i - stepsize^2 thick stiffness^i) (velocity ^(i+1) - velocity ^i) =\ -massmatrix(velocity^i - velocity_n) + stepsize thick force(state^i) + stepsize thick stiffness^i (-position^i + position_n + stepsize thick velocity^i)
+(massmatrix - stepsize thick (damping^i - lr(partial/(partial position) (massmatrix(position) velocity)|)_(state^i)) - stepsize^2 thick stiffness^i) (velocity ^(i+1) - velocity ^i) =\ -massmatrix(velocity^i - velocity_n) + stepsize thick force(state^i) - (lr(partial/(partial position) (massmatrix(position) velocity)|)_(state^i) - stepsize thick stiffness^i) (-position^i + position_n + stepsize thick velocity^i)
 $
 ]
 
