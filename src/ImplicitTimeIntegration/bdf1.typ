@@ -100,10 +100,19 @@ The application of the Newton-Raphson algorithm requires the computation of the 
 
 $
   (partial r_(n+1))/(partial z) = 
+  (partial (odemassmatrix(t_(n+1),z) z))/(partial z) - stepsize thick (partial f(t_(n+1), z))/(partial z)
+$
+
+$odemassmatrix$ is considered constant:
+
+$
+  (partial r_(n+1))/(partial z) = 
   odemassmatrix - stepsize thick (partial f(t_(n+1), z))/(partial z)
 $
 
-$odemassmatrix$ is considered constant.
+#todo()[
+    Consider the mass matrix non-constant.
+  ]
 
 Substituting this Jacobian into an iteration of the Newton-Raphson method (@linear_system_in_newton_raphson), we obtain:
 
@@ -112,6 +121,10 @@ $
 $ <eq_backward_euler_newton_raphson>
 
 #property(title: "Newton's Second Law of Motion")[
+
+  #todo()[
+    Consider the coriolis matrix
+  ]
 
   In Newton's second law of motion (@definition_y, @definition_f, @definition_M):
   $
