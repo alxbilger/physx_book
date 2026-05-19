@@ -124,12 +124,12 @@ $
   , wide
   f(t,y) = mat(
     velocity(t);
-    force(position(t), velocity(t))
+    force(position, velocity) - coriolismatrix(position, velocity) velocity
   )
   , wide
   odemassmatrix = mat(
     identity,0;
-    0, massmatrix
+    0, massmatrix(position)
   )
 $
 
@@ -140,18 +140,18 @@ $
   &
   mat(
     identity,0;
-    0, massmatrix
+    0, massmatrix(position)
   )
   thick
   mat(
     position_(n+1) - position_n;
     velocity_(n+1) - velocity_n
   )
-  = stepsize thick mat(velocity_n; force_n) \
+  = stepsize thick mat(velocity_n; force(position_n, velocity_n) - coriolismatrix(position_n, velocity_n) velocity_n) \
   <=>&
   mat(delim: #("{", none),
     position_(n+1) &= position_n + stepsize thick velocity_n;
-    velocity_(n+1) &= velocity_n + stepsize thick massmatrix^(-1) force_n
+    velocity_(n+1) &= velocity_n + stepsize thick massmatrix(position)^(-1) (force(position_n, velocity_n) - coriolismatrix(position_n, velocity_n) velocity_n)
   )
 $ <forward_euler>
 

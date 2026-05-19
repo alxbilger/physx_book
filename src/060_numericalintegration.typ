@@ -438,7 +438,7 @@ $ <definition_y>
 $
 f(t,y) = mat(
   velocity(t);
-  force(position, velocity) - coriolismatrix velocity
+  force(position, velocity) - coriolismatrix(position, velocity) velocity
 )
 $ <definition_f>
 
@@ -447,7 +447,7 @@ and
 $
   odemassmatrix(t,y) = mat(
     identity,0;
-    0, massmatrix
+    0, massmatrix(position)
   )
 $ <definition_M>
 
@@ -458,13 +458,13 @@ $
 
   mat(
     identity,0;
-    0, massmatrix
+    0, massmatrix(position)
   ) thick
   d/(d t) mat( position(t); velocity(t)) &
   =
   mat(
     velocity(t);
-    force(position, velocity) - coriolismatrix velocity
+    force(position, velocity) - coriolismatrix(position, velocity) velocity
   ) ;
   mat( position(t_0); velocity(t_0))& = mat( position_0; velocity_0)
 )
@@ -476,11 +476,11 @@ $
   mat(delim: #("{", none),
     mat(
         identity,0;
-        0, massmatrix
+        0, massmatrix(position)
       ) thick
       (d state)/(d t) &= mat(
     velocity(t);
-    force(position, velocity) - coriolismatrix velocity
+    force(position, velocity) - coriolismatrix(position, velocity) velocity
   );
   state(t_0) &= state_0
   )
@@ -489,7 +489,7 @@ $
 In case of Rayleigh damping (@F_rayleigh):
 
 $
-f(t,y) = mat( velocity(t); massmatrix^(-1) (force(position, velocity) - coriolismatrix velocity + (-alpha massmatrix + beta stiffness(position, velocity)) velocity))
+f(t,y) = mat( velocity(t); force(position, velocity) - coriolismatrix(position,velocity) velocity + (-alpha massmatrix(position) + beta stiffness(position, velocity)) velocity)
 $
 
 === Heat Equation <section_heat_equation_as_ODE>
