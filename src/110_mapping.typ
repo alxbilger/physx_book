@@ -187,3 +187,20 @@ $
   &= (partial massmatrix_"out" (position_"out"))/(partial position_"out") (partial position_"out")/(partial position_"in") \
   &= (partial massmatrix_"out" (position_"out"))/(partial position_"out") jacobianmapping(position_"in")
 $
+
+== Multiple mappings chain
+
+A chain of $n$ mapping functions:
+$
+  position_"out" = (mapping_0 circle.small mapping_1 circle.small ... circle.small mapping_(n-1))(position_"in")
+$
+
+#property(title:"Velocity")[
+  $
+    velocity_"out" &= (d position_"out")/(d t) \
+    &= (d (mapping_0 circle.small mapping_1 circle.small ... circle.small mapping_(n-1))(position_"in"))/(d t) \
+    &= (product_(i=0)^(n-1) jacobianmapping_i) velocity_"in"
+  $
+
+  where $jacobianmapping_i$ is the jacobian matrix of the mapping function $mapping_i$.
+]
