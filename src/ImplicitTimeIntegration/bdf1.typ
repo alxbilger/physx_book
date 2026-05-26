@@ -170,14 +170,19 @@ $ <eq_backward_euler_newton_raphson>
     )
     mat( position(t); velocity(t)))\
 
-    &= mat(column-gap: #2em,
-      (partial position)/(partial position), 0;
-      partial/(partial position) (massmatrix(position) velocity), partial/(partial velocity) (massmatrix(position) velocity)
-    ) \
+    &= partial/(partial y) mat(
+      position(t);
+      massmatrix(q) velocity(t)
+    )\
+
+    &= mat(
+      partial_position position(t), partial_velocity position(t);
+      partial_position [massmatrix(q) velocity(t)], partial_velocity [massmatrix(q) velocity(t)]
+    )\
 
     &= mat(column-gap: #2em,
       identity, 0;
-      partial/(partial position) (massmatrix(position) velocity), massmatrix(position)
+      partial_position massmatrix(position) dot velocity, massmatrix(position)
     )
   $
 
@@ -205,7 +210,7 @@ $ <eq_backward_euler_newton_raphson>
     &
     (mat(column-gap: #2em,
       identity,0;
-      lr(partial/(partial position) (massmatrix(position) velocity)|)_(state^i), massmatrix(position^i)
+      partial_position massmatrix(position^i) dot velocity^i, massmatrix(position^i)
     ) - 
     stepsize mat(
       0, identity;
@@ -216,7 +221,7 @@ $ <eq_backward_euler_newton_raphson>
     <=> &
     mat(column-gap: #2em,
       identity, - stepsize thick identity;
-      lr(partial/(partial position) (massmatrix(position) velocity)|)_(state^i) - stepsize thick stiffness^i, massmatrix(position^i) - stepsize thick damping^i
+      partial_position massmatrix(position^i) dot velocity^i - stepsize thick stiffness^i, massmatrix(position^i) - stepsize thick damping^i
     )
     (z^(i+1)-z^i) = -r_(n+1)(z^i)
   $
@@ -226,7 +231,7 @@ $ <eq_backward_euler_newton_raphson>
   $
     mat(column-gap: #2em,
       identity, - stepsize thick identity;
-      lr(partial/(partial position) (massmatrix(position) velocity)|)_(state^i) - stepsize thick stiffness^i, massmatrix(position^i) - stepsize thick damping^i
+      partial_position massmatrix(position^i) dot velocity^i - stepsize thick stiffness^i, massmatrix(position^i) - stepsize thick damping^i
     )
     mat(position^(i+1) - position^i; velocity^(i+1) - velocity^i) = \ -mat(
       position^(i) - position_n - stepsize thick velocity^i;
@@ -235,13 +240,35 @@ $ <eq_backward_euler_newton_raphson>
   $ <eq_backward_euler_newton_raphson_motion>
 ]
 
-=== Solve for $velocity$
+=== Solve for $velocity$ <sec_backward_euler_schur_velocity>
 
-Using the Schur complement (see @schur_complement_linear_system_y) in @eq_backward_euler_newton_raphson_motion, we obtain the reduced equation in $velocity ^(i+1) - velocity ^i$:
+@eq_backward_euler_newton_raphson_motion is a system of equations using a 2x2 partition of the form $mat( A, B; C, D) mat( x; y) = mat( u;v)$, where:
+
+$
+  A &= identity\
+  B &= - stepsize thick identity\
+  C &= partial_position massmatrix(position^i) dot velocity^i - stepsize thick stiffness^i \
+  D &= massmatrix(position^i) - stepsize thick damping^i \
+  x &= position^(i+1) - position^i \
+  y &= velocity^(i+1) - velocity^i \
+  u &= -(position^(i) - position_n - stepsize thick velocity^i) \
+  v &= -(massmatrix(position^i) (velocity^i - velocity_n) - stepsize thick force(position^i, velocity^i))
+$
+
+The Schur complement (@schur_complement_linear_system_y) can be used to get the following system in $y$:
+$
+  (D - C A^(-1) B) y = v - C A^(-1) u
+$
+
+Substituting,
+
+$
+  (massmatrix(position^i) - stepsize thick damping^i - (partial_position massmatrix(position^i) dot velocity^i - stepsize thick stiffness^i)(- stepsize thick identity) ) (velocity^(i+1) - velocity^i) =\ -(massmatrix(position^i) (velocity^i - velocity_n) - stepsize thick force(position^i, velocity^i) - (partial_position massmatrix(position^i) dot velocity^i - stepsize thick stiffness^i) ( -(position^(i) - position_n - stepsize thick velocity^i))
+$
 
 #result()[
 $
-(massmatrix - stepsize thick (damping^i - lr(partial/(partial position) (massmatrix(position) velocity)|)_(state^i)) - stepsize^2 thick stiffness^i) (velocity ^(i+1) - velocity ^i) =\ -massmatrix(velocity^i - velocity_n) + stepsize thick force(state^i) - (lr(partial/(partial position) (massmatrix(position) velocity)|)_(state^i) - stepsize thick stiffness^i) (-position^i + position_n + stepsize thick velocity^i)
+(massmatrix(position^i) - stepsize thick (damping^i - partial_position massmatrix(position^i) dot velocity^i) - stepsize^2 thick stiffness^i) (velocity ^(i+1) - velocity ^i) =\ -massmatrix(velocity^i - velocity_n) + stepsize thick force(state^i) - (partial_position massmatrix(position^i) dot velocity^i - stepsize thick stiffness^i) (-position^i + position_n + stepsize thick velocity^i)
 $
 ]
 
@@ -261,20 +288,36 @@ position^(i+1) = position_n + stepsize thick velocity ^(i+1)
 $
 ]
 
-=== Solve for #position
+=== Solve for $position$
 
-Using the Schur complement (see @schur_complement_linear_system_x) in @eq_backward_euler_newton_raphson_motion, we obtain the reduced equation in $position^(i+1) - position ^i$:
+Using the notation of the @sec_backward_euler_schur_velocity, the Schur complement can also be used to get one of the following systems in $x$:
 
+@schur_complement_linear_system_x:
+$
+  (C - D B^(-1) A) x = v - D B^(-1) u
+$
+
+or @schur_complement_linear_system_x_D:
 
 $
-((-stepsize thick #stiffness (#state^i))-(massmatrix - stepsize thick #damping (#state^i)) (-1/stepsize I)) (position^(i+1) - position ^i) =\ -massmatrix(velocity^i - velocity_n) + stepsize thick force(state^i) - (massmatrix - stepsize thick #damping (#state^i))(-1/stepsize) (-position^i + position_n + stepsize thick velocity^i)
+  (A - B D^(-1) C) x = u - B D^(-1) v
+$
+
+Since the inverse of $B$ is trivial ($-1/stepsize identity$), we select @schur_complement_linear_system_x.
+
+
+Substituting,
+
+$
+  (partial_position massmatrix(position^i) dot velocity^i - stepsize thick stiffness^i - (massmatrix(position^i) - stepsize thick damping^i) (- 1/stepsize)) (position^(i+1) - position^i) = \ -(massmatrix(position^i) (velocity^i - velocity_n) - stepsize thick force(position^i, velocity^i)) - (massmatrix(position^i) - stepsize thick damping^i) (- 1/stepsize) (-(position^(i) - position_n - stepsize thick velocity^i))
 $
 
 Cleaning:
 
 #result()[
 $
-(1/stepsize massmatrix - damping(state^i) -stepsize thick #stiffness (#state^i)) (position^(i+1) - position ^i) =\ -massmatrix(velocity^i - velocity_n) + stepsize thick force(state^i) + 1/stepsize (massmatrix - stepsize thick #damping (#state^i)) (-position^i + position_n + stepsize thick velocity^i)
+  (1/stepsize massmatrix(position^i) + partial_position massmatrix(position^i) dot velocity^i - damping^i - stepsize thick stiffness^i) (position^(i+1) - position^i) = \
+  -massmatrix(position^i) (velocity^i - velocity_n) + stepsize thick force(position^i, velocity^i) + 1/stepsize (massmatrix(position^i) - stepsize thick damping^i) (-position^(i) + position_n + stepsize thick velocity^i))
 $
 ]
 

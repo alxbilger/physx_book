@@ -314,31 +314,81 @@ $
 cases(A x + B y &= u, C x + D y &= v)
 $
 
-Using the first line, we can express $x$ in terms of $y$:
-$
-x = A^(-1)(u - B y)
-$ <block_elimination_x>
+#property()[  
+  In the first line $A x +  B y = u$, suppose that $A$ is invertible:
+  $
+    x = A^(-1) (u - B y)
+  $ <block_elimination_x>
 
-Substituting this expression into the second line of the equation:
+  Substituting this expression into the second line of the equation $C x + D y = v$:
 
-$
-(D - C A^(-1) B) y = v - C A^(-1) u
-$ <schur_complement_linear_system_y>
+  $
+    C A^(-1) (u - B y) + D y = v
+  $
 
-$(D - C A^(-1) B)$ is the Schur complement of the block $A$.
+  Factorization by $y$:
 
-Similarly, we can express $y$ in terms of $x$ using the first line:
+  $
+    (D - C A^(-1)B) y = v - C A^(-1) u
+  $ <schur_complement_linear_system_y>
+]
 
-$
-y = B^(-1) (u - A x)
-$ <block_elimination_y>
+#property()[  
+  In the first line $A x +  B y = u$, suppose that $B$ is invertible:
+  $
+    y = B^(-1) (u - A x)
+  $ <block_elimination_y>
 
-Substituting this expression into the second line of the equation:
+  Substituting this expression into the second line of the equation $C x + D y = v$:
 
-$
-(C - D B^(-1) A) x = v - D B^(-1) u
-$ <schur_complement_linear_system_x>
+  $
+    C x + D B^(-1) (u - A x) = v
+  $
 
+  Factorization by $x$:
+
+  $
+    (C - D B^(-1) A)x = v - D B^(-1) u
+  $ <schur_complement_linear_system_x>
+]
+
+#property()[  
+  In the second line $C x + D y = v$, suppose that $C$ is invertible:
+  $
+    x = C^(-1) (v - D y)
+  $
+
+  Substituting this expression into the first line of the equation $A x +  B y = u$:
+
+  $
+    A C^(-1) (v - D y) +  B y = u
+  $
+
+  Factorization by $y$:
+
+  $
+    (B - A C^(-1) D) y = u - A C^(-1) v
+  $ <schur_complement_linear_system_y_C>
+]
+
+#property()[  
+  In the second line $C x + D y = v$, suppose that $D$ is invertible:
+  $
+    y = D^(-1) (v - C x)
+  $
+
+  Substituting this expression into the first line of the equation $A x +  B y = u$:
+
+  $
+    A x +  B D^(-1) (v - C x) = u
+  $
+
+  Factorization by $x$:
+
+  $
+    (A - B D^(-1) C) x = u - B D^(-1) v
+  $ <schur_complement_linear_system_x_D>
+]
 
 == Integration by parts
 
