@@ -61,12 +61,12 @@ $
   force_"in" (position_"in") = jacobianmapping(position_"in")^T force_"out" (position_"out")
 $ <mapping_force>
 
-== Derivatives
+== Force Derivatives
 
 If we are interested in the derivatives, such as the stiffness matrix:
 
 $
-  stiffness_"in" (position_"in") = (partial force_"in" (position_"in"))/(partial position_"in") 
+  stiffness_"in" (position_"in") &= (partial force_"in" (position_"in"))/(partial position_"in") =  (partial (jacobianmapping(position_"in")^T force_"out" (position_"out")))/(partial position_"in") \
   &= (partial jacobianmapping(position_"in")^T)/(partial position_"in") force_"out" (position_"out") + jacobianmapping(position_"in")^T  (partial force_"out" (position_"out"))/(partial position_"in") \
   &= (partial jacobianmapping(position_"in")^T)/(partial position_"in") force_"out" (position_"out") + jacobianmapping(position_"in")^T  (partial force_"out" (position_"out"))/(partial position_"out") (partial position_"out")/(partial position_"in") \
   &= (partial jacobianmapping(position_"in")^T)/(partial position_"in") force_"out" (position_"out") + jacobianmapping(position_"in")^T  stiffness_"out" (position_"out") (partial mapping(position_"in"))/(partial position_"in") \
@@ -103,6 +103,19 @@ The kinetic energy is invariant under coordinate transformation: $kineticenergy_
 $
   massmatrix_"in" (position_"in") = jacobianmapping(position_"in")^T massmatrix_"out" (position_"out") jacobianmapping(position_"in")
 $ <mapping_mass>
+
+== Mass Derivative
+
+If a Newton method is used, it is likely that the term $partial_position massmatrix(position) velocity$ appears.
+
+In @mapping_mass, suppose that $massmatrix_"out"$ is constant.
+
+$
+  partial_position massmatrix 
+  &= (partial_position jacobianmapping(position_"in")^T) massmatrix_"out" jacobianmapping(position_"in") + jacobianmapping(position_"in")^T massmatrix_"out" (partial_position jacobianmapping(position_"in")) \
+  &= (partial_position jacobianmapping(position_"in"))^T massmatrix_"out" jacobianmapping(position_"in") + jacobianmapping(position_"in")^T massmatrix_"out" (partial_position jacobianmapping(position_"in"))
+$
+
 
 == Momentum
 
