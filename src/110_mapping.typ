@@ -47,12 +47,14 @@ The power delivered by a force is invariant under coordinate transformations. Fo
 
 $
   velocity_"in"^T force_"in" (position_"in") = velocity_"out"^T force_"out" (position_"out")
-$
+$ <eq_force_invariant_coordinate_transform>
 
 Substituting $velocity_"out"$ from @mapping_velocity,
 
 $
-  velocity_"in"^T force_"in" (position_"in") = (jacobianmapping(position_"in") velocity_"in")^T force_"out" (position_"out") = velocity_"in"^T jacobianmapping(position_"in")^T force_"out" (position_"out")
+  velocity_"in"^T force_"in" (position_"in") 
+  &= (jacobianmapping(position_"in") velocity_"in")^T force_"out" (position_"out") \
+  &= velocity_"in"^T jacobianmapping(position_"in")^T force_"out" (position_"out")
 $
 
 By the principle of virtual work, this implies:
@@ -199,8 +201,66 @@ $
   $
     velocity_"out" &= (d position_"out")/(d t) \
     &= (d (mapping_0 circle.small mapping_1 circle.small ... circle.small mapping_(n-1))(position_"in"))/(d t) \
-    &= (product_(i=0)^(n-1) jacobianmapping_i) velocity_"in"
   $
 
-  where $jacobianmapping_i$ is the jacobian matrix of the mapping function $mapping_i$.
+  By chain rule:
+
+  $
+    velocity_"out"
+    &= 
+      (partial mapping_0 (position_0))/(partial position_0)
+      (partial mapping_1 (position_1))/(partial position_1)
+      ...
+      (partial mapping_(n-1) (position_(n-1)))/(partial position_(n-1))
+      (d position_(n-1))/(d t)
+  $
+
+  where $position_i$ are the intermediate positions, and $position_(n-1)=position_"in"$
+
+  We define $jacobianmapping_i = (partial mapping_i (position_i))/(partial position_1)$ the jacobian matrix of the mapping function $mapping_i$.
+
+  Finally:
+  $
+    velocity_"out"
+    &= (product_(i=0)^(n-1) jacobianmapping_i) velocity_"in"
+  $ 
+
+  The total Jacobian matrix $jacobianmapping_"total"$ of the mapping chain is the product of the individual Jacobians:
+  $
+    jacobianmapping_"total" = product_(i=0)^(n-1) jacobianmapping_i
+  $
+
+  such that
+
+  $
+    velocity_"out" = jacobianmapping_"total" velocity_"in"
+  $ <eq_mapping_chain_velocity>
+]
+
+#property(title:"Force")[
+  @eq_force_invariant_coordinate_transform holds for a mapping chain. Substituting $velocity_"out"$ from @eq_mapping_chain_velocity,
+
+  $
+    velocity_"in"^T force_"in" (position_"in") 
+      &= (jacobianmapping_"total" velocity_"in")^T force_"out" (position_"out")\ 
+      &= velocity_"in"^T jacobianmapping_"total"^T force_"out" (position_"out")
+  $
+
+  We can deduse by the principle of virtual work:
+
+  $
+    force_"in" (position_"in") = jacobianmapping_"total"^T force_"out" (position_"out")
+  $
+
+  Note that
+
+  $
+    jacobianmapping_"total"^T = (jacobianmapping_0 jacobianmapping_1 ... jacobianmapping_(n-1))^T = jacobianmapping_(n-1)^T ... jacobianmapping_1^T jacobianmapping_0^T
+  $
+]
+
+#property(title:"Force derivative")[
+  $
+    stiffness_"in"(position_"in") = (partial jacobianmapping_"total" (position_"in")^T)/(partial position_"in") force_"out" (position_"out") + jacobianmapping_"total" (position_"in")^T  stiffness_"out" (position_"out") jacobianmapping_"total" (position_"in")
+  $
 ]
